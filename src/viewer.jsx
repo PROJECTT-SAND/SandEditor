@@ -1,61 +1,64 @@
 import style from './style/viewer.module.scss';
-import React, { Suspense, useEffect, useRef, useState } from 'react';
-import { Canvas, useFrame, useThree, createPortal } from '@react-three/fiber';
-
+import React, { useEffect, useState, Suspense, useRef } from 'react';
+import { Canvas, useFrame, useLoader } from '@react-three/fiber';
 import * as THREE from "three"
-import { ScrollControls, useScroll, Text, Loader, Line, Shadow, useTexture, meshBounds } from "@react-three/drei"
+import img from './example1.png'
 
-
-
-function Content(props) {
-  const ref = useRef()
-  useFrame((state, delta) => (ref.current.rotation.x += 0.01))
-  return (
-    <>
+function Viewer() {
+  function Image() {
+    const ref = useRef();
+    const texture = useLoader(THREE.TextureLoader, img);
+  
+    // useFrame((state, delta) => (
+    //   ref.current.rotation.x += 0.01
+    // ));
+  
+    return (
       <mesh
-        position={[1.2, 0, 0]}
+        position={(movingOBJ === "a") ? [x/100, y/-100, 0] : [0, 0, 0]}
         ref={ref}
-        scale={1}
-        onPointerOver={(event) => {}}
-        onPointerOut={(event) => {}}>
-        <boxGeometry args={[1, 1, 1]} />
-        <meshStandardMaterial color={'orange'} />
+        scale={10}
+        onClick={(event) => {
+          if (movingOBJ === "a") {
+            changeMovingOBJ(null);
+          } else {
+            console.log("can move!");
+            changeMovingOBJ("a");
+          }
+        }}>
+  
+        <planeBufferGeometry attach="geometry" />
+        <meshBasicMaterial attach="material" map={texture} toneMapped={false} />
       </mesh>
-      <Image />
-    </>
-  )
-}
+    )
+  }
 
+  const [x, setX] = useState()
+  const [y, setY] = useState()
+  const [movingOBJ, changeMovingOBJ] = useState()
 
-function Image() {
-  // const ref = useRef()
-  // return (
-  //   <group ref={ref}>
-  //     <Plane shift={100} aspect={1.5} scale={[3]} frustumCulled={false} />
-  //   </group>
-  // )
+  useEffect(() => {
+    const update = (e) => {
+      setX(e.x)
+      setY(e.y)
+    }
+    window.addEventListener('mousemove', update)
+    window.addEventListener('touchmove', update)
+    return () => {
+      window.removeEventListener('mousemove', update)
+      window.removeEventListener('touchmove', update)
+    }
+  }, [setX, setY])
 
-  // return (
-  //   <mesh ref={ref} {...props}>
-  //     <planeGeometry args={[1, 1, 32, 32]} />
-  //     <customMaterial ref={material} color={color} map="example1.png" map-minFilter={THREE.LinearFilter} transparent opacity={opacity} />
-  //   </mesh>
-  // )
-}
-
-
-
-function viewer() {
   return (
     <>
-      <Canvas>
-        <ambientLight intensity={0.5} />
-        <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
-        <pointLight position={[-10, -10, -10]} />
-        <Content />
+      <Canvas colorManagement>
+        <Suspense fallback={null}>
+          <Image />
+        </Suspense>
       </Canvas>
     </>
   );
 }
 
-export default viewer;
+export default Viewer;
