@@ -1,12 +1,18 @@
 import style from './style/layout.module.scss';
 import Viewer from './viewer';
 import Objects from './objects';
+import Blocks from './blocks';
+import Workspace from './workspace';
 
 function Layout() {
   return (
     <>
-      <Viewer />
-      <Objects />
+      <div>
+        <Viewer />
+        <Objects />
+      </div>
+      <Blocks />
+      <Workspace />
     </>
   );
 }
