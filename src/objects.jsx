@@ -3,8 +3,9 @@ import style from './style/objects.module.scss';
 function objects() {
   return (
     <>
-      <div>
-
+      <div className={style.object}>
+        <img></img>
+        <span></span>
       </div>
     </>
   );
