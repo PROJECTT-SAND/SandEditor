@@ -7,12 +7,15 @@ import Workspace from './workspace';
 function Layout() {
   return (
     <>
-      <div>
+      {/* <div>
         <Viewer />
         <Objects />
       </div>
       <Blocks />
-      <Workspace />
+      <Workspace /> */}
+      <div className={style.viewer}>
+        <Viewer />
+      </div>
     </>
   );
 }
