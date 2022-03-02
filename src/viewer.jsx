@@ -1,59 +1,60 @@
 import style from './style/viewer.module.scss';
-import React, { useEffect, useState, Suspense, useRef } from 'react';
-import { Canvas, useFrame, useLoader } from '@react-three/fiber';
+import React, { useState, Suspense } from 'react';
+import { useGesture } from '@use-gesture/react'
+import { Canvas, useLoader, useThree } from '@react-three/fiber';
+import { useSpring, a } from "@react-spring/three"
 import * as THREE from "three"
 import img from './example1.png'
 
 function Viewer() {
-  function Image() {
-    const ref = useRef();
-    const texture = useLoader(THREE.TextureLoader, img);
-  
-    // useFrame((state, delta) => (
-    //   ref.current.rotation.x += 0.01
-    // ));
-  
+  const [OBJPos, setOBJPos] = useState({
+    a: [0, 0, 0]
+  });
+
+  function update(OBJ, x, y) {
+    const value = {...OBJPos};
+    value[OBJ] = [x, y*-1, 0];
+    setOBJPos(value);
+  }
+
+  function Bg() {
     return (
       <mesh
-        position={(movingOBJ === "a") ? [x/100, y/-100, 0] : [0, 0, 0]}
-        ref={ref}
-        scale={10}
-        onClick={(event) => {
-          if (movingOBJ === "a") {
-            changeMovingOBJ(null);
-          } else {
-            console.log("can move!");
-            changeMovingOBJ("a");
-          }
-        }}>
+        position={[0, 0, -10]}
+        scale={10000}>
   
         <planeBufferGeometry attach="geometry" />
-        <meshBasicMaterial attach="material" map={texture} toneMapped={false} />
+        <meshBasicMaterial attach="material" color="#404040" toneMapped={false} />
       </mesh>
     )
   }
 
-  const [x, setX] = useState()
-  const [y, setY] = useState()
-  const [movingOBJ, changeMovingOBJ] = useState()
-
-  useEffect(() => {
-    const update = (e) => {
-      setX(e.x)
-      setY(e.y)
-    }
-    window.addEventListener('mousemove', update)
-    window.addEventListener('touchmove', update)
-    return () => {
-      window.removeEventListener('mousemove', update)
-      window.removeEventListener('touchmove', update)
-    }
-  }, [setX, setY])
+  function Image() {
+    const { size, viewport } = useThree()
+    const aspect = size.width / viewport.width
+    const [spring, set] = useSpring(() => ({ scale: [10, 10, 10], position: [0, 0, 0], config: { friction: 15 } }))
+    const bind = useGesture({
+      onDrag: ({ offset: [x, y] }) => {
+        set({ position: [x / aspect, -y / aspect, 0] });
+        update('a', x, y);
+        console.log("a");
+      }
+    })
+    const texture = useLoader(THREE.TextureLoader, img);
+  
+    return (
+      <a.mesh {...spring} {...bind()}>
+        <planeBufferGeometry attach="geometry" />
+        <meshBasicMaterial attach="material" map={texture} />
+      </a.mesh>
+    )
+  }
 
   return (
     <>
-      <Canvas colorManagement>
+      <Canvas camera={{ position: [0, 0, 5] }}>
         <Suspense fallback={null}>
+          <Bg />
           <Image />
         </Suspense>
       </Canvas>
