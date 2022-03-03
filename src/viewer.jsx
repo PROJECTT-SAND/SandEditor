@@ -51,14 +51,14 @@ function Viewer() {
   }
 
   return (
-    <>
+    <div className={style.viewer}>
       <Canvas camera={{ position: [0, 0, 5] }}>
         <Suspense fallback={null}>
           <Bg />
           <Image />
         </Suspense>
       </Canvas>
-    </>
+    </div>
   );
 }
 
