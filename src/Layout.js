@@ -11,13 +11,17 @@ function Layout() {
   return (
     <div className={style.layout}>
       <div className={style.layout_left}>
-        <div className={style.viewer}><Viewer /></div>
+        <div className={style.viewer}>
+          <div className={style.viewer_viewer}><Viewer /></div>
+          <div className={style.viewer_controller}></div>
+        </div>
         <div className={style.layout_left_bottom}>
           <div className={style.objects} style={{ width: `${leftBottomLayoutSize}%` }}><Objects /></div>
+          <div className={style.folder}></div>
         </div>
       </div>
       <div className={style.layout_right}>
-        <div className={style.workspace} style={{ height: `${rightLayoutSize}%` }}>a<Workspace /></div>
+        <div className={style.workspace} style={{ height: `${rightLayoutSize}%` }}><Workspace /></div>
         <div className={style.console}></div>
       </div>
     </div>
