@@ -1,9 +1,10 @@
 import style from './style/folder.module.scss';
+import Window from './Window';
 
 function folder() {
   return (
-    <div className={style.folder}>
-    </div>
+    <Window>
+    </Window>
   );
 }
 

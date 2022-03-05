@@ -1,13 +1,13 @@
 import style from './style/objects.module.scss';
-
+import Window from './Window';
+<Window>
+</Window>
 function objects() {
   return (
-    <>
-      <div className={style.object}>
-        <img></img>
-        <span></span>
-      </div>
-    </>
+    <Window>
+      <img></img>
+      <span></span>
+    </Window>
   );
 }
 

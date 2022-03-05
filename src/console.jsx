@@ -1,9 +1,10 @@
 import style from './style/console.module.scss';
+import Window from './Window';
 
 function console() {
   return (
-    <div className={style.console}>
-    </div>
+    <Window>
+    </Window>
   );
 }
 

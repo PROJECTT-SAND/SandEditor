@@ -1,9 +1,10 @@
 import style from './style/workspace.module.scss';
+import Window from './Window';
 
 function objects() {
   return (
-    <div className={style.objects}>
-    </div>
+    <Window>
+    </Window>
   );
 }
 
