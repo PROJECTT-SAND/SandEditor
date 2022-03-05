@@ -4,11 +4,11 @@ import Window from './Window';
 function Console() {
   return (
     <Window>
-      <header className={style.header}>
-        <button className={style.header_addObject}></button>
+      <div className={style.topBar}>
+        <button className={style.topBar_addObject}></button>
         <i>Console</i>
-        <button className={style.header_search}></button>
-      </header>
+        <button className={style.topBar_search}></button>
+      </div>
     </Window>
   );
 }

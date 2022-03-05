@@ -4,10 +4,10 @@ import Window from './Window';
 function Folder() {
   return (
     <Window>
-      <header className={style.header}>
+      <div className={style.topBar}>
         <i>C:/users/user/desktop/game</i>
-        <button className={style.header_back}></button>
-      </header>
+        <button className={style.topBar_back}></button>
+      </div>
     </Window>
   );
 }

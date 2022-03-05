@@ -1,4 +1,4 @@
-.header {
+.topBar {
     display: flex;
     align-items: center;
     overflow: hidden;
@@ -21,11 +21,11 @@
         height: 100%;
     }
 
-    .header_addObject {
+    .topBar_addObject {
         width: 105px;
     }
 
-    .header_search {
+    .topBar_search {
         width: 55px;
     }
 }
