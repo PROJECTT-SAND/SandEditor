@@ -1,11 +1,12 @@
-import style from './style/console.module.scss';
+import style from './style/Console.module.scss';
 import Window from './Window';
 
-function console() {
+function Console() {
+  console.log()
   return (
     <Window>
     </Window>
   );
 }
 
-export default console;
+export default Console;

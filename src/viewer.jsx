@@ -1,4 +1,4 @@
-import style from './style/viewer.module.scss';
+import style from './style/Viewer.module.scss';
 import React, { useState, Suspense } from 'react';
 import { useGesture } from '@use-gesture/react'
 import { Canvas, useLoader, useThree } from '@react-three/fiber';
@@ -11,7 +11,7 @@ function Viewer() {
     a: [0, 0, 0]
   });
 
-  function update(OBJ, x, y) {
+  function getUpdateFrom(OBJ, x, y) {
     const value = {...OBJPos};
     value[OBJ] = [x, y*-1, 0];
     setOBJPos(value);
@@ -36,7 +36,7 @@ function Viewer() {
     const bind = useGesture({
       onDrag: ({ offset: [x, y] }) => {
         set({ position: [x / aspect, -y / aspect, 0] });
-        update('a', x, y);
+        getUpdateFrom('a', x, y);
         console.log("a");
       }
     })

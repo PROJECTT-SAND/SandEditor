@@ -1,9 +1,9 @@
-import style from './style/viewerController.module.scss';
+import style from './style/ViewerController.module.scss';
 
-function viewerController() {
+function ViewerController() {
   return (
     <></>
   );
 }
 
-export default viewerController;
+export default ViewerController;

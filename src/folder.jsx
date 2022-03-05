@@ -1,11 +1,11 @@
-import style from './style/folder.module.scss';
+import style from './style/Folder.module.scss';
 import Window from './Window';
 
-function folder() {
+function Folder() {
   return (
     <Window>
     </Window>
   );
 }
 
-export default folder;
+export default Folder;

@@ -1,8 +1,8 @@
-import style from './style/objects.module.scss';
+import style from './style/Objects.module.scss';
 import Window from './Window';
 <Window>
 </Window>
-function objects() {
+function Objects() {
   return (
     <Window>
       <img></img>
@@ -11,4 +11,4 @@ function objects() {
   );
 }
 
-export default objects;
+export default Objects;

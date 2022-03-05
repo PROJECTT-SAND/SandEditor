@@ -1,11 +1,11 @@
-import style from './style/workspace.module.scss';
+import style from './style/Workspace.module.scss';
 import Window from './Window';
 
-function objects() {
+function Objects() {
   return (
     <Window>
     </Window>
   );
 }
 
-export default objects;
+export default Objects;
