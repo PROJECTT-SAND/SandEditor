@@ -1,0 +1,131 @@
+.viewerController {
+    display: flex;
+    align-items: center;
+    gap: 35px;
+    margin-left: auto;
+    width: fit-content;
+
+    button {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        background-color: #595959;
+    }
+    button:hover {
+        background-color: #4e4e4e;
+    }
+
+    svg {
+        fill: #fff;
+        margin-top: 2px;
+    }
+
+    .positionIndicator {
+        color: #fff;
+        display: flex;
+        gap: 6px;
+        font-size: 12px;
+        margin-top: 3px;
+
+        i {
+            font-style: normal;
+        }
+    }
+
+    .other {
+        display: flex;
+        gap: 12px;
+
+        .showGrid {
+            svg {
+                width: 22px;
+                height: 22px;
+            }
+        }
+
+        .fullScreen {
+            svg {
+                width: 22px;
+                height: 22px;
+            }
+        }
+    }
+
+    .tool {
+        svg {
+            width: 15px;
+            height: 15px;
+        }
+
+        .tool_active {
+            background-color: #3280ed;
+        }
+
+        .tool_hand {
+            border-radius: 10px 0px 0px 10px;
+        }
+
+        .tool_move {
+            border-radius: 0px 10px 10px 0px;
+        }
+    }
+
+    .player {
+        svg {
+            width: 12px;
+            height: 12px;
+        }
+
+        .player_noActive {
+            svg {
+                fill: #868686;
+            }
+        }
+        .player_noActive:hover {
+            background-color: #595959;
+        }
+
+        .player_play {
+            width: 42px;
+            padding-left: 3px;
+            border-radius: 1000px 0px 0px 1000px;
+        }
+        .player_play_active {
+            background-color: #3280ed;
+            svg {
+                fill: #fff;
+            }
+        }
+        .player_play_active:hover {
+            background-color: #3280ed;
+        }
+
+        .player_pause {
+            border-radius: 0;
+        }
+        .player_pause_active {
+            background-color: #ffc000;
+            svg {
+                fill: #fff;
+            }
+        }
+        .player_pause_active:hover {
+            background-color: #ffc000;
+        }
+
+        .player_stop {
+            width: 42px;
+            padding-right: 4px;
+            border-radius: 0px 1000px 1000px 0px;
+        }
+        .player_stop_active {
+            background-color: #f23a3a;
+            svg {
+                fill: #fff;
+            }
+        }
+        .player_stop_active:hover {
+            background-color: #f23a3a;
+        }
+    }
+}
