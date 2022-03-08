@@ -20,11 +20,13 @@ function Layout() {
         </div>
         <div className={style.layout_left_bottom}>
           <div className={style.objects} style={{ width: `${leftBottomLayoutSize}%` }}><Objects /></div>
+          <span className={style.window_controller} style={{ left: `${leftBottomLayoutSize}%` }}></span>
           <div className={style.folder}><Folder /></div>
         </div>
       </div>
       <div className={style.layout_right}>
         <div className={style.workspace} style={{ height: `${rightLayoutSize}%` }}><Workspace /></div>
+        <span className={style.window_controller} style={{ top: `${rightLayoutSize}%` }}></span>
         <div className={style.console}><Console /></div>
       </div>
     </div>
