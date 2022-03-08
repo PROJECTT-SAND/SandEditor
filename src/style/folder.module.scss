@@ -23,3 +23,39 @@
         height: 100%;
     }
 }
+
+.folder {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px 10px;
+    margin: 20px 20px 0px 20px;
+
+    .file {
+        display: flex;
+        flex-direction: column;
+        justify-self: center;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 8px 10px 8px;
+        border-radius: 10px;
+        width: 62px;
+        height: 62px;
+        border: 1px solid #0000;
+
+        img {
+            width: 55px;
+            object-fit: scale-down;
+            margin: auto 0px;
+        }
+
+        span {
+            font-size: 12px;
+            color: #fff;
+        }
+    }
+
+    .file:hover {
+        background-color: #ffffff10;
+        border: 1px solid #ffffff80;
+    }
+}
