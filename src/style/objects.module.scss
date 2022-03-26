@@ -2,6 +2,7 @@
     display: flex;
     align-items: center;
     overflow: hidden;
+    flex-shrink: 0;
     background-color: #27303d;
     height: 28px;
     border-radius: 15px;
@@ -27,5 +28,113 @@
 
     .topBar_search {
         width: 55px;
+    }
+}
+
+.objects {
+    padding: 12px 18px 80px 18px;
+    overflow-y: scroll;
+
+    .object_folder1 {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        background: #222a35;
+        border-radius: 15px;
+
+        .object {
+            background: #333f50;
+            color: #fff;
+            height: 30px;
+            border-radius: 15px;
+            padding-left: 6px;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+
+            .object_arrow {
+                width: 30px;
+                height: calc(100% - 4px);
+                padding: 0px 2px;
+                border-radius: 5px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+
+                &:hover {
+                    background: #0002;
+                }
+
+                img {
+                    width: 10px;
+                }
+            }
+
+            .object_icon {
+                width: 30px;
+                height: calc(100% - 4px);
+                padding: 0px 2px;
+                border-radius: 5px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+
+                &:hover {
+                    background: #0002;
+                }
+
+                img {
+                    width: 14px;
+                }
+            }
+
+            .object_name {
+                width: calc(100% - 6px);
+                height: calc(100% - 4px);
+                font-size: 13px;
+                padding-left: 4px;
+                margin-left: 2px;
+                margin-right: 12px;
+                border-radius: 5px;
+                align-items: center;
+                justify-content: flex-start;
+                display: flex;
+
+                &:hover {
+                    background: #0002;
+                }
+            }
+
+            .object_see {
+                width: 30px;
+                height: 100%;
+                background: #27303d;
+                flex-shrink: 0;
+
+                &:hover {
+                    background: #212935;
+                }
+            }
+
+            .object_goto {
+                width: 35px;
+                height: 100%;
+                background: #27303d;
+                flex-shrink: 0;
+
+                &:hover {
+                    background: #212935;
+                }
+            }
+        }
+
+        .object_child {
+            margin-left: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
     }
 }
