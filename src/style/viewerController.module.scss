@@ -10,9 +10,10 @@
         height: 40px;
         border-radius: 10px;
         background-color: #595959;
-    }
-    button:hover {
-        background-color: #4e4e4e;
+
+        &:hover {
+            background-color: #4e4e4e;
+        }
     }
 
     svg {
@@ -32,9 +33,17 @@
         }
     }
 
-    .other {
+    .options {
         display: flex;
         gap: 12px;
+
+        .option_active {
+            background: #3280ed;
+
+            &:hover {
+                background: #2274e7;
+            }
+        }
 
         .showGrid {
             svg {
@@ -58,7 +67,7 @@
         }
 
         .tool_active {
-            background-color: #3280ed;
+            background: #3280ed;
         }
 
         .tool_hand {
@@ -77,12 +86,13 @@
         }
 
         .player_noActive {
+            &:hover {
+                background: #595959;
+            }
+
             svg {
                 fill: #868686;
             }
-        }
-        .player_noActive:hover {
-            background-color: #595959;
         }
 
         .player_play {
@@ -91,26 +101,29 @@
             border-radius: 1000px 0px 0px 1000px;
         }
         .player_play_active {
-            background-color: #3280ed;
+            background: #3280ed;
+            &:hover {
+                background: #3280ed;
+            }
+
             svg {
                 fill: #fff;
             }
-        }
-        .player_play_active:hover {
-            background-color: #3280ed;
         }
 
         .player_pause {
             border-radius: 0;
         }
         .player_pause_active {
-            background-color: #ffc000;
+            background: #ffc000;
+
+            &:hover {
+                background: #ffc000;
+            }
+
             svg {
                 fill: #fff;
             }
-        }
-        .player_pause_active:hover {
-            background-color: #ffc000;
         }
 
         .player_stop {
@@ -119,13 +132,15 @@
             border-radius: 0px 1000px 1000px 0px;
         }
         .player_stop_active {
-            background-color: #f23a3a;
+            background: #f23a3a;
+
+            &:hover {
+                background: #f23a3a;
+            }
+
             svg {
                 fill: #fff;
             }
-        }
-        .player_stop_active:hover {
-            background-color: #f23a3a;
         }
     }
 }
