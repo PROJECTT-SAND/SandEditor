@@ -39,4 +39,4 @@ None.
 
 ## License
 
-None.
+MIT
