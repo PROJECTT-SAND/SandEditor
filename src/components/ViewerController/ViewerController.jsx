@@ -1,4 +1,4 @@
-import style from './style/ViewerController.module.scss';
+import style from './ViewerController.module.scss';
 import React, { useState } from 'react';
 
 function ViewerController() {

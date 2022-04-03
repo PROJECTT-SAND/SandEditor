@@ -1,11 +1,7 @@
-import style from './style/Layout.module.scss';
+import style from './Layout.module.scss';
 import React, { useState } from 'react';
-import Viewer from './Viewer';
-import ViewerController from './ViewerController';
-import Objects from './Objects';
-import Folder from './Folder';
-import Workspace from './Workspace';
-import Console from './Console';
+
+import { Viewer, ViewerController, Objects, Folder, Workspace, Console } from './components/index';
 
 function Layout() {
   const [leftBottomLayoutSize, setleftBottomLayoutSize] = useState(60);

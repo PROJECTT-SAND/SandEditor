@@ -1,4 +1,4 @@
-import style from './style/Viewer.module.scss';
+import style from './Viewer.module.scss';
 import React, { useState, Suspense } from 'react';
 import { useGesture } from '@use-gesture/react'
 import { Canvas, useLoader, useThree } from '@react-three/fiber';

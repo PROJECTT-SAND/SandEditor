@@ -1,5 +1,5 @@
-import style from './style/Console.module.scss';
-import Window from './Window';
+import style from './Console.module.scss';
+import Window from '../Window/Window';
 
 function Console() {
   return (

@@ -1,5 +1,5 @@
-import style from './style/Folder.module.scss';
-import Window from './Window';
+import style from './Folder.module.scss';
+import Window from '../Window/Window';
 import example from './example1.png';
 
 function Folder() {

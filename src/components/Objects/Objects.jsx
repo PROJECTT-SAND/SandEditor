@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import style from './style/Objects.module.scss';
-import Window from './Window';
-import folderIcon from './res/icon/folder.svg';
-import arrowDownIcon from './res/icon/arrow_down.svg';
-import arrowUpIcon from './res/icon/arrow_up.svg';
+import style from './Objects.module.scss';
+import Window from '../Window/Window';
+import folderIcon from './folder.svg';
+import arrowDownIcon from './arrow_down.svg';
+import arrowUpIcon from './arrow_up.svg';
 
 function Objects() {
   const [objectIsOpened, setobjectIsOpened] = useState({

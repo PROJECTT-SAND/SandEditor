@@ -1,5 +1,5 @@
-import style from './style/Workspace.module.scss';
-import Window from './Window';
+import style from './Workspace.module.scss';
+import Window from '../Window/Window';
 
 function Objects() {
   return (
