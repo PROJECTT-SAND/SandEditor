@@ -33,7 +33,18 @@
 
 .objects {
     padding: 12px 18px 80px 18px;
-    overflow-y: scroll;
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+        width: 8px;
+        background-color: transparent;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+        background: #2a3038;
+        margin: 10px;
+        border-radius: 100px;
+    }
 
     .object_folder1 {
         display: flex;
