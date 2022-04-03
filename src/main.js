@@ -1,5 +1,6 @@
 const { app, BrowserWindow, Menu } = require('electron');
 const log = require('electron-log');
+const isDev = require('electron-is-dev');
 
 function createWindow() {
     const win = new BrowserWindow({ 
@@ -13,8 +14,12 @@ function createWindow() {
 
     win.webContents.openDevTools();
 
-    // win.loadFile("build/index.html");
-    win.loadURL(`file://${__dirname}/../build/index.html`);
+    if(isDev) {
+        win.loadURL("http://localhost:3000/");
+        win.webContents.openDevTools();
+    } else {
+        win.loadURL(`file://${__dirname}/../build/index.html`);
+    }
 
     const template = [
         {
