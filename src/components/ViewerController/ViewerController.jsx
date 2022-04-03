@@ -1,7 +1,7 @@
 import style from './ViewerController.module.scss';
 import React, { useState } from 'react';
 
-function ViewerController() {
+export default function ViewerController() {
   const playerStates = [ // 0: 조작 불가, 1: 조작 가능, 2: 활성화
     [0, 0, 0], // 0 프로그램 로딩 상태.
     [1, 0, 0], // 1 최초 상태. 실행만 가능.
@@ -115,5 +115,3 @@ function ViewerController() {
     </div>
   );
 }
-
-export default ViewerController;

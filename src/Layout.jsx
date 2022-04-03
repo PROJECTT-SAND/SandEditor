@@ -1,9 +1,8 @@
 import style from './Layout.module.scss';
 import React, { useState } from 'react';
-
 import { Viewer, ViewerController, Objects, Folder, Workspace, Console } from './components/index';
 
-function Layout() {
+export default function Layout() {
   const [leftBottomLayoutSize, setleftBottomLayoutSize] = useState(60);
   const [rightLayoutSize, setrightLayoutSize] = useState(60);
 
@@ -28,5 +27,3 @@ function Layout() {
     </div>
   );
 }
-
-export default Layout;

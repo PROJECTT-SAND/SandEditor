@@ -1,7 +1,5 @@
 import style from './Window.module.scss';
 
-function Wrapper({children}) {
+export default function Wrapper({children}) {
   return(<div className={style.window}>{children}</div>)
 }
-
-export default Wrapper;

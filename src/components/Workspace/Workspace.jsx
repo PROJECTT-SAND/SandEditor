@@ -1,11 +1,9 @@
 import style from './Workspace.module.scss';
 import Window from '../Window/Window';
 
-function Objects() {
+export default function Objects() {
   return (
     <Window>
     </Window>
   );
 }
-
-export default Objects;

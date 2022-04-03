@@ -2,7 +2,7 @@ import style from './Folder.module.scss';
 import Window from '../Window/Window';
 import example from './example1.png';
 
-function Folder() {
+export default function Folder() {
   return (
     <Window>
       <div className={style.topBar}>
@@ -16,5 +16,3 @@ function Folder() {
     </Window>
   );
 }
-
-export default Folder;

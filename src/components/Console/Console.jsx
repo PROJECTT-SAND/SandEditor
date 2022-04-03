@@ -1,7 +1,7 @@
 import style from './Console.module.scss';
 import Window from '../Window/Window';
 
-function Console() {
+export default function Console() {
   return (
     <Window>
       <div className={style.topBar}>
@@ -12,5 +12,3 @@ function Console() {
     </Window>
   );
 }
-
-export default Console;

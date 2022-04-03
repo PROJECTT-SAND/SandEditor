@@ -5,7 +5,7 @@ import folderIcon from './folder.svg';
 import arrowDownIcon from './arrow_down.svg';
 import arrowUpIcon from './arrow_up.svg';
 
-function Objects() {
+export default function Objects() {
   const [objectIsOpened, setobjectIsOpened] = useState({
     InGame: true,
     Chr1: false
@@ -87,5 +87,3 @@ function Objects() {
     </Window>
   );
 }
-
-export default Objects;

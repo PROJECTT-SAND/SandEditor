@@ -6,7 +6,7 @@ import { useSpring, a } from "@react-spring/three"
 import * as THREE from "three"
 import img from './example1.png'
 
-function Viewer() {
+export default function Viewer() {
   const [OBJPos, setOBJPos] = useState({
     a: [0, 0, 0]
   });
@@ -61,5 +61,3 @@ function Viewer() {
     </div>
   );
 }
-
-export default Viewer;
