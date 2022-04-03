@@ -29,7 +29,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "set PUBLIC_URL=./ && react-scripts build",
+    "build": "set PUBLIC_URL=./ && react-scripts build && electron-forge make",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "electron": "electron .",
