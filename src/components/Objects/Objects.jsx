@@ -45,8 +45,6 @@ export default function Objects() {
                 ...objectIsOpened,
                 [name] : !objectIsOpened[name]
               });
-
-              console.log(e.target.parentNode.parentNode.parentNode.className === style.object_child)
             }}>
               <img src={(objectIsOpened[name]) ? arrowDownIcon : arrowUpIcon}></img>
             </div>
