@@ -1,21 +1,15 @@
 import style from './Viewer.module.scss';
-import React, { useState, Suspense } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import { useGesture } from '@use-gesture/react'
-import { Canvas, useLoader, useThree } from '@react-three/fiber';
 import { useSpring, a } from "@react-spring/three"
+import { Canvas, useLoader, useThree } from '@react-three/fiber';
 import * as THREE from "three"
 import img from './example1.png'
 
 export default function Viewer() {
-  const [OBJPos, setOBJPos] = useState({
-    a: [0, 0, 0]
+  const [objValue, setobjValue] = useState({
+    example1: {x: 10, y: 10}
   });
-
-  function getUpdateFrom(OBJ, x, y) {
-    const value = {...OBJPos};
-    value[OBJ] = [x, y*-1, 0];
-    setOBJPos(value);
-  }
 
   function Bg() {
     return (
@@ -30,16 +24,37 @@ export default function Viewer() {
   }
 
   function Image() {
-    const { size, viewport } = useThree()
-    const aspect = size.width / viewport.width
-    const [spring, set] = useSpring(() => ({ scale: [10, 10, 10], position: [0, 0, 0], config: { friction: 15 } }))
+    const { size, viewport } = useThree();
+    const aspect = size.width / viewport.width;
+
+    const [spring, set] = useSpring(() => ({
+      scale: [10, 10, 10],
+      position: [
+        objValue["example1"].x / aspect,
+        objValue["example1"].y / aspect,
+        0
+      ]
+    }));
+
     const bind = useGesture({
-      onDrag: ({ offset: [x, y] }) => {
-        set({ position: [x / aspect, -y / aspect, 0] });
-        getUpdateFrom('a', x, y);
-        console.log("a");
+      onDrag: ({ down, offset: [x, y] }) => {
+        set({
+          immediate: true,
+          position: [
+            (x + objValue["example1"].x) / aspect,
+            (-y + objValue["example1"].y) / aspect,
+            0
+          ]
+        });
+      },
+      onDragEnd: ({ offset: [x, y] }) => {
+        setobjValue({...objValue, "example1": {
+          x: x + objValue["example1"].x,
+          y: -y + objValue["example1"].y
+        }});
       }
-    })
+    });
+
     const texture = useLoader(THREE.TextureLoader, img);
   
     return (
