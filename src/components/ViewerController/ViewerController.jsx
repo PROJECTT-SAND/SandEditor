@@ -1,5 +1,6 @@
 import style from './ViewerController.module.scss';
 import React, { useState } from 'react';
+import useStore from '../../store'
 
 export default function ViewerController() {
   const playerStates = [ // 0: 조작 불가, 1: 조작 가능, 2: 활성화
@@ -10,27 +11,38 @@ export default function ViewerController() {
     [1, 2, 1], // 4 멈춘 상태. 실행, 멈춤 가능.
     [0, 0, 2], // 5 정지중인 상태. 조작 불가.
   ]
+
   const [playerState, setPlayerState] = useState(1);
-
   const [toolState, setToolState] = useState(0);
-
   const [optionsState, setOptionsState] = useState({
     "showGrid": false,
     "fullScreen": false
   });
 
+  const {ViewerMouse} = useStore();
+
+  function PositionIndicator() {
+    if (ViewerMouse.onEnter) {
+      return(
+        <div className={style.positionIndicator}>
+          <div>
+            <span>X: </span>
+            <i>{ViewerMouse.PosX}</i>
+          </div>
+          <div>
+            <span>Y: </span>
+            <i>{ViewerMouse.PosY}</i>
+          </div>
+        </div>
+      );
+    } else {
+      return(null);
+    }
+  }
+
   return (
     <div className={style.viewerController}>
-      <div className={style.positionIndicator}>
-        <div>
-          <span>X: </span>
-          <i>10</i>
-        </div>
-        <div>
-          <span>Y: </span>
-          <i>10</i>
-        </div>
-      </div>
+      <PositionIndicator />
       <div className={style.options}>
         <div className={style.showGrid}>
           <button

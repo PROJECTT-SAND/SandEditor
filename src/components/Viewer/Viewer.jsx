@@ -4,12 +4,15 @@ import { useGesture } from '@use-gesture/react'
 import { useSpring, a } from "@react-spring/three"
 import { Canvas, useLoader, useThree } from '@react-three/fiber';
 import * as THREE from "three"
+import useStore from '../../store'
 import img from './example1.png'
 
 export default function Viewer() {
   const [objValue, setobjValue] = useState({
     example1: {x: 10, y: 10}
   });
+
+  const {ViewerMouse} = useStore();
 
   function Bg() {
     return (
@@ -66,7 +69,19 @@ export default function Viewer() {
   }
 
   return (
-    <div className={style.viewer}>
+    <div
+      className={style.viewer}
+      onMouseMove={(e) => {
+        useStore.setState({ViewerMouse: {
+          PosX: e.clientX-25,
+          PosY: e.clientY-25,
+          onEnter: true
+        }})
+      }}
+      onMouseLeave={() => {
+        useStore.setState({ViewerMouse: {...ViewerMouse, onEnter: false}})
+      }}
+    >
       <Canvas camera={{ position: [0, 0, 5] }}>
         <Suspense fallback={null}>
           <Bg />
