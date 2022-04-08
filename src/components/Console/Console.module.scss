@@ -17,3 +17,27 @@
         height: 100%;
     }
 }
+
+.console {
+    margin: 10px 20px 0px 20px;
+    color: #fff;
+    line-height: 1.5em;
+
+    .warning {
+        color: rgb(255, 228, 75);
+    }
+
+    .errer {
+        color: rgb(255, 77, 77);
+    }
+
+    .target {
+        color: rgb(68, 142, 240);
+        line-height: 35px;
+    }
+
+    .object {
+        color: rgb(255, 164, 112);
+        text-decoration: underline;
+    }
+}
