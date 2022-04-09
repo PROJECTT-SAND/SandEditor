@@ -1,6 +1,7 @@
 import style from './ViewerController.module.scss';
 import React, { useState } from 'react';
-import useStore from '../../store'
+import useStore from '../../store';
+import { system } from '../../system';
 
 export default function ViewerController() {
   const playerStates = [ // 0: 조작 불가, 1: 조작 가능, 2: 활성화
@@ -97,7 +98,22 @@ export default function ViewerController() {
             ${(playerStates[playerState][0] === 0) ? style.player_noActive : ""}
             ${(playerStates[playerState][0] === 2) ? style.player_play_active : ""}
           `} 
-          onClick={()=>{ if(playerStates[playerState][0] === 1) {setPlayerState(3)} }}>
+          onClick={()=>{
+            if(playerStates[playerState][0] === 1) {
+              setPlayerState(2);
+              if(playerState === 1) {
+                (async function() {
+                  await system.run("sys start");
+                  setPlayerState(3);
+                })();
+              } else if(playerState === 4) {
+                (async function() {
+                  await system.run("sys restart");
+                  setPlayerState(3);
+                })();
+              }
+            }
+          }}>
 
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 22v-20l18 10-18 10z"/></svg>
         </button>
@@ -108,7 +124,11 @@ export default function ViewerController() {
             ${(playerStates[playerState][1] === 0) ? style.player_noActive : ""}
             ${(playerStates[playerState][1] === 2) ? style.player_pause_active : ""}
           `}
-          onClick={()=>{ if(playerStates[playerState][1] === 1) {setPlayerState(4)} }}>
+          onClick={()=>{
+            if(playerStates[playerState][1] === 1) {
+              setPlayerState(4);
+            }
+          }}>
           
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 24h-6v-24h6v24zm10-24h-6v24h6v-24z"/></svg>
         </button>
@@ -119,7 +139,22 @@ export default function ViewerController() {
             ${(playerStates[playerState][2] === 0) ? style.player_noActive : ""}
             ${(playerStates[playerState][2] === 2) ? style.player_stop_active : ""}
           `}
-          onClick={()=>{ if(playerStates[playerState][2] === 1) {setPlayerState(1)} }}>
+          onClick={()=>{
+            if(playerStates[playerState][2] === 1) {
+              setPlayerState(5);
+              if(playerState === 3) {
+                (async function() {
+                  await system.run("sys stop");
+                  setPlayerState(1);
+                })();
+              } else if(playerState === 4) {
+                (async function() {
+                  await system.run("sys stop");
+                  setPlayerState(1);
+                })();
+              }
+            }
+          }}>
           
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M2 2h20v20h-20z"/></svg>
         </button>

@@ -23,3 +23,19 @@ export default function Console() {
     </Window>
   );
 }
+
+export const sysConsole = {
+  command: function(Props) {
+    console.log(Props);
+    console.log("연산 시작");
+  },
+  text: function(Props) {
+    console.log(Props)
+  },
+  warning: function(Props) {
+    console.log(Props);
+  },
+  endCalculation: function() {
+    console.log("연산 끝");
+  }
+}
