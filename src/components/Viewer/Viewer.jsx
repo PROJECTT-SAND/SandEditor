@@ -9,7 +9,7 @@ import img from './example1.png'
 
 export default function Viewer() {
   const [objValue, setobjValue] = useState({
-    example1: {x: 10, y: 10}
+    example1: {x: 0, y: 0}
   });
 
   const {ViewerMouse} = useStore();
@@ -39,7 +39,7 @@ export default function Viewer() {
       ]
     }));
 
-    const bind = useGesture({
+    const OBJbind = useGesture({
       onDrag: ({ down, offset: [x, y] }) => {
         set({
           immediate: true,
@@ -61,33 +61,35 @@ export default function Viewer() {
     const texture = useLoader(THREE.TextureLoader, img);
   
     return (
-      <a.mesh {...spring} {...bind()}>
+      <a.mesh {...spring} {...OBJbind()}>
         <planeBufferGeometry attach="geometry" />
         <meshBasicMaterial attach="material" map={texture} />
       </a.mesh>
     )
   }
 
+  const mouseSencerBind = useGesture({
+    onMouseMove: ({ event: {clientX: x, clientY: y} }) => {
+      useStore.setState({ViewerMouse: {
+        PosX: x - 25,
+        PosY: y - 25,
+        onEnter: true
+      }})
+    },
+    onMouseLeave: () => {
+      useStore.setState({ViewerMouse: {...ViewerMouse, onEnter: false}})
+    }
+  })
+
   return (
-    <div
-      className={style.viewer}
-      onMouseMove={(e) => {
-        useStore.setState({ViewerMouse: {
-          PosX: e.clientX-25,
-          PosY: e.clientY-25,
-          onEnter: true
-        }})
-      }}
-      onMouseLeave={() => {
-        useStore.setState({ViewerMouse: {...ViewerMouse, onEnter: false}})
-      }}
-    >
+    <div className={style.viewer}>
       <Canvas camera={{ position: [0, 0, 5] }}>
         <Suspense fallback={null}>
           <Bg />
           <Image />
         </Suspense>
       </Canvas>
+      <div className={style.mouseSencer} {...mouseSencerBind()}></div>
     </div>
   );
 }
