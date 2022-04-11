@@ -1,5 +1,5 @@
 import style from './ViewerController.module.scss';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import useStore from '../../store';
 import { system } from '../../system';
 
@@ -20,19 +20,28 @@ export default function ViewerController() {
     "fullScreen": false
   });
 
-  const {ViewerMouse} = useStore();
-
   function PositionIndicator() {
-    if (ViewerMouse.onEnter) {
+    const {mouseIsEnterViewer} = useStore();
+    const [mouseX, setMouseX] = useState(0);
+    const [mouseY, setMouseY] = useState(0);
+
+    useEffect(() => {
+      document.addEventListener('mousemove', ({clientX: x, clientY: y}) => {
+        setMouseX(x - 25);
+        setMouseY(y - 25);
+      })
+    }, []);
+
+    if (mouseIsEnterViewer) {
       return(
         <div className={style.positionIndicator}>
           <div>
             <span>X: </span>
-            <i>{ViewerMouse.PosX}</i>
+            <i>{mouseX}</i>
           </div>
           <div>
             <span>Y: </span>
-            <i>{ViewerMouse.PosY}</i>
+            <i>{mouseY}</i>
           </div>
         </div>
       );

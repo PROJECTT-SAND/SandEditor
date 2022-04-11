@@ -12,8 +12,6 @@ export default function Viewer() {
     example1: {x: 0, y: 0}
   });
 
-  const {ViewerMouse} = useStore();
-
   function Bg() {
     return (
       <mesh
@@ -68,28 +66,30 @@ export default function Viewer() {
     )
   }
 
-  const mouseSencerBind = useGesture({
-    onMouseMove: ({ event: {clientX: x, clientY: y} }) => {
-      useStore.setState({ViewerMouse: {
-        PosX: x - 25,
-        PosY: y - 25,
-        onEnter: true
-      }})
-    },
-    onMouseLeave: () => {
-      useStore.setState({ViewerMouse: {...ViewerMouse, onEnter: false}})
+  function mouseEnterEvent() {
+    useStore.setState({mouseIsEnterViewer: true})
     }
-  })
+
+  function mouseLeaveEvent() {
+    useStore.setState({mouseIsEnterViewer: false})
+  }
 
   return (
-    <div className={style.viewer}>
+    <div className={style.viewer}
+      onMouseEnter={() => {
+        useStore.setState({mouseIsEnterViewer: true})
+      }}
+      onMouseLeave={() => {
+        useStore.setState({mouseIsEnterViewer: false})
+      }}
+      >
+
       <Canvas camera={{ position: [0, 0, 5] }}>
         <Suspense fallback={null}>
           <Bg />
           <Image />
         </Suspense>
       </Canvas>
-      <div className={style.mouseSencer} {...mouseSencerBind()}></div>
     </div>
   );
 }
