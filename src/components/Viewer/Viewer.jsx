@@ -66,14 +66,6 @@ export default function Viewer() {
     )
   }
 
-  function mouseEnterEvent() {
-    useStore.setState({mouseIsEnterViewer: true})
-    }
-
-  function mouseLeaveEvent() {
-    useStore.setState({mouseIsEnterViewer: false})
-  }
-
   return (
     <div className={style.viewer}
       onMouseEnter={() => {
