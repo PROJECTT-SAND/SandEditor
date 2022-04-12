@@ -64,12 +64,12 @@ export default function ViewerController() {
             if(playerStates[playerState][0] === 1) {
               setPlayerState(2);
               if(playerState === 1) {
-                (async function() {
+                (async () => {
                   await system.run("sys start");
                   setPlayerState(3);
                 })();
               } else if(playerState === 4) {
-                (async function() {
+                (async () => {
                   await system.run("sys restart");
                   setPlayerState(3);
                 })();
@@ -105,12 +105,12 @@ export default function ViewerController() {
             if(playerStates[playerState][2] === 1) {
               setPlayerState(5);
               if(playerState === 3) {
-                (async function() {
+                (async () => {
                   await system.run("sys stop");
                   setPlayerState(1);
                 })();
               } else if(playerState === 4) {
-                (async function() {
+                (async () => {
                   await system.run("sys stop");
                   setPlayerState(1);
                 })();
