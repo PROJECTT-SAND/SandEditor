@@ -1,0 +1,35 @@
+.workSpace {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .workMenu {
+        height: 35px;
+        display: flex;
+
+        .menuItemSelected {
+            background: #1b222b !important;
+            border: 1px solid #222a35 !important;
+        }
+
+        .menuItem {
+            width: 140px;
+            height: 100%;
+            border-radius: 10px 10px 0px 0px;
+            font-size: 12px;
+            padding: 0px 15px;
+            color: #fff;
+            border: 2px solid #333f50;
+            background: none;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+
+            .menuItemContent {
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+    }
+}

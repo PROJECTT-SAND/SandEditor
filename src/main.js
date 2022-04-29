@@ -12,8 +12,6 @@ function createWindow() {
         }
     });
 
-    win.webContents.openDevTools();
-
     if(isDev) {
         win.loadURL("http://localhost:3000/");
         win.webContents.openDevTools();

@@ -1,8 +1,8 @@
 import style from './Viewer.module.scss';
-import React, { useEffect, useState, Suspense } from 'react';
+import React, { useEffect, useRef, useState, Suspense } from 'react';
 import { useGesture } from '@use-gesture/react'
 import { useSpring, a } from "@react-spring/three"
-import { Canvas, useLoader, useThree } from '@react-three/fiber';
+import { Canvas, useLoader, useThree, useFrame } from '@react-three/fiber';
 import * as THREE from "three"
 import useStore from '../../store'
 import img from './example1.png'
@@ -56,12 +56,41 @@ export default function Viewer() {
       }
     });
 
+    const ref = useRef()
+
+    useFrame(() => {
+      ref.current.shift = 10
+    })
+
     const texture = useLoader(THREE.TextureLoader, img);
-  
+    
+    const fragmentShader = `
+    uniform sampler2D tex;
+
+    void main(void) {
+        vec2 offset = 1, 1;
+
+        vec4 cr = texture2D(tex, p + offset);
+        vec4 cga = texture2D(tex, p);
+        vec4 cb = texture2D(tex, p - offset);
+
+        gl_FragColor = vec4(cr.r, cga.g, cb.b, cga.a);
+    }`
+
     return (
-      <a.mesh {...spring} {...OBJbind()}>
+      <a.mesh
+        {...spring}
+        {...OBJbind()}
+        >
+
         <planeBufferGeometry attach="geometry" />
-        <meshBasicMaterial attach="material" map={texture} />
+        {/* <shaderMaterial */}
+        <meshBasicMaterial
+          ref={ref}
+          attach="material"
+          map={texture}
+          // fragmentShader={fragmentShader}
+          />
       </a.mesh>
     )
   }
