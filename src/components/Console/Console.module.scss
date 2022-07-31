@@ -6,6 +6,7 @@
     height: 28px;
     border-radius: 15px;
     padding-left: 15px;
+    flex-shrink: 0;
 
     i {
         color: #fff;
@@ -18,45 +19,49 @@
     }
 }
 
-.console {
-    height: 100%;
-    margin: 10px 20px 0px 20px;
-    color: #fff;
-    line-height: 1.6rem;
-    font-size: 16px;
-    display: flex;
-    flex-direction: column;
-    font-family: monospace;
+.console_wrap {
+    padding: 10px 20px 20px 20px;
+    overflow-y: auto;
 
-    .warning {
-        color: rgb(255, 228, 75);
-    }
-
-    .errer {
-        color: rgb(255, 77, 77);
-    }
-
-    .target {
-        color: rgb(68, 142, 240);
-        margin-right: 8px;
-    }
-
-    .object {
-        color: rgb(255, 164, 112);
-        text-decoration: underline;
-    }
-
-    .consoleInput_wrap {
+    .console {
+        color: #fff;
+        line-height: 1.6rem;
+        font-size: 16px;
         display: flex;
-
-        .consoleInput {
-            width: 100%;
-            outline: none;
-            background: none;
-            border: none;
-            color: #fff;
-            font-size: 16px;
-            font-family: monospace;
+        flex-direction: column;
+        font-family: monospace;
+    
+        .warning {
+            color: rgb(255, 228, 75);
+        }
+    
+        .errer {
+            color: rgb(255, 77, 77);
+        }
+    
+        .target {
+            color: rgb(68, 142, 240);
+            margin-right: 8px;
+        }
+    
+        .object {
+            color: rgb(255, 164, 112);
+            text-decoration: underline;
+        }
+    
+        .consoleInput_wrap {
+            display: flex;
+            margin-top: 7px;
+    
+            .consoleInput {
+                width: 100%;
+                outline: none;
+                background: none;
+                border: none;
+                color: #fff;
+                font-size: 16px;
+                font-family: monospace;
+            }
         }
     }
 }

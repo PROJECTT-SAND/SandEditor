@@ -1,112 +1,65 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
+import shallow from 'zustand/shallow';
 import style from './Console.module.scss';
 import Window from '../Window/Window';
 import { system } from '../../system';
+import useStore from '../../store';
 
 export default function Console() {
-  const [logs, setLogs] = useState([
-    { kind: 'input', content: "asdgjohgasfdjkhgafjkhgsdoujasgd", time: '054301' },
-    { kind: 'error', content: "알 수 없는 명령어" },
-    { kind: 'input', content: "sys run" },
-    { kind: 'text', content: "시스템: 살행 중" },
-    { kind: 'text', content: "시스템: 살행 완료" },
-    { kind: 'warning', content: "InGame 코딩이 이상해유" },
-    { kind: 'warning', content: "코드를 너무 엿같이 짜놨읍니다" },
-    { kind: 'warning', content: "코드를 너무 엿같이 짜놨읍니다" },
-  ]);
+  const logs = useStore(store => Object.values(store.logs), shallow);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    ref.current.scrollTop = 100;
+    // console.log("as")
+  }, []);
 
   function Console() {
-      const dgfojisdg = [];
-    // useEffect(() => {
-      for(let i=0; i<8; i++) {
-        const item = logs[i];
+    let result = [];
 
-        if(item.kind === 'input') {
-          return (
-            <div>
-              <span className={style.target}>&#62;</span>
-              {item.content}
-            </div>
-          )
-        } else if(item.kind === 'error') {
-          return (
-            <div className={style.errer}>{item.content}</div>
-          )
-        } else if(item.kind === 'warning') {
-          return (
-            <div className={style.warning}>{item.content}</div>
-          )
-        } else if(item.kind === 'text') {
-          return (
-            <div>{item.content}</div>
-          )
-        }
+    logs.map((item, key) => {
+      if(item.kind === 'command') {
+        result.push (
+          <div key={key}>
+            <span className={style.target}>&#62;</span>
+            {item.content}
+          </div>
+        );
+      } else if(item.kind === 'error') {
+        result.push (
+          <div key={key} className={style.errer}>{item.content}</div>
+        );
+      } else if(item.kind === 'warning') {
+        result.push (
+          <div key={key} className={style.warning}>{item.content}</div>
+        );
+      } else if(item.kind === 'text') {
+        result.push (
+          <div key={key}>{item.content}</div>
+        );
       }
+    })
 
-
-
-      // const content = logs.map(item => {
-      //   if(item.kind === 'input') {
-      //     return (
-      //       <div>
-      //         <span className={style.target}>&#62;</span>
-      //         {item.content}
-      //       </div>
-      //     )
-      //   } else if(item.kind === 'error') {
-      //     return (
-      //       <div className={style.errer}>{item.content}</div>
-      //     )
-      //   } else if(item.kind === 'warning') {
-      //     return (
-      //       <div className={style.warning}>{item.content}</div>
-      //     )
-      //   } else if(item.kind === 'text') {
-      //     return (
-      //       <div>{item.content}</div>
-      //     )
-      //   }
-      // });
-
-      // console.log(content[0])
-
-      // return(content[0])
-    // }, [logs, '']);
-
-    return('')
-
-    // return(
-    //   <code className={style.console}>
-    //     <div>
-    //       <div>
-    //         <span className={style.target}>&#62;</span>
-    //         asdgjohgasfdjkhgafjkhgsdoujasgd
-    //       </div>
-    //       <div className={style.errer}>오류 - 알 수 없는 명령어</div>
-    //       <div>
-    //         <span className={style.target}>&#62;</span>
-    //         sys run
-    //       </div>
-    //       <div>시스템: 실행 중</div>
-    //       <div>시스템: 실행 완료</div>
-    //       <div className={style.warning}>주의 - <span className={style.object}>InGame</span> 코딩이 이상해유</div>
-    //       <div className={style.warning}>주의 - 코드를 너무 엿같이 짜놨읍니다</div>
-    //       <div className={style.warning}>주의 - 코드를 너무 엿같이 짜놨읍니다</div>
-    //     </div>
-    //     <div className={style.consoleInput_wrap}>
-    //       <span className={style.target}>&#62;</span>
-    //       <input
-    //         className={style.consoleInput}
-    //         onKeyDown={(e)=>{
-    //           if(e.key == 'Enter') {
-    //             system.run(e.target.value);
-    //             e.target.value = "";
-    //           }
-    //         }}>
-    //       </input>
-    //     </div>
-    //   </code>
-    // )
+    return (
+      <div className={style.console_wrap} ref={ref}>
+        <code className={style.console}>
+          {result}
+          <div className={style.consoleInput_wrap}>
+            <span className={style.target}>&#62;</span>
+            <input
+              className={style.consoleInput}
+              onKeyDown={(e)=>{
+                if(e.key === 'Enter') {
+                  system.run(e.target.value);
+                  e.target.value = "";
+                  
+                }
+              }}>
+            </input>
+          </div>
+        </code>
+      </div>
+    );
   }
 
   return (
@@ -116,24 +69,70 @@ export default function Console() {
         <i>Console</i>
         <button className={style.topBar_search}></button>
       </div>
-      <Console />
+      <Console/>
     </Window>
   );
 }
 
-export const sysConsole = {
-  command: function(Props) {
 
-    console.log(Props);
-    console.log("연산 시작");
+export const sysConsole = {
+  command: (Props) => {
+    let logsValue = useStore.getState().logs;
+    
+    logsValue.push({
+      kind: 'command',
+      content: Props,
+      time: new Date()
+    });
+
+    useStore.setState({
+        logs: logsValue,
+        ...useStore
+    });
   },
-  text: function(Props) {
-    console.log(Props)
+  text: (Props) => {
+    let logsValue = useStore.getState().logs;
+    
+    logsValue.push({
+      kind: 'text',
+      content: Props,
+      time: new Date()
+    });
+
+    useStore.setState({
+      logs: logsValue,
+      ...useStore
+  });
   },
-  warning: function(Props) {
-    console.log(Props);
+  warning: (Props) => {
+    let logsValue = useStore.getState().logs;
+    
+    logsValue.push({
+      kind: 'warning',
+      content: Props,
+      time: new Date()
+    });
+
+    useStore.setState({
+      logs: logsValue,
+      ...useStore
+    });
   },
-  endCalculation: function() {
-    console.log("연산 끝");
+  error: (Props) => {
+    let logsValue = useStore.getState().logs;
+    
+    logsValue.push({
+      kind: 'error',
+      content: Props,
+      time: new Date()
+    });
+
+    useStore.setState({
+      logs: logsValue,
+      ...useStore
+    });
+  },
+  endCalculation: (Props) => {
+    // 연산 끝
   }
 }

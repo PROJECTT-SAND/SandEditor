@@ -29,30 +29,35 @@ export default function Viewer() {
     const aspect = size.width / viewport.width;
 
     const [spring, set] = useSpring(() => ({
+      rotation: [-(Math.PI/2), 0, 0],
       scale: [10, 10, 10],
       position: [
         objValue["example1"].x / aspect,
-        objValue["example1"].y / aspect,
-        0
+        -0.01,
+        objValue["example1"].y / -aspect
       ]
     }));
 
     const OBJbind = useGesture({
       onDrag: ({ down, offset: [x, y] }) => {
-        set({
-          immediate: true,
-          position: [
-            (x + objValue["example1"].x) / aspect,
-            (-y + objValue["example1"].y) / aspect,
-            0
-          ]
-        });
+        if(toolState === 1) {
+          set({
+            immediate: true,
+            position: [
+              (x + objValue["example1"].x) / aspect,
+              -0.01,
+              (-y + objValue["example1"].y) / -aspect
+            ]
+          });
+        }
       },
       onDragEnd: ({ offset: [x, y] }) => {
-        setobjValue({...objValue, "example1": {
-          x: x + objValue["example1"].x,
-          y: -y + objValue["example1"].y
-        }});
+        if(toolState === 1) {
+          setobjValue({...objValue, "example1": {
+            x: x + objValue["example1"].x,
+            y: -y + objValue["example1"].y
+          }});
+        }
       }
     });
 
@@ -60,21 +65,29 @@ export default function Viewer() {
 
     useFrame(() => {
       ref.current.shift = 10
+      // ref.current.rotation.x = 0
     })
 
-    const texture = useLoader(THREE.TextureLoader, img);
+    const [texture] = useLoader(THREE.TextureLoader, [img]);
     
-    const fragmentShader = `
-    uniform sampler2D tex;
+    //vertexShader
+    const VS = `
+    varying vec2 vUv;
 
-    void main(void) {
-        vec2 offset = 1, 1;
+    void main() {
+      vUv = uv;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    }`
 
-        vec4 cr = texture2D(tex, p + offset);
-        vec4 cga = texture2D(tex, p);
-        vec4 cb = texture2D(tex, p - offset);
+    //fragmentShader
+    const FS = `
+    uniform sampler2D uTexture;
 
-        gl_FragColor = vec4(cr.r, cga.g, cb.b, cga.a);
+    varying vec2 vUv;
+
+    void main() {
+      vec3 texture = texture2D(uTexture, vUv).rgb;
+      gl_FragColor = vec4(texture.r, texture.g, texture.b, 1.0);
     }`
 
     return (
@@ -84,31 +97,40 @@ export default function Viewer() {
         >
 
         <planeBufferGeometry attach="geometry" />
-        {/* <shaderMaterial */}
         <meshBasicMaterial
           ref={ref}
           attach="material"
           map={texture}
-          // fragmentShader={fragmentShader}
           />
+          
+        {/* <shaderMaterial
+          uniforms={{
+            uTexture: texture
+          }}
+          fragmentShader={FS}
+          vertexShader={VS}
+          /> */}
       </a.mesh>
     )
   }
 
+  const { toolState } = useStore();
+
   return (
     <div className={style.viewer}
       onMouseEnter={() => {
-        useStore.setState({mouseIsEnterViewer: true})
+        useStore.setState({mouseIsEnterViewer: true, ...useStore})
       }}
       onMouseLeave={() => {
-        useStore.setState({mouseIsEnterViewer: false})
+        useStore.setState({mouseIsEnterViewer: false, ...useStore})
       }}
       >
 
-      <Canvas camera={{ position: [0, 0, 5] }}>
+      <Canvas camera={{ position: [0, 5, 0] }}>
         <Suspense fallback={null}>
-          <Bg />
           <Image />
+          <gridHelper args={[100, 4, `white`, `gray`]} />
+          <Bg />
         </Suspense>
       </Canvas>
     </div>
