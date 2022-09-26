@@ -72,12 +72,6 @@ export default function WorkSpace() {
         <Editor
           theme="vs-dark"
           defaultLanguage={languageID}
-          // language={null}
-          defaultValue={`func null start(obj:obj)
-  obj.[x, y, size] = [10, 20, 100]
-      
-  for(10)
-    obj.X += 10`}
           onMount={handleEditorDidMount} />
       </Window>
     </div>
