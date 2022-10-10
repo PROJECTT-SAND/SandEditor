@@ -1,5 +1,5 @@
-import style from './Layout.module.scss';
-import React, { useState } from 'react';
+import style from "./Layout.module.scss";
+import { useState } from "react";
 import { Viewer, ViewerController, Objects, Folder, Workspace, Console } from './components/index';
 
 export default function Layout() {
