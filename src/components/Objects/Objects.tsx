@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import style from './Objects.module.scss';
-import Window from '../Window/Window';
+import Window from '../Window/Window.tsx';
 import folderIcon from './folder.svg';
 import arrowDownIcon from './arrow_down.svg';
 import arrowUpIcon from './arrow_up.svg';
