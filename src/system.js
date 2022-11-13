@@ -32,17 +32,40 @@ function sys(Props) {
     try {
       switch (Props[0]) {
         case 'start':
+          function tokenizing(code) {
+            let tokenize = code;
+
+            const asdf = ['\\(', '\\)', '\\[', '\\]', ',', '\\:', '\\.'];
+            let regExp = "/(";
+
+            for(let item of asdf) {
+              regExp += item + '|';
+            }
+
+            regExp += " )/g"; //공백 포함
+
+            tokenize = tokenize
+              .split(regExp)
+              .map(item => { return item.replace(/\n/g,'') })
+              .filter(item => item !== '' && item !== ' ')
+
+            return tokenize;
+          }
+
+          // function lexing() {
+
+          // }
+
           sysConsole.text("시스템: 살행 중");
           useStore.setState({playerState: 2, ...useStore});
 
-          // await (()=>{})
-
-          const code = useStore.getState().codes["qwe.sdcod"]
-
-          console.log(code)
+          let code = useStore.getState().codes["qwe.sdcod"]
           
           sysConsole.text("시스템: 살행 완료");
           useStore.setState({playerState: 3, ...useStore});
+
+          code = tokenizing(code);
+
           sysConsole.warning("InGame 13번 코드에 오류가 있습니다.");
           resolve();
           break;
