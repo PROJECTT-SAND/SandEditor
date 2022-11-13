@@ -15,9 +15,9 @@ export default function Console() {
   }, []);
 
   function Console() {
-    let result = [];
+    let result: any = [];
 
-    logs.map((item, key) => {
+    logs.map((item: any, key) => {
       if(item.kind === 'command') {
         result.push (
           <div key={key}>
@@ -76,7 +76,7 @@ export default function Console() {
 
 
 export const sysConsole = {
-  command: (Props) => {
+  command: (Props: any) => {
     let logsValue = useStore.getState().logs;
     
     logsValue.push({
@@ -90,7 +90,7 @@ export const sysConsole = {
         ...useStore
     });
   },
-  text: (Props) => {
+  text: (Props: any) => {
     let logsValue = useStore.getState().logs;
     
     logsValue.push({
@@ -104,7 +104,7 @@ export const sysConsole = {
       ...useStore
   });
   },
-  warning: (Props) => {
+  warning: (Props: any) => {
     let logsValue = useStore.getState().logs;
     
     logsValue.push({
@@ -118,7 +118,7 @@ export const sysConsole = {
       ...useStore
     });
   },
-  error: (Props) => {
+  error: (Props: any) => {
     let logsValue = useStore.getState().logs;
     
     logsValue.push({
@@ -132,7 +132,7 @@ export const sysConsole = {
       ...useStore
     });
   },
-  endCalculation: (Props) => {
+  endCalculation: (Props: any) => {
     // 연산 끝
   }
 }
