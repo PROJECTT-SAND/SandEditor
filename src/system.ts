@@ -1,16 +1,33 @@
-import { sysConsole } from "./components/Console/Console";
 import useStore from "./store";
 
+import { sysConsole } from "./components/Console/Console";
+
+import * as Sys from "./system/Sys"
+
 export const system = {
-  run: function (Props) {
+  run: (Props: string) => {
     return new Promise((resolve, reject) => {
       try {
         (async () => {
-          sysConsole.command(Props);
+          const store = useStore.getState();
 
-          switch (Props.split(" ")[0]) {
+          sysConsole.command(Props);
+          const prefix = Props.split(" ")[0];
+          const command = Props.split(" ")[1];
+
+          switch (prefix) {
             case "sys":
-              await sys(Props.split(" ").slice(1));
+              sysConsole.text("시스템: 실행 중");
+              store.setters.setPlayerState(2);
+              
+              await Sys.start;
+              
+              const code = store.codes["qwe.sdcod"];
+              
+              sysConsole.text("시스템: 실행 완료");
+              store.setters.setPlayerState(3);
+              sysConsole.warning("InGame 13번 코드에 오류가 있습니다.");
+              
               break;
 
             default:
@@ -18,7 +35,7 @@ export const system = {
           }
 
           sysConsole.endCalculation();
-          resolve();
+          resolve(null);
         })();
       } catch {
         reject();
@@ -27,87 +44,214 @@ export const system = {
   },
 };
 
-function sys(Props) {
-  return new Promise(async (resolve, reject) => {
-    try {
-      switch (Props[0]) {
-        case 'start':
-          function tokenizing(code) {
-            let tokenize = code;
+// const sys = {
+//   start: () => {
+//     return new Promise(async (resolve, reject) => {
+//       function tokenizing(code) {
+//         let tokenize = code;
+  
+//         const asdf = ['\\(', '\\)', '\\[', '\\]', ',', '\\:', '\\.'];
+//         let regExp = "/(";
+  
+//         for(let item of asdf) {
+//           regExp += item + '|';
+//         }
+  
+//         regExp += " )/g"; //공백 포함
+  
+//         tokenize = tokenize
+//           .split(regExp)
+//           .map(item => { return item.replace(/\n/g,'') })
+//           .filter(item => item !== '' && item !== ' ')
+  
+//         return tokenize;
+//       }
+  
+//       // function lexing() {
+  
+//       // }
+  
+//       sysConsole.text("시스템: 살행 중");
+//       useStore.setState({ playerState: 2, ...useStore });
+  
+//       // await (()=>{})
+  
+//       const code = useStore.getState().codes["qwe.sdcod"];
+  
+//       console.log(code);
+  
+//       sysConsole.text("시스템: 살행 완료");
+//       useStore.setState({ playerState: 3, ...useStore });
+//       sysConsole.warning("InGame 13번 코드에 오류가 있습니다.");
+//     })
+//   }
 
-            const asdf = ['\\(', '\\)', '\\[', '\\]', ',', '\\:', '\\.'];
-            let regExp = "/(";
+//   return new Promise(async (resolve, reject) => {
+//     try {
+//       switch (Props[0]) {
+//         case 'start':
+//           function tokenizing(code) {
+//             let tokenize = code;
 
-            for(let item of asdf) {
-              regExp += item + '|';
-            }
+//             const asdf = ['\\(', '\\)', '\\[', '\\]', ',', '\\:', '\\.'];
+//             let regExp = "/(";
 
-            regExp += " )/g"; //공백 포함
+//             for(let item of asdf) {
+//               regExp += item + '|';
+//             }
 
-            tokenize = tokenize
-              .split(regExp)
-              .map(item => { return item.replace(/\n/g,'') })
-              .filter(item => item !== '' && item !== ' ')
+//             regExp += " )/g"; //공백 포함
 
-            return tokenize;
-          }
+//             tokenize = tokenize
+//               .split(regExp)
+//               .map(item => { return item.replace(/\n/g,'') })
+//               .filter(item => item !== '' && item !== ' ')
 
-          // function lexing() {
+//             return tokenize;
+//           }
 
-          // }
+//           // function lexing() {
 
-          sysConsole.text("시스템: 살행 중");
-          useStore.setState({ playerState: 2, ...useStore });
+//           // }
 
-          // await (()=>{})
+//           sysConsole.text("시스템: 살행 중");
+//           useStore.setState({ playerState: 2, ...useStore });
 
-          const code = useStore.getState().codes["qwe.sdcod"];
+//           // await (()=>{})
 
-          console.log(code);
+//           const code = useStore.getState().codes["qwe.sdcod"];
 
-          sysConsole.text("시스템: 살행 완료");
-          useStore.setState({ playerState: 3, ...useStore });
-          sysConsole.warning("InGame 13번 코드에 오류가 있습니다.");
-          resolve();
-          break;
+//           console.log(code);
 
-        case "stop":
-          sysConsole.text("시스템: 종료 중");
-          useStore.setState({ playerState: 5, ...useStore });
+//           sysConsole.text("시스템: 살행 완료");
+//           useStore.setState({ playerState: 3, ...useStore });
+//           sysConsole.warning("InGame 13번 코드에 오류가 있습니다.");
+//           resolve();
+//           break;
 
-          await (() => {});
+//         case "stop":
+//           sysConsole.text("시스템: 종료 중");
+//           useStore.setState({ playerState: 5, ...useStore });
 
-          sysConsole.text("시스템: 종료 완료");
-          useStore.setState({ playerState: 1, ...useStore });
-          resolve();
-          break;
+//           await (() => {});
 
-        case "restart":
-          sysConsole.text("시스템: 재시작 중");
-          useStore.setState({ playerState: 5, ...useStore });
+//           sysConsole.text("시스템: 종료 완료");
+//           useStore.setState({ playerState: 1, ...useStore });
+//           resolve();
+//           break;
 
-          await (() => {});
+//         case "restart":
+//           sysConsole.text("시스템: 재시작 중");
+//           useStore.setState({ playerState: 5, ...useStore });
 
-          sysConsole.text("시스템: 재시작 완료");
-          useStore.setState({ playerState: 1, ...useStore });
-          resolve();
-          break;
+//           await (() => {});
 
-        case "pause":
-          sysConsole.text("시스템: 일시중지 중");
-          useStore.setState({ playerState: 5, ...useStore });
+//           sysConsole.text("시스템: 재시작 완료");
+//           useStore.setState({ playerState: 1, ...useStore });
+//           resolve();
+//           break;
 
-          await (() => {});
+//         case "pause":
+//           sysConsole.text("시스템: 일시중지 중");
+//           useStore.setState({ playerState: 5, ...useStore });
 
-          sysConsole.text("시스템: 일시중지 완료");
-          useStore.setState({ playerState: 1, ...useStore });
-          resolve();
-          break;
-        default:
-          sysConsole.error("sys: 알 수 없는 명령어");
-      }
-    } catch {
-      reject();
-    }
-  });
-}
+//           await (() => {});
+
+//           sysConsole.text("시스템: 일시중지 완료");
+//           useStore.setState({ playerState: 1, ...useStore });
+//           resolve();
+//           break;
+//         default:
+//           sysConsole.error("sys: 알 수 없는 명령어");
+//       }
+//     } catch {
+//       reject();
+//     }
+//   });
+// }
+
+
+// function sys(Props) {
+//   return new Promise(async (resolve, reject) => {
+//     try {
+//       switch (Props[0]) {
+//         case 'start':
+//           function tokenizing(code) {
+//             let tokenize = code;
+
+//             const asdf = ['\\(', '\\)', '\\[', '\\]', ',', '\\:', '\\.'];
+//             let regExp = "/(";
+
+//             for(let item of asdf) {
+//               regExp += item + '|';
+//             }
+
+//             regExp += " )/g"; //공백 포함
+
+//             tokenize = tokenize
+//               .split(regExp)
+//               .map(item => { return item.replace(/\n/g,'') })
+//               .filter(item => item !== '' && item !== ' ')
+
+//             return tokenize;
+//           }
+
+//           // function lexing() {
+
+//           // }
+
+//           sysConsole.text("시스템: 살행 중");
+//           useStore.setState({ playerState: 2, ...useStore });
+
+//           // await (()=>{})
+
+//           const code = useStore.getState().codes["qwe.sdcod"];
+
+//           console.log(code);
+
+//           sysConsole.text("시스템: 살행 완료");
+//           useStore.setState({ playerState: 3, ...useStore });
+//           sysConsole.warning("InGame 13번 코드에 오류가 있습니다.");
+//           resolve();
+//           break;
+
+//         case "stop":
+//           sysConsole.text("시스템: 종료 중");
+//           useStore.setState({ playerState: 5, ...useStore });
+
+//           await (() => {});
+
+//           sysConsole.text("시스템: 종료 완료");
+//           useStore.setState({ playerState: 1, ...useStore });
+//           resolve();
+//           break;
+
+//         case "restart":
+//           sysConsole.text("시스템: 재시작 중");
+//           useStore.setState({ playerState: 5, ...useStore });
+
+//           await (() => {});
+
+//           sysConsole.text("시스템: 재시작 완료");
+//           useStore.setState({ playerState: 1, ...useStore });
+//           resolve();
+//           break;
+
+//         case "pause":
+//           sysConsole.text("시스템: 일시중지 중");
+//           useStore.setState({ playerState: 5, ...useStore });
+
+//           await (() => {});
+
+//           sysConsole.text("시스템: 일시중지 완료");
+//           useStore.setState({ playerState: 1, ...useStore });
+//           resolve();
+//           break;
+//         default:
+//           sysConsole.error("sys: 알 수 없는 명령어");
+//       }
+//     } catch {
+//       reject();
+//     }
+//   });
+// }

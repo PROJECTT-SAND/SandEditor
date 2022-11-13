@@ -48,24 +48,25 @@ export default function ViewerController() {
     const {playerState} = useStore();
 
     const playerStates = [ // 0: 조작 불가, 1: 조작 가능, 2: 활성화
-      [0, 0, 0], // 0 프로그램 로딩 상태.
-      [1, 0, 0], // 1 최초 상태. 실행만 가능.
-      [2, 0, 0], // 2 실행중인 상태. 조작 불가.
-      [2, 1, 1], // 3 실행된 상태. 정지, 멈춤 가능.
-      [1, 2, 1], // 4 멈춘 상태. 실행, 멈춤 가능.
-      [0, 0, 2], // 5 정지중인 상태. 조작 불가.
+      {play: 0, pause: 0, stop: 0}, // 0 프로그램 로딩 상태.
+      {play: 1, pause: 0, stop: 0}, // 1 최초 상태. 실행만 가능.
+      {play: 2, pause: 0, stop: 0}, // 2 실행중인 상태. 조작 불가.
+      {play: 2, pause: 1, stop: 1}, // 3 실행된 상태. 정지, 멈춤 가능.
+      {play: 1, pause: 2, stop: 1}, // 4 멈춘 상태. 실행, 멈춤 가능.
+      {play: 0, pause: 0, stop: 2}, // 5 정지중인 상태. 조작 불가.
     ]
+
+    const state = ['disabled', 'available', 'active']
 
     return(
       <div className={style.player}>
         <button
           className={`
-            ${style.player_play}
-            ${(playerStates[playerState][0] === 0) ? style.player_noActive : ""}
-            ${(playerStates[playerState][0] === 2) ? style.player_play_active : ""}
+            ${style.play}
+            ${style[state[playerStates[playerState].play]]}
           `} 
           onClick={()=>{
-            if(playerStates[playerState][0] === 1) {
+            if(playerStates[playerState].play === 1) {
               if(playerState === 1) {
                 (async () => {
                   await system.run("sys start");
@@ -83,12 +84,11 @@ export default function ViewerController() {
 
         <button
           className={`
-            ${style.player_pause}
-            ${(playerStates[playerState][1] === 0) ? style.player_noActive : ""}
-            ${(playerStates[playerState][1] === 2) ? style.player_pause_active : ""}
+            ${style.pause}
+            ${style[state[playerStates[playerState].pause]]}
           `}
           onClick={()=>{
-            if(playerStates[playerState][1] === 1) {
+            if(playerStates[playerState].pause === 1) {
               (async () => {
                 await system.run("sys pause");
               })();
@@ -101,12 +101,11 @@ export default function ViewerController() {
 
         <button
           className={`
-            ${style.player_stop}
-            ${(playerStates[playerState][2] === 0) ? style.player_noActive : ""}
-            ${(playerStates[playerState][2] === 2) ? style.player_stop_active : ""}
+            ${style.stop}
+            ${style[state[playerStates[playerState].stop]]}
           `}
           onClick={()=>{
-            if(playerStates[playerState][2] === 1) {
+            if(playerStates[playerState].stop === 1) {
               if(playerState === 3) {
                 (async () => {
                   await system.run("sys stop");

@@ -8,7 +8,6 @@
     button {
         width: 40px;
         height: 40px;
-        border-radius: 10px;
         background-color: #595959;
 
         &:hover {
@@ -37,6 +36,10 @@
         display: flex;
         gap: 12px;
 
+        button {
+            border-radius: 10px;
+        }
+
         .option_active {
             background: #3280ed;
 
@@ -61,6 +64,9 @@
     }
 
     .tool {
+        border-radius: 10px;
+        overflow: hidden;
+
         svg {
             width: 15px;
             height: 15px;
@@ -69,23 +75,19 @@
         .tool_active {
             background: #3280ed;
         }
-
-        .tool_hand {
-            border-radius: 10px 0px 0px 10px;
-        }
-
-        .tool_move {
-            border-radius: 0px 10px 10px 0px;
-        }
     }
 
     .player {
+        border-radius: 10px;
+        overflow: hidden;
+
         svg {
             width: 12px;
             height: 12px;
+            fill: #fff;
         }
 
-        .player_noActive {
+        .disabled {
             &:hover {
                 background: #595959;
             }
@@ -95,51 +97,41 @@
             }
         }
 
-        .player_play {
+        .play {
             width: 42px;
             padding-left: 3px;
-            border-radius: 1000px 0px 0px 1000px;
-        }
-        .player_play_active {
-            background: #3280ed;
-            &:hover {
+
+            &.active {
                 background: #3280ed;
-            }
 
-            svg {
-                fill: #fff;
+                &:hover {
+                    background: #3280ed;
+                }
             }
         }
 
-        .player_pause {
+        .pause {
             border-radius: 0;
-        }
-        .player_pause_active {
-            background: #ffc000;
 
-            &:hover {
+            &.active {
                 background: #ffc000;
-            }
-
-            svg {
-                fill: #fff;
+    
+                &:hover {
+                    background: #ffc000;
+                }
             }
         }
 
-        .player_stop {
+        .stop {
             width: 42px;
             padding-right: 4px;
-            border-radius: 0px 1000px 1000px 0px;
-        }
-        .player_stop_active {
-            background: #f23a3a;
-
-            &:hover {
+            
+            &.active {
                 background: #f23a3a;
-            }
-
-            svg {
-                fill: #fff;
+    
+                &:hover {
+                    background: #f23a3a;
+                }
             }
         }
     }

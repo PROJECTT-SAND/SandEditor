@@ -132,7 +132,7 @@ export const sysConsole = {
       ...useStore
     });
   },
-  endCalculation: (Props: any) => {
+  endCalculation: () => {
     // 연산 끝
   }
 }

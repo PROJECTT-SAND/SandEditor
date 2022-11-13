@@ -1,6 +1,18 @@
 import create from 'zustand';
 
-const useStore = create((set) => ({
+type Store = {
+  mouseIsEnterViewer: boolean
+  playerState: number
+  toolState: number
+  logs: any[]
+  codes: any
+
+  setters: {
+    setPlayerState: (state: number) => void
+  }
+}
+
+const useStore = create<Store>(set => ({
   mouseIsEnterViewer: false,
   playerState: 1,
   toolState: 1,
@@ -12,6 +24,12 @@ const useStore = create((set) => ({
 
       loop(10)
         obj.X += 10`
+  },
+
+  setters: {
+    setPlayerState: (state) => {
+      set(() => ({playerState: state}));
+    }
   }
 }));
 
