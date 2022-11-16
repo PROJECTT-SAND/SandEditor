@@ -56,14 +56,12 @@ export default function ViewerController() {
       {play: 0, pause: 0, stop: 2}, // 5 정지중인 상태. 조작 불가.
     ]
 
-    const state = ['disabled', 'available', 'active']
-
     return(
       <div className={style.player}>
         <button
+          data-state={playerStates[playerState].play}
           className={`
             ${style.play}
-            ${style[state[playerStates[playerState].play]]}
           `} 
           onClick={()=>{
             if(playerStates[playerState].play === 1) {
@@ -83,9 +81,9 @@ export default function ViewerController() {
         </button>
 
         <button
+          data-state={playerStates[playerState].pause}
           className={`
             ${style.pause}
-            ${style[state[playerStates[playerState].pause]]}
           `}
           onClick={()=>{
             if(playerStates[playerState].pause === 1) {
@@ -100,9 +98,9 @@ export default function ViewerController() {
         </button>
 
         <button
+          data-state={playerStates[playerState].stop}
           className={`
             ${style.stop}
-            ${style[state[playerStates[playerState].stop]]}
           `}
           onClick={()=>{
             if(playerStates[playerState].stop === 1) {
