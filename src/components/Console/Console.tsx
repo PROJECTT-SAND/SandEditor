@@ -10,9 +10,9 @@ export default function Console() {
   const ref = useRef(null);
 
   useEffect(() => {
-    ref.current.scrollTop = 100;
-    // console.log("as")
-  }, []);
+    const reff = ref.current
+    reff.scrollTop = reff.scrollHeight - reff.clientHeight;;
+  }, [logs]);
 
   function Console() {
     let result: any = [];

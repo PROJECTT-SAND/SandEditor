@@ -8,29 +8,21 @@ import useStore from '../../store'
 import img from './example1.png'
 
 export default function Viewer() {
+  const {playerState} = useStore();
+
+  // const [isStart, setIsStart] = useState(false);
+  const [isGrid, setIsGrid] = useState(false);
   const [objValue, setobjValue] = useState({
     example1: {x: 0, y: 0}
   });
-
-  function Bg() {
-    return (
-      <mesh
-        position={[0, 0, -10]}
-        scale={10000}>
-  
-        <planeBufferGeometry attach="geometry" />
-        <meshBasicMaterial attach="material" color="#404040" toneMapped={false} />
-      </mesh>
-    )
-  }
 
   function Image() {
     const { size, viewport } = useThree();
     const aspect = size.width / viewport.width;
 
-    const [spring, set] = useSpring(() => ({
+    const [spring, setSpring] = useSpring(() => ({
       rotation: [-(Math.PI/2), 0, 0],
-      scale: [10, 10, 10],
+      scale: [7.96, 4.95, 10],
       position: [
         objValue["example1"].x / aspect,
         -0.01,
@@ -40,8 +32,8 @@ export default function Viewer() {
 
     const OBJbind = useGesture({
       onDrag: ({ down, offset: [x, y] }) => {
-        if(toolState === 1) {
-          set({
+        if(toolState === 1 && playerState!=3) {
+          setSpring({
             immediate: true,
             position: [
               (x + objValue["example1"].x) / aspect,
@@ -52,7 +44,7 @@ export default function Viewer() {
         }
       },
       onDragEnd: ({ offset: [x, y] }) => {
-        if(toolState === 1) {
+        if(toolState === 1 && playerState!=3) {
           setobjValue({...objValue, "example1": {
             x: x + objValue["example1"].x,
             y: -y + objValue["example1"].y
@@ -60,16 +52,11 @@ export default function Viewer() {
         }
       }
     });
-
-    const ref = useRef()
-
-    useFrame(() => {
-      ref.current.shift = 10
-      // ref.current.rotation.x = 0
-    })
-
-    const [texture] = useLoader(THREE.TextureLoader, [img]);
     
+    function useTexture(img: any) {
+      return useLoader(THREE.TextureLoader, [img])[0];
+    };
+
     //vertexShader
     const VS = `
     varying vec2 vUv;
@@ -98,10 +85,9 @@ export default function Viewer() {
 
         <planeBufferGeometry attach="geometry" />
         <meshBasicMaterial
-          ref={ref}
           attach="material"
-          map={texture}
-          />
+          map={useTexture(img)}
+        />
           
         {/* <shaderMaterial
           uniforms={{
@@ -126,11 +112,16 @@ export default function Viewer() {
       }}
       >
 
-      <Canvas camera={{ position: [0, 5, 0] }}>
+      <Canvas
+        camera={{ position: [0, 5, 0] }}
+        gl={{ toneMapping: THREE.NoToneMapping }}
+        className={`${style.canvas} ${playerState==3 ? style.start : style.edit}`}
+      >
         <Suspense fallback={null}>
           <Image />
-          <gridHelper args={[100, 4, `white`, `gray`]} />
-          <Bg />
+          {isGrid &&
+            <gridHelper args={[14, 8, `white`, `gray`]} />
+          }
         </Suspense>
       </Canvas>
     </div>

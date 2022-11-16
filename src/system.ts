@@ -15,8 +15,8 @@ export const system = {
           const prefix = Props.split(" ")[0];
           const command = Props.split(" ")[1];
 
-          switch (prefix) {
-            case "sys":
+          if (prefix == "sys") {
+            if (command == "start") {
               sysConsole.text("시스템: 실행 중");
               store.setters.setPlayerState(2);
               
@@ -27,13 +27,22 @@ export const system = {
               sysConsole.text("시스템: 실행 완료");
               store.setters.setPlayerState(3);
               sysConsole.warning("InGame 13번 코드에 오류가 있습니다.");
-              
-              break;
-
-            default:
-              sysConsole.error("알 수 없는 명령어");
+            }
+            if (command == "pause") {
+              sysConsole.text("시스템: 일시정지");
+            store.setters.setPlayerState(4);
+            }
+            if (command == "stop") {
+              sysConsole.text("시스템: 중지 중");
+            store.setters.setPlayerState(5);
+            
+            sysConsole.text("시스템: 중지 완료");
+            store.setters.setPlayerState(1);
+            }
+          } else {
+            sysConsole.error("알 수 없는 명령어");
           }
-
+          
           sysConsole.endCalculation();
           resolve(null);
         })();
