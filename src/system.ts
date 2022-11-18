@@ -1,49 +1,48 @@
-import useStore from "./store";
+import { useBoundStore } from "./store";
 
-import { sysConsole } from "./components/Console/Console";
-
-import * as Sys from "./system/Sys"
+import log from './system/log';
+import * as sys from "./system/Sys"
 
 export const system = {
   run: (Props: string) => {
     return new Promise((resolve, reject) => {
       try {
         (async () => {
-          const store = useStore.getState();
+          const store = useBoundStore.getState();
 
-          sysConsole.command(Props);
+          log.command(Props);
           const prefix = Props.split(" ")[0];
           const command = Props.split(" ")[1];
 
           if (prefix == "sys") {
             if (command == "start") {
-              sysConsole.text("시스템: 실행 중");
-              store.setters.setPlayerState(2);
+              log.text("시스템: 실행 중");
+              store.setPlayerState(2);
               
-              await Sys.start;
+              await sys.start;
               
               const code = store.codes["qwe.sdcod"];
               
-              sysConsole.text("시스템: 실행 완료");
-              store.setters.setPlayerState(3);
-              sysConsole.warning("InGame 13번 코드에 오류가 있습니다.");
+              log.text("시스템: 실행 완료");
+              store.setPlayerState(3);
+              log.warning("InGame 13번 코드에 오류가 있습니다.");
             }
             if (command == "pause") {
-              sysConsole.text("시스템: 일시정지");
-            store.setters.setPlayerState(4);
+              log.text("시스템: 일시정지");
+            store.setPlayerState(4);
             }
             if (command == "stop") {
-              sysConsole.text("시스템: 중지 중");
-            store.setters.setPlayerState(5);
+              log.text("시스템: 중지 중");
+            store.setPlayerState(5);
             
-            sysConsole.text("시스템: 중지 완료");
-            store.setters.setPlayerState(1);
+            log.text("시스템: 중지 완료");
+            store.setPlayerState(1);
             }
           } else {
-            sysConsole.error("알 수 없는 명령어");
+            log.error("알 수 없는 명령어");
           }
           
-          sysConsole.endCalculation();
+          // log.endCalculation();
           resolve(null);
         })();
       } catch {
@@ -80,18 +79,18 @@ export const system = {
   
 //       // }
   
-//       sysConsole.text("시스템: 살행 중");
-//       useStore.setState({ playerState: 2, ...useStore });
+//       log.text("시스템: 살행 중");
+//       useBoundStore.setState({ playerState: 2, ...useBoundStore });
   
 //       // await (()=>{})
   
-//       const code = useStore.getState().codes["qwe.sdcod"];
+//       const code = useBoundStore.getState().codes["qwe.sdcod"];
   
 //       console.log(code);
   
-//       sysConsole.text("시스템: 살행 완료");
-//       useStore.setState({ playerState: 3, ...useStore });
-//       sysConsole.warning("InGame 13번 코드에 오류가 있습니다.");
+//       log.text("시스템: 살행 완료");
+//       useBoundStore.setState({ playerState: 3, ...useBoundStore });
+//       log.warning("InGame 13번 코드에 오류가 있습니다.");
 //     })
 //   }
 
@@ -123,55 +122,55 @@ export const system = {
 
 //           // }
 
-//           sysConsole.text("시스템: 살행 중");
-//           useStore.setState({ playerState: 2, ...useStore });
+//           log.text("시스템: 살행 중");
+//           useBoundStore.setState({ playerState: 2, ...useBoundStore });
 
 //           // await (()=>{})
 
-//           const code = useStore.getState().codes["qwe.sdcod"];
+//           const code = useBoundStore.getState().codes["qwe.sdcod"];
 
 //           console.log(code);
 
-//           sysConsole.text("시스템: 살행 완료");
-//           useStore.setState({ playerState: 3, ...useStore });
-//           sysConsole.warning("InGame 13번 코드에 오류가 있습니다.");
+//           log.text("시스템: 살행 완료");
+//           useBoundStore.setState({ playerState: 3, ...useBoundStore });
+//           log.warning("InGame 13번 코드에 오류가 있습니다.");
 //           resolve();
 //           break;
 
 //         case "stop":
-//           sysConsole.text("시스템: 종료 중");
-//           useStore.setState({ playerState: 5, ...useStore });
+//           log.text("시스템: 종료 중");
+//           useBoundStore.setState({ playerState: 5, ...useBoundStore });
 
 //           await (() => {});
 
-//           sysConsole.text("시스템: 종료 완료");
-//           useStore.setState({ playerState: 1, ...useStore });
+//           log.text("시스템: 종료 완료");
+//           useBoundStore.setState({ playerState: 1, ...useBoundStore });
 //           resolve();
 //           break;
 
 //         case "restart":
-//           sysConsole.text("시스템: 재시작 중");
-//           useStore.setState({ playerState: 5, ...useStore });
+//           log.text("시스템: 재시작 중");
+//           useBoundStore.setState({ playerState: 5, ...useBoundStore });
 
 //           await (() => {});
 
-//           sysConsole.text("시스템: 재시작 완료");
-//           useStore.setState({ playerState: 1, ...useStore });
+//           log.text("시스템: 재시작 완료");
+//           useBoundStore.setState({ playerState: 1, ...useBoundStore });
 //           resolve();
 //           break;
 
 //         case "pause":
-//           sysConsole.text("시스템: 일시중지 중");
-//           useStore.setState({ playerState: 5, ...useStore });
+//           log.text("시스템: 일시중지 중");
+//           useBoundStore.setState({ playerState: 5, ...useBoundStore });
 
 //           await (() => {});
 
-//           sysConsole.text("시스템: 일시중지 완료");
-//           useStore.setState({ playerState: 1, ...useStore });
+//           log.text("시스템: 일시중지 완료");
+//           useBoundStore.setState({ playerState: 1, ...useBoundStore });
 //           resolve();
 //           break;
 //         default:
-//           sysConsole.error("sys: 알 수 없는 명령어");
+//           log.error("sys: 알 수 없는 명령어");
 //       }
 //     } catch {
 //       reject();
@@ -209,55 +208,55 @@ export const system = {
 
 //           // }
 
-//           sysConsole.text("시스템: 살행 중");
-//           useStore.setState({ playerState: 2, ...useStore });
+//           log.text("시스템: 살행 중");
+//           useBoundStore.setState({ playerState: 2, ...useBoundStore });
 
 //           // await (()=>{})
 
-//           const code = useStore.getState().codes["qwe.sdcod"];
+//           const code = useBoundStore.getState().codes["qwe.sdcod"];
 
 //           console.log(code);
 
-//           sysConsole.text("시스템: 살행 완료");
-//           useStore.setState({ playerState: 3, ...useStore });
-//           sysConsole.warning("InGame 13번 코드에 오류가 있습니다.");
+//           log.text("시스템: 살행 완료");
+//           useBoundStore.setState({ playerState: 3, ...useBoundStore });
+//           log.warning("InGame 13번 코드에 오류가 있습니다.");
 //           resolve();
 //           break;
 
 //         case "stop":
-//           sysConsole.text("시스템: 종료 중");
-//           useStore.setState({ playerState: 5, ...useStore });
+//           log.text("시스템: 종료 중");
+//           useBoundStore.setState({ playerState: 5, ...useBoundStore });
 
 //           await (() => {});
 
-//           sysConsole.text("시스템: 종료 완료");
-//           useStore.setState({ playerState: 1, ...useStore });
+//           log.text("시스템: 종료 완료");
+//           useBoundStore.setState({ playerState: 1, ...useBoundStore });
 //           resolve();
 //           break;
 
 //         case "restart":
-//           sysConsole.text("시스템: 재시작 중");
-//           useStore.setState({ playerState: 5, ...useStore });
+//           log.text("시스템: 재시작 중");
+//           useBoundStore.setState({ playerState: 5, ...useBoundStore });
 
 //           await (() => {});
 
-//           sysConsole.text("시스템: 재시작 완료");
-//           useStore.setState({ playerState: 1, ...useStore });
+//           log.text("시스템: 재시작 완료");
+//           useBoundStore.setState({ playerState: 1, ...useBoundStore });
 //           resolve();
 //           break;
 
 //         case "pause":
-//           sysConsole.text("시스템: 일시중지 중");
-//           useStore.setState({ playerState: 5, ...useStore });
+//           log.text("시스템: 일시중지 중");
+//           useBoundStore.setState({ playerState: 5, ...useBoundStore });
 
 //           await (() => {});
 
-//           sysConsole.text("시스템: 일시중지 완료");
-//           useStore.setState({ playerState: 1, ...useStore });
+//           log.text("시스템: 일시중지 완료");
+//           useBoundStore.setState({ playerState: 1, ...useBoundStore });
 //           resolve();
 //           break;
 //         default:
-//           sysConsole.error("sys: 알 수 없는 명령어");
+//           log.error("sys: 알 수 없는 명령어");
 //       }
 //     } catch {
 //       reject();

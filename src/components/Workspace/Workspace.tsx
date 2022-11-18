@@ -1,8 +1,8 @@
 import React, { useState, useRef } from "react";
 import Editor, { DiffEditor, useMonaco, loader } from "@monaco-editor/react";
 import style from "./Workspace.module.scss";
-import Window from "../Window/Window.tsx";
-import useStore from "../../store";
+import Window from "../Window/Window";
+import { useBoundStore } from "../../store";
 import { monarchLanguage } from "./SendBoxCodeLang";
 
 export default function WorkSpace() {

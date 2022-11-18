@@ -1,9 +1,11 @@
-import style from './ViewerController.module.scss';
+import style from './Toolbar.module.scss';
 import React, { useEffect, useState } from 'react';
-import useStore from '../../store';
+import { useBoundStore } from '../../store'
 import { system } from '../../system';
 
 export default function ViewerController() {
+  const store = useBoundStore();
+
   const [toolState, setToolState] = useState(0);
   const [optionsState, setOptionsState] = useState({
     "showGrid": false,
@@ -11,11 +13,10 @@ export default function ViewerController() {
   });
   
   useEffect(() => {
-    useStore.setState({toolState, ...useStore});
+    store.setToolState(toolState);
   }, [toolState]);
 
   function PositionIndicator() {
-    const {mouseIsEnterViewer} = useStore();
     const [mouseX, setMouseX] = useState(0);
     const [mouseY, setMouseY] = useState(0);
 
@@ -26,7 +27,7 @@ export default function ViewerController() {
       })
     }, []);
 
-    if (mouseIsEnterViewer) {
+    if (store.mouseIsEnterViewer) {
       return(
         <div className={style.positionIndicator}>
           <div>
@@ -45,15 +46,24 @@ export default function ViewerController() {
   }
 
   function Player() {
-    const {playerState} = useStore();
+    const {playerState} = store;
 
-    const playerStates = [ // 0: 조작 불가, 1: 조작 가능, 2: 활성화
-      {play: 0, pause: 0, stop: 0}, // 0 프로그램 로딩 상태.
-      {play: 1, pause: 0, stop: 0}, // 1 최초 상태. 실행만 가능.
-      {play: 2, pause: 0, stop: 0}, // 2 실행중인 상태. 조작 불가.
-      {play: 2, pause: 1, stop: 1}, // 3 실행된 상태. 정지, 멈춤 가능.
-      {play: 1, pause: 2, stop: 1}, // 4 멈춘 상태. 실행, 멈춤 가능.
-      {play: 0, pause: 0, stop: 2}, // 5 정지중인 상태. 조작 불가.
+    const lifeCycle = {
+      LOADING: {play: 0, pause: 0, stop: 0},
+      IDLE: {play: 1, pause: 0, stop: 0},
+      STARTING: {play: 2, pause: 0, stop: 0},
+      RUNNING: {play: 2, pause: 1, stop: 1},
+      PAUSE: {play: 1, pause: 2, stop: 1},
+      STOPPING: {play: 0, pause: 0, stop: 2},
+    }
+
+    const playerStates = [
+      lifeCycle.LOADING,
+      lifeCycle.IDLE,
+      lifeCycle.STARTING,
+      lifeCycle.RUNNING,
+      lifeCycle.PAUSE,
+      lifeCycle.STOPPING,
     ]
 
     return(

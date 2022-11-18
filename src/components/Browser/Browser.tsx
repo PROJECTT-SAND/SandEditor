@@ -1,4 +1,4 @@
-import style from './Folder.module.scss';
+import style from './Browser.module.scss';
 import Window from '../Window/Window';
 import example from './example1.png';
 

@@ -1,17 +1,17 @@
 import { useEffect, useRef } from 'react';
 import shallow from 'zustand/shallow';
-import style from './Console.module.scss';
+import style from './Terminal.module.scss';
 import Window from '../Window/Window';
 import { system } from '../../system';
-import useStore from '../../store';
+import { useBoundStore } from '../../store';
 
 export default function Console() {
-  const logs = useStore(store => Object.values(store.logs), shallow);
-  const ref = useRef(null);
+  const logs = useBoundStore(store => Object.values(store.logs), shallow);
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const reff = ref.current
-    reff.scrollTop = reff.scrollHeight - reff.clientHeight;;
+    if (!ref.current) return
+    ref.current.scrollTop = ref.current.scrollHeight - ref.current.clientHeight;;
   }, [logs]);
 
   function Console() {
@@ -44,15 +44,14 @@ export default function Console() {
       <div className={style.console_wrap} ref={ref}>
         <code className={style.console}>
           {result}
-          <div className={style.consoleInput_wrap}>
+          <div className={style.prompt_wrap}>
             <span className={style.target}>&#62;</span>
             <input
-              className={style.consoleInput}
+              className={style.prompt}
               onKeyDown={(e)=>{
                 if(e.key === 'Enter') {
-                  system.run(e.target.value);
-                  e.target.value = "";
-                  
+                  system.run(e.currentTarget.value);
+                  e.currentTarget.value = "";
                 }
               }}>
             </input>
@@ -72,67 +71,4 @@ export default function Console() {
       <Console/>
     </Window>
   );
-}
-
-
-export const sysConsole = {
-  command: (Props: any) => {
-    let logsValue = useStore.getState().logs;
-    
-    logsValue.push({
-      kind: 'command',
-      content: Props,
-      time: new Date()
-    });
-
-    useStore.setState({
-        logs: logsValue,
-        ...useStore
-    });
-  },
-  text: (Props: any) => {
-    let logsValue = useStore.getState().logs;
-    
-    logsValue.push({
-      kind: 'text',
-      content: Props,
-      time: new Date()
-    });
-
-    useStore.setState({
-      logs: logsValue,
-      ...useStore
-  });
-  },
-  warning: (Props: any) => {
-    let logsValue = useStore.getState().logs;
-    
-    logsValue.push({
-      kind: 'warning',
-      content: Props,
-      time: new Date()
-    });
-
-    useStore.setState({
-      logs: logsValue,
-      ...useStore
-    });
-  },
-  error: (Props: any) => {
-    let logsValue = useStore.getState().logs;
-    
-    logsValue.push({
-      kind: 'error',
-      content: Props,
-      time: new Date()
-    });
-
-    useStore.setState({
-      logs: logsValue,
-      ...useStore
-    });
-  },
-  endCalculation: () => {
-    // 연산 끝
-  }
 }

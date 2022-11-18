@@ -1,17 +1,17 @@
-import style from './Viewer.module.scss';
+import style from './Viewport.module.scss';
 import React, { useEffect, useRef, useState, Suspense } from 'react';
 import { useGesture } from '@use-gesture/react'
 import { useSpring, a } from "@react-spring/three"
 import { Canvas, useLoader, useThree, useFrame } from '@react-three/fiber';
 import * as THREE from "three"
-import useStore from '../../store'
+import { useBoundStore } from '../../store'
 import img from './example1.png'
 
 export default function Viewer() {
-  const {playerState} = useStore();
-
+  const {playerState, isGrid, toolState, setMouseIsEnterViewer} = useBoundStore();
+  
   // const [isStart, setIsStart] = useState(false);
-  const [isGrid, setIsGrid] = useState(false);
+  // const [isGrid, setIsGrid] = useState(false);
   const [objValue, setobjValue] = useState({
     example1: {x: 0, y: 0}
   });
@@ -100,15 +100,13 @@ export default function Viewer() {
     )
   }
 
-  const { toolState } = useStore();
-
   return (
     <div className={style.viewer}
       onMouseEnter={() => {
-        useStore.setState({mouseIsEnterViewer: true, ...useStore})
+        setMouseIsEnterViewer(true);
       }}
       onMouseLeave={() => {
-        useStore.setState({mouseIsEnterViewer: false, ...useStore})
+        setMouseIsEnterViewer(false);
       }}
       >
 
