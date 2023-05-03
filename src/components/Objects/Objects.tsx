@@ -11,21 +11,38 @@ export default function Objects() {
     Chr1: false
   });
 
-  const [objectTree, setObjectTree] = useState({
-    'InGame': [
-      'Tlqkf',
-      'Tlqkf2',
-      {'Chr1': [
-        'Head',
-        'arm',
-        'body',
-        'leg',
-        'foot'
-      ]}
-    ]
-  });
+  const ObjectKind = {
+    scene: 0,
+    object: 1,
+  }
 
-  function Object({children, name, icon, isHidden}) {
+  const [objectTree, setObjectTree] = useState(
+    {
+      name: 'InGame', kind: ObjectKind.scene, child: [
+        { name: 'Tlqkf', kind: ObjectKind.object, child: null },
+        { name: 'Tlqkf2', kind: ObjectKind.object, child: null },
+        {
+          name: 'Chr1', kind: ObjectKind.object, child: [
+            {
+              name: 'Head', kind: ObjectKind.object, child: null
+            },
+            {
+              name: 'arm', kind: ObjectKind.object, child: null
+            },
+            {
+              name: 'body', kind: ObjectKind.object, child: null
+            },
+            {
+              name: 'leg', kind: ObjectKind.object, child: null
+            },
+            { name: 'foot', kind: ObjectKind.object, child: null }
+          ]
+        }
+      ]
+    }
+  );
+
+  function Object({ children, name, icon, isHidden }) {
 
     const content = (
       <>
@@ -43,7 +60,7 @@ export default function Objects() {
             <div className={style.object_arrow} onClick={(e) => {
               setobjectIsOpened({
                 ...objectIsOpened,
-                [name] : !objectIsOpened[name]
+                [name]: !objectIsOpened[name]
               });
             }}>
               <img src={(objectIsOpened[name]) ? arrowDownIcon : arrowUpIcon}></img>
