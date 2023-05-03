@@ -11,31 +11,41 @@ export default function Objects() {
     Chr1: false
   });
 
-  const ObjectKind = {
+  interface ObjKind {
+    [key: string]: number
+  }
+
+  const ObjKindEnum: ObjKind = {
     scene: 0,
     object: 1,
   }
 
-  const [objectTree, setObjectTree] = useState(
+  interface Object {
+    name: string,
+    kind: ObjKind,
+    child: Object[] | null
+  }
+
+  const [objectTree, setObjectTree] = useState<Object>(
     {
-      name: 'InGame', kind: ObjectKind.scene, child: [
-        { name: 'Tlqkf', kind: ObjectKind.object, child: null },
-        { name: 'Tlqkf2', kind: ObjectKind.object, child: null },
+      name: 'InGame', kind: ObjKindEnum.scene, child: [
+        { name: 'Tlqkf', kind: ObjKindEnum.object, child: null },
+        { name: 'Tlqkf2', kind: ObjKindEnum.object, child: null },
         {
-          name: 'Chr1', kind: ObjectKind.object, child: [
+          name: 'Chr1', kind: ObjKindEnum.object, child: [
             {
-              name: 'Head', kind: ObjectKind.object, child: null
+              name: 'Head', kind: ObjKindEnum.object, child: null
             },
             {
-              name: 'arm', kind: ObjectKind.object, child: null
+              name: 'arm', kind: ObjKindEnum.object, child: null
             },
             {
-              name: 'body', kind: ObjectKind.object, child: null
+              name: 'body', kind: ObjKindEnum.object, child: null
             },
             {
-              name: 'leg', kind: ObjectKind.object, child: null
+              name: 'leg', kind: ObjKindEnum.object, child: null
             },
-            { name: 'foot', kind: ObjectKind.object, child: null }
+            { name: 'foot', kind: ObjKindEnum.object, child: null }
           ]
         }
       ]

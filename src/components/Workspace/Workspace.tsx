@@ -6,8 +6,14 @@ import { useBoundStore } from "../../store";
 import { monarchLanguage } from "./SendBoxCodeLang";
 
 export default function WorkSpace() {
+  interface File {
+    fullName: string,
+    fileName: string,
+    extension: string,
+  }
+
   function WorkMenu() {
-    const [workMenu, setWorkMenu] = useState([
+    const [workMenu, setWorkMenu] = useState<File[]>([
       {
         fullName: "asd.sdcod",
         fileName: "asd",
