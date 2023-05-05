@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import style from './Objects.module.scss';
-import Window from '../Window/Window.tsx';
-import folderIcon from './folder.svg';
-import arrowDownIcon from './arrow_down.svg';
-import arrowUpIcon from './arrow_up.svg';
+import Window from '../Window/Window';
+
+import folderIcon from '@assets/icon/object/folder.svg';
+import arrowDownIcon from '@assets/icon/object/arrow_down.svg';
+import arrowUpIcon from '@assets/icon/object/arrow_up.svg';
 
 export default function Objects() {
   const [objectIsOpened, setobjectIsOpened] = useState({
@@ -22,7 +23,7 @@ export default function Objects() {
 
   interface Object {
     name: string,
-    kind: ObjKind,
+    kind: number,
     child: Object[] | null
   }
 

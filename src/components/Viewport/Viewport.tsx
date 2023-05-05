@@ -1,11 +1,11 @@
 import style from './Viewport.module.scss';
 import React, { useState, useRef, useEffect } from 'react';
 import * as THREE from "three"
-import { useBoundStore } from '../../store'
+import { useBoundStore } from '@/store'
 import img from './example1.png'
 
 export default function Viewer() {
-  const { playerState, isGrid, toolState, setMouseIsEnterViewer } = useBoundStore();
+  const { currentLifeCycle, isGrid, toolState, setMouseIsEnterViewer } = useBoundStore();
 
   type ObjValueType = {
     x: number,
@@ -32,12 +32,12 @@ export default function Viewer() {
       this.cubeSize = 2;
       this.cubeActive = false;
 
-      setobjValue({
-        ...objValue, [this.uuid]: {
-          x: 0,
-          y: 0
-        }
-      });
+      // setobjValue({
+      //   ...objValue, [this.uuid]: {
+      //     x: 0,
+      //     y: 0
+      //   }
+      // });
     }
 
     render() {
@@ -62,14 +62,14 @@ export default function Viewer() {
     }
 
     onDrag(e: any) {
-      if (toolState === 1 && playerState != 3) {
+      if (toolState === 1 && currentLifeCycle != 3) {
         this.position.x = (e.clientX + objValue[this.uuid].x);
         this.position.z = (-e.clientY + objValue[this.uuid].y);
       }
     }
 
     onDragEnd(e: any) {
-      if (toolState === 1 && playerState != 3) {
+      if (toolState === 1 && currentLifeCycle != 3) {
         setobjValue({
           ...objValue, [this.uuid]: {
             x: e.clientX + objValue[this.uuid].x,

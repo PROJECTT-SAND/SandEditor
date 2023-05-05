@@ -1,6 +1,6 @@
 import style from './Browser.module.scss';
 import Window from '../Window/Window';
-import example from './example1.png';
+import example from '@assets/example1.png';
 
 export default function Folder() {
   return (
