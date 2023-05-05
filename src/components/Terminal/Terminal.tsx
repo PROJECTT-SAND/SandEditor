@@ -18,23 +18,23 @@ export default function Console() {
     let result: any = [];
 
     logs.map((item: any, key) => {
-      if(item.kind === 'command') {
-        result.push (
+      if (item.kind === 'command') {
+        result.push(
           <div key={key}>
             <span className={style.target}>&#62;</span>
             {item.content}
           </div>
         );
-      } else if(item.kind === 'error') {
-        result.push (
+      } else if (item.kind === 'error') {
+        result.push(
           <div key={key} className={style.errer}>{item.content}</div>
         );
-      } else if(item.kind === 'warning') {
-        result.push (
+      } else if (item.kind === 'warning') {
+        result.push(
           <div key={key} className={style.warning}>{item.content}</div>
         );
-      } else if(item.kind === 'text') {
-        result.push (
+      } else if (item.kind === 'text') {
+        result.push(
           <div key={key}>{item.content}</div>
         );
       }
@@ -48,8 +48,8 @@ export default function Console() {
             <span className={style.target}>&#62;</span>
             <input
               className={style.prompt}
-              onKeyDown={(e)=>{
-                if(e.key === 'Enter') {
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
                   system.run(e.currentTarget.value);
                   e.currentTarget.value = "";
                 }
@@ -68,7 +68,7 @@ export default function Console() {
         <i>Console</i>
         <button className={style.topBar_search}></button>
       </div>
-      <Console/>
+      <Console />
     </Window>
   );
 }
