@@ -1,6 +1,6 @@
 import style from './Toolbar.module.scss';
 import { useEffect, useState } from 'react';
-import { useBoundStore } from '../../store'
+import { useBoundStore } from '@/store'
 
 export default function PositionIndicator() {
   const [mouseX, setMouseX] = useState(0);

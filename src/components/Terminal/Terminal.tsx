@@ -1,9 +1,9 @@
 import { useEffect, useRef } from 'react';
 import shallow from 'zustand/shallow';
 import style from './Terminal.module.scss';
-import Window from '../Window/Window';
-import { system } from '../../system';
-import { useBoundStore } from '../../store';
+import Window from '@components/Window/Window';
+import { system } from '@/system';
+import { useBoundStore } from '@/store';
 
 export default function Console() {
   const logs = useBoundStore(store => Object.values(store.logs), shallow);

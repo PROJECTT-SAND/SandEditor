@@ -1,6 +1,6 @@
 import style from './Toolbar.module.scss';
 import React from 'react';
-import { useBoundStore } from '../../store'
+import { useBoundStore } from '@/store'
 
 const PlayerButton: React.FC<{
   PlayerButtonEnum: any;

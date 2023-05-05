@@ -2,7 +2,7 @@ import style from './Viewport.module.scss';
 import React, { useState, useRef, useEffect } from 'react';
 import * as THREE from "three"
 import { useBoundStore } from '@/store'
-import img from './example1.png'
+import img from '@assets/example1.png'
 
 export default function Viewer() {
   const { currentLifeCycle, isGrid, toolState, setMouseIsEnterViewer } = useBoundStore();

@@ -1,9 +1,9 @@
 import React, { useState, useRef } from "react";
 import Editor, { DiffEditor, useMonaco, loader } from "@monaco-editor/react";
 import style from "./Workspace.module.scss";
-import Window from "../Window/Window";
-import { useBoundStore } from "../../store";
-import { monarchLanguage } from "../../SendBoxCodeLang";
+import Window from "@components/Window/Window";
+import { useBoundStore } from "@/store";
+import { monarchLanguage } from "@/SendBoxCodeLang";
 
 export default function WorkSpace() {
   interface File {
@@ -51,16 +51,16 @@ export default function WorkSpace() {
 
   const languageID = "SendBoxCodeLang";
 
-  function handleEditorDidMount(editor, monaco) {
+  function handleEditorDidMount(editor: any, monaco: any) {
     editorRef.current = editor;
 
     monaco.languages.register({ id: languageID });
     monaco.languages.setMonarchTokensProvider(languageID, monarchLanguage);
   }
 
-  function showValue() {
-    alert(editorRef.current.getValue());
-  }
+  // function showValue() {
+  //   alert(editorRef.current.getValue());
+  // }
 
   // useStore.setState({codes: , ...useStore});
 

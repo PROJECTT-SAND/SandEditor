@@ -1,13 +1,18 @@
 import { useState } from 'react';
 import style from './Objects.module.scss';
-import Window from '../Window/Window';
+import Window from '@components/Window/Window';
 
 import folderIcon from '@assets/icon/object/folder.svg';
 import arrowDownIcon from '@assets/icon/object/arrow_down.svg';
 import arrowUpIcon from '@assets/icon/object/arrow_up.svg';
 
 export default function Objects() {
-  const [objectIsOpened, setobjectIsOpened] = useState({
+
+  interface asdfasdf {
+    [key: string]: boolean;
+  }
+
+  const [objectIsOpened, setobjectIsOpened] = useState<asdfasdf>({
     InGame: true,
     Chr1: false
   });
@@ -53,8 +58,21 @@ export default function Objects() {
     }
   );
 
-  function Object({ children, name, icon, isHidden }) {
+  interface WrapperProps {
+    children?: React.ReactNode;
+    name: any;
+    icon: any;
+    isHidden: boolean;
+  }
 
+  const setObjFold = (name: string) => {
+    setobjectIsOpened({
+      ...objectIsOpened,
+      [name]: !objectIsOpened[name]
+    });
+  }
+
+  const Object: React.FC<WrapperProps> = ({ children, name, icon, isHidden }) => {
     const content = (
       <>
         <div className={style.object_icon}><img src={icon}></img></div>
@@ -65,20 +83,17 @@ export default function Objects() {
     );
 
     if (children !== undefined) {
+      const isOpened = objectIsOpened[name];
+
       return (
         <div className={(true) ? style.object_folder1 : style.object_folder2}>
           <div className={style.object}>
-            <div className={style.object_arrow} onClick={(e) => {
-              setobjectIsOpened({
-                ...objectIsOpened,
-                [name]: !objectIsOpened[name]
-              });
-            }}>
-              <img src={(objectIsOpened[name]) ? arrowDownIcon : arrowUpIcon}></img>
+            <div className={style.object_arrow} onClick={() => { setObjFold(name) }}>
+              <img src={isOpened ? arrowDownIcon : arrowUpIcon}></img>
             </div>
             {content}
           </div>
-          {(objectIsOpened[name]) ? <div className={style.object_child}>{children}</div> : null}
+          {isOpened ? <div className={style.object_child}>{children}</div> : null}
         </div>
       );
     } else {

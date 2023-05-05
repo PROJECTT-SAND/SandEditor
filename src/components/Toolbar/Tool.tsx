@@ -1,6 +1,6 @@
 import style from './Toolbar.module.scss';
 import React, { useEffect, useState } from 'react';
-import { useBoundStore } from '../../store'
+import { useBoundStore } from '@/store'
 
 const Tool: React.FC<{
   style_: string;
