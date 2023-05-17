@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import style from './Objects.module.scss';
 import Window from '@components/Window/Window';
 
@@ -12,16 +12,12 @@ export default function Objects() {
     [key: string]: boolean;
   }
 
-  const [objectIsOpened, setobjectIsOpened] = useState<asdfasdf>({
-    InGame: true,
-    Chr1: false
-  });
 
   interface ObjKind {
     [key: string]: number
   }
 
-  const ObjKindEnum: ObjKind = {
+  const ObjKind: ObjKind = {
     scene: 0,
     object: 1,
   }
@@ -29,34 +25,10 @@ export default function Objects() {
   interface Object {
     name: string,
     kind: number,
-    child: Object[] | null
+    isHidden: boolean,
+    parentUUID: any | null,// uuidv4
+    UUID: any// uuidv4
   }
-
-  const [objectTree, setObjectTree] = useState<Object>(
-    {
-      name: 'InGame', kind: ObjKindEnum.scene, child: [
-        { name: 'Tlqkf', kind: ObjKindEnum.object, child: null },
-        { name: 'Tlqkf2', kind: ObjKindEnum.object, child: null },
-        {
-          name: 'Chr1', kind: ObjKindEnum.object, child: [
-            {
-              name: 'Head', kind: ObjKindEnum.object, child: null
-            },
-            {
-              name: 'arm', kind: ObjKindEnum.object, child: null
-            },
-            {
-              name: 'body', kind: ObjKindEnum.object, child: null
-            },
-            {
-              name: 'leg', kind: ObjKindEnum.object, child: null
-            },
-            { name: 'foot', kind: ObjKindEnum.object, child: null }
-          ]
-        }
-      ]
-    }
-  );
 
   interface WrapperProps {
     children?: React.ReactNode;
@@ -64,6 +36,84 @@ export default function Objects() {
     icon: any;
     isHidden: boolean;
   }
+
+  const [objectIsOpened, setobjectIsOpened] = useState<asdfasdf>({
+    InGame: true,
+    Chr1: false
+  });
+
+  // npm i uuid
+  // npm i @types/uuid
+  // import { v4 as uuidv4 } from 'uuid';
+  // uuidv4();
+
+  class object {
+    constructor(name, kind, isHidden, parentUUID) {
+      this.UUID = uuidv4();
+      this.treeDepth = 123123;
+    }
+  }
+
+  const [objectTree, setObjectTree] = useState<Object[]>(
+    [
+      { name: 'InGame', kind: ObjKind.scene, isHidden: false, treeDepth: 0, parentUUID: null, UUID: 1 },
+      { name: 'Tlqkf', kind: ObjKind.object, isHidden: true, treeDepth: 1, parentUUID: 1, UUID: 2 },
+      { name: 'Tlqkf2', kind: ObjKind.object, isHidden: false, treeDepth: 1, parentUUID: 1, UUID: 3 },
+      { name: 'Chr1', kind: ObjKind.object, isHidden: false, treeDepth: 1, parentUUID: 1, UUID: 4 },
+      { name: 'Head', kind: ObjKind.object, isHidden: false, treeDepth: 2, parentUUID: 4, UUID: 5 },
+      { name: 'arm', kind: ObjKind.object, isHidden: false, treeDepth: 2, parentUUID: 4, UUID: 6 },
+      { name: 'body', kind: ObjKind.object, isHidden: false, treeDepth: 2, parentUUID: 4, UUID: 7 },
+    ]
+    // {
+    //   name: 'InGame', kind: ObjKindEnum.scene, child: [
+    //     { name: 'Tlqkf', kind: ObjKindEnum.object, child: null },
+    //     { name: 'Tlqkf2', kind: ObjKindEnum.object, child: null },
+    //     {
+    //       name: 'Chr1', kind: ObjKindEnum.object, child: [
+    //         {
+    //           name: 'Head', kind: ObjKindEnum.object, child: null
+    //         },
+    //         {
+    //           name: 'arm', kind: ObjKindEnum.object, child: null
+    //         },
+    //         {
+    //           name: 'body', kind: ObjKindEnum.object, child: null
+    //         },
+    //         {
+    //           name: 'leg', kind: ObjKindEnum.object, child: null
+    //         },
+    //         { name: 'foot', kind: ObjKindEnum.object, child: null }
+    //       ]
+    //     }
+    //   ]
+    // }
+  );
+
+  let objectRoot;
+
+  useEffect(() => {
+    const objectTreeSorted = objectTree.sort((a, b) => {
+      return a.treeDepth - b.treeDepth;
+    })
+
+    objectTreeSorted.map((object) => {
+      let icon = folderIcon;
+
+      if(object.kind == ObjKind.object) {
+        icon = folderIcon;
+      }
+
+      const objectElem = (
+        <Object name={object.name} icon={icon} isHidden={object.isHidden} />
+      );
+
+      if(object.parentUUID !== null) {
+        objectRoot.appendChild(objectElem);
+      } else {
+        objectRoot.appendChild(objectElem);
+      }
+    })
+  }, [objectRoot])
 
   const setObjFold = (name: string) => {
     setobjectIsOpened({
@@ -85,6 +135,7 @@ export default function Objects() {
     if (children !== undefined) {
       const isOpened = objectIsOpened[name];
 
+      // 코드 단축 필요
       return (
         <div className={(true) ? style.object_folder1 : style.object_folder2}>
           <div className={style.object}>
@@ -112,18 +163,7 @@ export default function Objects() {
         <i>여기에 검색하세요</i>
         <button className={style.topBar_search}></button>
       </div>
-      <div className={style.objects}>
-        <Object name="InGame" icon={folderIcon} isHidden={false}>
-          <Object name="Tlqkf" icon={folderIcon} isHidden={true} />
-          <Object name="Tlqkf2" icon={folderIcon} isHidden={false} />
-          <Object name="Chr1" icon={folderIcon} isHidden={true}>
-            <Object name="Head" icon={folderIcon} isHidden={true} />
-            <Object name="arm" icon={folderIcon} isHidden={true} />
-            <Object name="body" icon={folderIcon} isHidden={true} />
-            <Object name="leg" icon={folderIcon} isHidden={true} />
-            <Object name="foot" icon={folderIcon} isHidden={true} />
-          </Object>
-        </Object>
+      <div className={style.objects} bind={objectRoot}>
       </div>
     </Window>
   );
