@@ -67,7 +67,7 @@ export default function WorkSpace() {
   return (
     <div className={style.workSpace}>
       <WorkMenu />
-      <Window customStyle={{ borderRadius: "0px 0px 15px 15px" }}>
+      <Window customStyle={{ borderRadius: "10px 10px 0px 0px" }}>
         {/*
         func null start(obj:obj)
           obj.[x, y, size] = [10, 20, 100]

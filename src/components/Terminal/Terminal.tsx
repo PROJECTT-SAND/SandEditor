@@ -62,7 +62,7 @@ export default function Console() {
   }
 
   return (
-    <Window>
+    <Window customStyle={{ borderRadius: "0px 0px 10px 10px" }}>
       <div className={style.topBar}>
         <button className={style.topBar_addObject}></button>
         <i>Console</i>

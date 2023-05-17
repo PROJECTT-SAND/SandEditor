@@ -1,67 +1,67 @@
 .topBar {
-    display: flex;
-    align-items: center;
-    overflow: hidden;
-    background-color: #27303d;
-    height: 28px;
-    border-radius: 15px;
-    padding-left: 15px;
-    flex-shrink: 0;
+	display: flex;
+	align-items: center;
+	overflow: hidden;
+	background-color: #27303d;
+	height: 24px;
+	border-radius: 6px;
+	padding-left: 0px;
+	flex-shrink: 0;
 
-    i {
-        color: #fff;
-        font-style: normal;
-        font-size: 13px;
-        padding-top: 10px;
-        padding-left: 15px;
-        width: 100%;
-        height: 100%;
-    }
+	i {
+		color: #aaa;
+		font-style: normal;
+		font-size: 12px;
+		padding-top: 10px;
+		padding-left: 18px;
+		width: 100%;
+		height: 100%;
+	}
 }
 
 .console_wrap {
-    padding: 10px 20px 20px 20px;
-    overflow-y: auto;
+	padding: 10px 20px 20px 20px;
+	overflow-y: auto;
 
-    .console {
-        color: #fff;
-        line-height: 1.6rem;
-        font-size: 16px;
-        display: flex;
-        flex-direction: column;
-        font-family: monospace;
-    
-        .warning {
-            color: rgb(255, 228, 75);
-        }
-    
-        .errer {
-            color: rgb(255, 77, 77);
-        }
-    
-        .target {
-            color: rgb(68, 142, 240);
-            margin-right: 8px;
-        }
-    
-        .object {
-            color: rgb(255, 164, 112);
-            text-decoration: underline;
-        }
-    
-        .prompt_wrap {
-            display: flex;
-            margin-top: 7px;
-    
-            .prompt {
-                width: 100%;
-                outline: none;
-                background: none;
-                border: none;
-                color: #fff;
-                font-size: 16px;
-                font-family: monospace;
-            }
-        }
-    }
+	.console {
+		color: #fff;
+		line-height: 1.6rem;
+		font-size: 16px;
+		display: flex;
+		flex-direction: column;
+		font-family: monospace;
+
+		.warning {
+			color: rgb(255, 228, 75);
+		}
+
+		.errer {
+			color: rgb(255, 77, 77);
+		}
+
+		.target {
+			color: rgb(68, 142, 240);
+			margin-right: 8px;
+		}
+
+		.object {
+			color: rgb(255, 164, 112);
+			text-decoration: underline;
+		}
+
+		.prompt_wrap {
+			display: flex;
+			margin-top: 7px;
+
+			.prompt {
+				width: 100%;
+				outline: none;
+				background: none;
+				border: none;
+				color: #fff;
+				font-size: 16px;
+				font-family: monospace;
+			}
+		}
+	}
 }

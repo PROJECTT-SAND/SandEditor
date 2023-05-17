@@ -1,17 +1,19 @@
 .viewer {
-    width: 100%;
-    height: 100%;
-    position: relative;
+	width: 100%;
+	height: 100%;
+	position: relative;
 
-    .canvas {
-        touch-action: none;
+	.canvas {
+		touch-action: none;
+		width: 100%;
+		height: 100%;
 
-        &.edit {
-            background: #333;
-        }
-    
-        &.start {
-            background: #000;
-        }
-    }
+		&.edit {
+			background: #333;
+		}
+
+		&.start {
+			background: #000;
+		}
+	}
 }

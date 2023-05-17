@@ -1,130 +1,131 @@
 .viewerController {
-  display: flex;
-  align-items: center;
-  gap: 35px;
-  margin-left: auto;
-  width: fit-content;
+	display: flex;
+	align-items: center;
+	gap: 35px;
+	margin-left: auto;
+	padding: 6px;
+	width: fit-content;
 
-  button {
-    width: 40px;
-    height: 40px;
-    background-color: #595959;
+	button {
+		width: 40px;
+		height: 40px;
+		background-color: #595959;
 
-    &:hover {
-      background-color: #4e4e4e;
-    }
-  }
+		&:hover {
+			background-color: #4e4e4e;
+		}
+	}
 
-  svg {
-    fill: #fff;
-    margin-top: 2px;
-  }
+	svg {
+		fill: #fff;
+		margin-top: 2px;
+	}
 
-  .positionIndicator {
-    color: #fff;
-    display: flex;
-    gap: 6px;
-    font-size: 12px;
-    margin-top: 3px;
+	.positionIndicator {
+		color: #fff;
+		display: flex;
+		gap: 6px;
+		font-size: 12px;
+		margin-top: 3px;
 
-    i {
-      font-style: normal;
-    }
-  }
+		i {
+			font-style: normal;
+		}
+	}
 
-  .options {
-    display: flex;
-    gap: 12px;
+	.options {
+		display: flex;
+		gap: 12px;
 
-    button {
-      border-radius: 10px;
-    }
+		button {
+			border-radius: 10px;
+		}
 
-    .option_active {
-      background: #3280ed;
+		.option_active {
+			background: #3280ed;
 
-      &:hover {
-        background: #2274e7;
-      }
-    }
+			&:hover {
+				background: #2274e7;
+			}
+		}
 
-    .showGrid {
-      svg {
-        width: 22px;
-        height: 22px;
-      }
-    }
+		.showGrid {
+			svg {
+				width: 22px;
+				height: 22px;
+			}
+		}
 
-    .fullScreen {
-      svg {
-        width: 22px;
-        height: 22px;
-      }
-    }
-  }
+		.fullScreen {
+			svg {
+				width: 22px;
+				height: 22px;
+			}
+		}
+	}
 
-  .tool {
-    border-radius: 10px;
-    overflow: hidden;
+	.tool {
+		border-radius: 10px;
+		overflow: hidden;
 
-    svg {
-      width: 15px;
-      height: 15px;
-    }
+		svg {
+			width: 15px;
+			height: 15px;
+		}
 
-    .tool_active {
-      background: #3280ed;
-    }
-  }
+		.tool_active {
+			background: #3280ed;
+		}
+	}
 
-  .player {
-    border-radius: 10px;
-    overflow: hidden;
+	.player {
+		border-radius: 10px;
+		overflow: hidden;
 
-    @mixin active($color) {
-      background: $color;
+		@mixin active($color) {
+			background: $color;
 
-      &:hover {
-        background: darken($color, 5%);
-      }
-    }
+			&:hover {
+				background: darken($color, 5%);
+			}
+		}
 
-    svg {
-      width: 12px;
-      height: 12px;
-      fill: #fff;
-    }
+		svg {
+			width: 12px;
+			height: 12px;
+			fill: #fff;
+		}
 
-    .div > *{
-      width: 42px;
+		.div > * {
+			width: 42px;
 
-      &[data-state='0'] {
-        &:hover {
-          background: #595959;
-        }
-  
-        svg {
-          fill: #868686;
-        }
-      }
-    }
+			&[data-state='0'] {
+				&:hover {
+					background: #595959;
+				}
 
-    .play {
-      &[data-state='2'] {
-        @include active(#3280ed);
-      }
-    }
+				svg {
+					fill: #868686;
+				}
+			}
+		}
 
-    .pause {
-      &[data-state='2'] {
-        @include active(#ffc000);
-      }
-    }
+		.play {
+			&[data-state='2'] {
+				@include active(#3280ed);
+			}
+		}
 
-    .stop {
-      &[data-state='2'] {
-        @include active(#f23a3a);
-      }
-    }
-  }
+		.pause {
+			&[data-state='2'] {
+				@include active(#ffc000);
+			}
+		}
+
+		.stop {
+			&[data-state='2'] {
+				@include active(#f23a3a);
+			}
+		}
+	}
 }

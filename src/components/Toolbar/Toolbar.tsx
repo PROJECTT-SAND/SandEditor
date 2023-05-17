@@ -1,6 +1,7 @@
 import style from './Toolbar.module.scss';
 import { useBoundStore } from '@/store'
 import { system } from '@/system';
+import Window from '@components/Window/Window'
 
 import { ReactComponent as PlaySVG } from '@assets/icon/toolbar/player/play.svg';
 import { ReactComponent as PauseSVG } from '@assets/icon/toolbar/player/pause.svg';
@@ -57,31 +58,34 @@ export default function ViewerController() {
   }
 
   return (
-    <div className={style.viewerController}>
-      <PositionIndicator />
+    <Window>
+      <div className={style.viewerController}>
+        <PositionIndicator />
 
-      <div className={style.options}>
-        <Option style_={style.showGrid} optionEnum={OPTION.FullScreen}>
-          <GullscreenSVG />
-        </Option>
+        <div className={style.options}>
+          <Option style_={style.showGrid} optionEnum={OPTION.FullScreen}>
+            <GullscreenSVG />
+          </Option>
 
-        <Option style_={style.fullScreen} optionEnum={OPTION.ShowGrid}>
-          <ShowgridSVG />
-        </Option>
+          <Option style_={style.fullScreen} optionEnum={OPTION.ShowGrid}>
+            <ShowgridSVG />
+          </Option>
+        </div>
+
+        <div className={style.tool}>
+          <Tool style_={style.tool_hand} toolEnum={TOOL.Hand}>
+            <HandSVG />
+          </Tool>
+          <Tool style_={style.tool_move} toolEnum={TOOL.Move}>
+            <MoveSVG />
+          </Tool>
+        </div>
+
+        <div className={style.player}>
+          <Player />
+        </div>
       </div>
+    </Window>
 
-      <div className={style.tool}>
-        <Tool style_={style.tool_hand} toolEnum={TOOL.Hand}>
-          <HandSVG />
-        </Tool>
-        <Tool style_={style.tool_move} toolEnum={TOOL.Move}>
-          <MoveSVG />
-        </Tool>
-      </div>
-
-      <div className={style.player}>
-        <Player />
-      </div>
-    </div>
   );
 }
