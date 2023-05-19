@@ -27,6 +27,12 @@ export const PLAYER = {
 } as const;
 type PLAYER = (typeof PLAYER)[keyof typeof PLAYER];
 
+export const OBJECT_TYPE = {
+    Scene: 0,
+    Object: 1,
+} as const;
+type OBJECT_TYPE = (typeof OBJECT_TYPE)[keyof typeof OBJECT_TYPE];
+
 export const ButtonState = {
 	DISABLED: 0,
 	DEFAULT: 1,
@@ -41,3 +47,12 @@ export const ButtonLifeCycle = [
 	{ play: 1, pause: 2, stop: 1 },
 	{ play: 0, pause: 0, stop: 2 },
 ] as const;
+
+export const ButtonState = [
+    [0, 0, 0],
+    [1, 0, 0],
+    [2, 0, 0],
+    [2, 1, 1],
+    [1, 2, 1],
+    [0, 0, 2],
+  ] as const;

@@ -1,5 +1,6 @@
 import style from './Toolbar.module.scss';
 import React, { useState } from 'react';
+import { useBoundStore } from '@/store'
 
 const Option: React.FC<{
   style_: string;
@@ -7,6 +8,7 @@ const Option: React.FC<{
   children: React.ReactNode;
 }> = ({ style_, optionEnum, children }) => {
   const [optionsState, setOptionsState] = useState([false, false]);
+  const store = useBoundStore();
   const isActive = optionsState[optionEnum];
 
   const setOption = () => {
