@@ -1,6 +1,6 @@
 import style from "./Layout.module.scss";
 import { useState } from "react";
-import { Viewport, Toolbar, Objects, Browser, Workspace, Terminal } from './components/index';
+import { Viewport, Toolbar, Objects, Browser, Workspace, Terminal } from '@components/index';
 
 export default function Layout() {
   const [leftBottomLayoutSize, setleftBottomLayoutSize] = useState(60);

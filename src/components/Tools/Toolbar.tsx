@@ -1,6 +1,6 @@
 import style from './Toolbar.module.scss';
 import { useBoundStore } from '@/store'
-import { system } from '@/system';
+import { system } from '@/system/system';
 import Window from '@components/Window/Window'
 
 import { ReactComponent as PlaySVG } from '@assets/icon/toolbar/player/play.svg';

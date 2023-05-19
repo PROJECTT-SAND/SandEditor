@@ -1,7 +1,7 @@
 import style from './Toolbar.module.scss';
 import React from 'react';
 import { useBoundStore } from '@/store'
-import {ButtonState} from '@/constants'
+import { ButtonState } from '@/constants'
 
 const PlayerButton: React.FC<{
   PlayerButtonEnum: any;

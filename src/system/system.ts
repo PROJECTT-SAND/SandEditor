@@ -1,7 +1,7 @@
-import { useBoundStore } from './store';
+import { useBoundStore } from '../store';
 
-import log from './system/log';
-import * as sys from './system/Sys';
+import log from './log';
+import * as sys from './Sys';
 
 export const system = {
 	run: (Props: string) => {
