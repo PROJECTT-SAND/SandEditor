@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import style from './Objects.module.scss';
 import Window from '@components/Window/Window';
 
@@ -6,114 +7,97 @@ import folderIcon from '@assets/icon/object/folder.svg';
 import arrowDownIcon from '@assets/icon/object/arrow_down.svg';
 import arrowUpIcon from '@assets/icon/object/arrow_up.svg';
 
+import { OBJ_KIND } from '@/constants';
+
 export default function Objects() {
-
-  interface asdfasdf {
-    [key: string]: boolean;
-  }
-
-
-  interface ObjKind {
-    [key: string]: number
-  }
-
-  const ObjKind: ObjKind = {
-    scene: 0,
-    object: 1,
-  }
-
   interface Object {
     name: string,
     kind: number,
     isHidden: boolean,
-    parentUUID: any | null,// uuidv4
-    UUID: any// uuidv4
+    parentUUID: any | null,
+    UUID: any
   }
 
-  interface WrapperProps {
-    children?: React.ReactNode;
-    name: any;
-    icon: any;
-    isHidden: boolean;
-  }
-
-  const [objectIsOpened, setobjectIsOpened] = useState<asdfasdf>({
+  const [objectIsOpened, setobjectIsOpened] = useState<{ [key: string]: boolean }>({
     InGame: true,
     Chr1: false
   });
 
-  // npm i uuid
-  // npm i @types/uuid
-  // import { v4 as uuidv4 } from 'uuid';
-  // uuidv4();
+  class OBJ {
+    UUID: string;
+    name: string;
+    kind: typeof OBJ_KIND;
+    isHidden: boolean;
+    parentUUID: number;
 
-  class object {
-    constructor(name, kind, isHidden, parentUUID) {
+    constructor(name: string, kind: typeof OBJ_KIND, isHidden: boolean, parentUUID: number) {
+      this.name = name;
+      this.kind = kind;
+      this.isHidden = isHidden;
+      this.parentUUID = parentUUID;
       this.UUID = uuidv4();
-      this.treeDepth = 123123;
     }
   }
 
   const [objectTree, setObjectTree] = useState<Object[]>(
     [
-      { name: 'InGame', kind: ObjKind.scene, isHidden: false, treeDepth: 0, parentUUID: null, UUID: 1 },
-      { name: 'Tlqkf', kind: ObjKind.object, isHidden: true, treeDepth: 1, parentUUID: 1, UUID: 2 },
-      { name: 'Tlqkf2', kind: ObjKind.object, isHidden: false, treeDepth: 1, parentUUID: 1, UUID: 3 },
-      { name: 'Chr1', kind: ObjKind.object, isHidden: false, treeDepth: 1, parentUUID: 1, UUID: 4 },
-      { name: 'Head', kind: ObjKind.object, isHidden: false, treeDepth: 2, parentUUID: 4, UUID: 5 },
-      { name: 'arm', kind: ObjKind.object, isHidden: false, treeDepth: 2, parentUUID: 4, UUID: 6 },
-      { name: 'body', kind: ObjKind.object, isHidden: false, treeDepth: 2, parentUUID: 4, UUID: 7 },
+      { name: 'InGame', kind: OBJ_KIND.scene, isHidden: false, parentUUID: null, UUID: 1 },
+      { name: 'Tlqkf', kind: OBJ_KIND.object, isHidden: true, parentUUID: 1, UUID: 2 },
+      { name: 'Tlqkf2', kind: OBJ_KIND.object, isHidden: false, parentUUID: 1, UUID: 3 },
+      { name: 'Chr1', kind: OBJ_KIND.object, isHidden: false, parentUUID: 1, UUID: 4 },
+      { name: 'Head', kind: OBJ_KIND.object, isHidden: false, parentUUID: 4, UUID: 5 },
+      { name: 'arm', kind: OBJ_KIND.object, isHidden: false, parentUUID: 4, UUID: 6 },
+      { name: 'body', kind: OBJ_KIND.object, isHidden: false, parentUUID: 4, UUID: 7 },
     ]
-    // {
-    //   name: 'InGame', kind: ObjKindEnum.scene, child: [
-    //     { name: 'Tlqkf', kind: ObjKindEnum.object, child: null },
-    //     { name: 'Tlqkf2', kind: ObjKindEnum.object, child: null },
-    //     {
-    //       name: 'Chr1', kind: ObjKindEnum.object, child: [
-    //         {
-    //           name: 'Head', kind: ObjKindEnum.object, child: null
-    //         },
-    //         {
-    //           name: 'arm', kind: ObjKindEnum.object, child: null
-    //         },
-    //         {
-    //           name: 'body', kind: ObjKindEnum.object, child: null
-    //         },
-    //         {
-    //           name: 'leg', kind: ObjKindEnum.object, child: null
-    //         },
-    //         { name: 'foot', kind: ObjKindEnum.object, child: null }
-    //       ]
-    //     }
-    //   ]
-    // }
   );
 
-  let objectRoot;
+  const testValue = [
+    { key: "0", UUID: 2, children: null },
+    { key: "1", UUID: 2, children: null },
+    {
+      key: "2", UUID: 2, children: [
+        {
+          key: "2-0", UUID: 2, children: null
+        },
+        {
+          key: "2-1", UUID: 2, children: null
+        },
+        {
+          key: "2-2", UUID: 2, children: null
+        },
+        {
+          key: "2-3", UUID: 2, children: null
+        },
+        { key: "2-4", UUID: 2, children: null }
+      ]
+    }
+  ]
 
-  useEffect(() => {
-    const objectTreeSorted = objectTree.sort((a, b) => {
-      return a.treeDepth - b.treeDepth;
-    })
+  // useEffect(() => {
+  //   const objectTreeSorted = objectTree.sort((a, b) => {
+  //     return a.treeDepth - b.treeDepth;
+  //   })
 
-    objectTreeSorted.map((object) => {
-      let icon = folderIcon;
+  //   objectTreeSorted.map((object) => {
+  //     let icon = folderIcon;
 
-      if(object.kind == ObjKind.object) {
-        icon = folderIcon;
-      }
+  //     if (object.kind == OBJ_KIND.object) {
+  //       icon = folderIcon;
+  //     }
 
-      const objectElem = (
-        <Object name={object.name} icon={icon} isHidden={object.isHidden} />
-      );
+  //     const objectElem = (
+  //       <>
+  //         <Object name={object.name} icon={icon} isHidden={object.isHidden} />
+  //       </>
+  //     );
 
-      if(object.parentUUID !== null) {
-        objectRoot.appendChild(objectElem);
-      } else {
-        objectRoot.appendChild(objectElem);
-      }
-    })
-  }, [objectRoot])
+  //     if (object.parentUUID !== null) {
+  //       objectRoot.current?.appendChild(objectElem);
+  //     } else {
+  //       objectRoot.current?.appendChild(objectElem);
+  //     }
+  //   })
+  // }, [objectRoot])
 
   const setObjFold = (name: string) => {
     setobjectIsOpened({
@@ -122,7 +106,7 @@ export default function Objects() {
     });
   }
 
-  const Object: React.FC<WrapperProps> = ({ children, name, icon, isHidden }) => {
+  const ObjectNode: React.FC<{ node: any }> = ({ node }) => {
     const content = (
       <>
         <div className={style.object_icon}><img src={icon}></img></div>
@@ -156,6 +140,18 @@ export default function Objects() {
     }
   }
 
+  function ObjectTree() {
+    return (
+      <>
+        {
+          testValue.map((node) => {
+            <ObjectNode node={node} key={node.key} />
+          })
+        }
+      </>
+    )
+  }
+
   return (
     <Window>
       <div className={style.topBar}>
@@ -163,7 +159,8 @@ export default function Objects() {
         <i>여기에 검색하세요</i>
         <button className={style.topBar_search}></button>
       </div>
-      <div className={style.objects} bind={objectRoot}>
+      <div className={style.objects}>
+        <ObjectTree />
       </div>
     </Window>
   );

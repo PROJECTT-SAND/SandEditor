@@ -16,7 +16,7 @@ import Option from './Option';
 import PlayerButton from './PlayerButton';
 import Tool from './Tool';
 
-import { TOOL, OPTION, LIFECYCLE, PLAYER, ButtonState, ButtonLifeCycle } from '../../constants';
+import { TOOL, OPTION, LIFECYCLE, PLAYER, ButtonState, ButtonLifeCycle } from '@/constants';
 
 export default function ViewerController() {
   function Player() {

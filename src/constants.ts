@@ -27,6 +27,12 @@ export const PLAYER = {
 } as const;
 type PLAYER = (typeof PLAYER)[keyof typeof PLAYER];
 
+export const OBJ_KIND = {
+	scene: 0,
+	object: 1,
+} as const;
+type OBJ_KIND = (typeof OBJ_KIND)[keyof typeof OBJ_KIND];
+
 export const ButtonState = {
 	DISABLED: 0,
 	DEFAULT: 1,
