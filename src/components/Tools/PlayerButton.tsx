@@ -1,6 +1,7 @@
 import style from './Toolbar.module.scss';
 import React from 'react';
 import { useBoundStore } from '@/store'
+import {ButtonState} from '@/constants'
 
 const PlayerButton: React.FC<{
   PlayerButtonEnum: any;
@@ -9,14 +10,6 @@ const PlayerButton: React.FC<{
   children: React.ReactNode;
 }> = ({ PlayerButtonEnum, style_, func, children }) => {
   const store = useBoundStore();
-  const ButtonState = [
-    [0, 0, 0],
-    [1, 0, 0],
-    [2, 0, 0],
-    [2, 1, 1],
-    [1, 2, 1],
-    [0, 0, 2],
-  ]
 
   return (
     <button

@@ -1,5 +1,6 @@
 import { useBoundStore } from '../store';
 import log from './log';
+import {VM} from 'vm2'
 // import { sysConsole } from "../components/Terminal/Terminal";
 
 // import lexing from "./lexing";
@@ -13,10 +14,20 @@ export function start() {
     log.text("시스템: 시작 중");
     store.setPlayerState(2);
 
+    // npm install vm2
+
     // await (()=>{})
     // phasing, tokenizing, run
     // const code = store.codes["qwe.sdcod"];
     // asd()
+    const util = {
+      add: (a, b) => a + b
+    }
+  
+    const vm = new VM();
+    vm.freeze(util, 'util');
+    const script = new VMScript('util.add = (a, b) => a - b');
+    vm.run(script);
 
     log.text("시스템: 시작 완료");
     store.setPlayerState(3);
