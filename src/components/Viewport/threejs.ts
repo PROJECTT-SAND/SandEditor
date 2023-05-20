@@ -1,26 +1,10 @@
+import { codes, objects, logs, viewerController } from '@/types';
 import * as THREE from 'three';
 import { DragControls } from 'three/examples/jsm/controls/DragControls.js';
 
-interface command {
-	type: string;
-	props: any[];
-}
-
-let callStack: command[] = [
-	{ type: 'loop', props: [10, { type: 'moveX', props: [10] }] },
-];
-
-`
-loop(10) {
-  moveX(10)
-}
-`;
-
-// const [isStart, setIsStart] = useState(false);
-// const [isGrid, setIsGrid] = useState(false);
 const objValue: { [key: string]: OBJ } = {};
 const objects: THREE.Object3D<THREE.Event>[] = [];
-let storeValue;
+let storeValue: viewerController & objects & logs & codes;
 let canvasElement: HTMLCanvasElement;
 
 const Ctx = {
@@ -50,6 +34,8 @@ const camera = new THREE.PerspectiveCamera(
 camera.position.z = 700;
 
 class OBJ extends THREE.Mesh {
+	material: THREE.MeshBasicMaterial;
+
 	constructor() {
 		super();
 		this.geometry = new THREE.CircleGeometry(15, 32);
@@ -129,8 +115,10 @@ export const createScene = (el: HTMLCanvasElement) => {
 	test();
 };
 
-export const setStoreValue = (as: any) => {
-	storeValue = as;
+export const setStoreValue = (
+	value: viewerController & objects & logs & codes
+) => {
+	storeValue = value;
 	isOBJDragable =
 		storeValue.toolState === 1 && storeValue.currentLifeCycle != 3;
 };
@@ -150,37 +138,8 @@ const resize = () => {
 	camera.updateProjectionMatrix();
 };
 
-let callStackIndex = 0;
-let loopIndex = 0;
-let currentCall: any = null;
-let callType = currentCall?.type;
-let callProps = currentCall?.props;
-let requestAnimationID;
-
 const render = () => {
-	requestAnimationID = requestAnimationFrame(render);
-
-	// if (currentCall === null) {
-	// 	currentCall = callStack[callStackIndex];
-	// 	callStackIndex += 1;
-	// }
-
-	// if (currentCall === undefined) {
-	// 	cancelAnimationFrame(requestAnimationID);
-	// 	return;
-	// }
-
-	// callType = currentCall.type;
-	// callProps = currentCall.props;
-
-	// if (callType == 'loop') {
-	// 	loopIndex = callProps[0];
-	// 	currentCall = callProps[1];
-	// }
-	// if (callType == 'moveX') {
-	// 	objects[0].position.x += callProps[0];
-	// }
-
+	requestAnimationFrame(render);
 	renderer.clear();
 	// renderer.render(scene2, camera);
 	// renderer.clearDepth();

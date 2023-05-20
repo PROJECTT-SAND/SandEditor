@@ -1,7 +1,7 @@
-import style from './Toolbar.module.scss';
+import style from './Tools.module.scss';
 import { useBoundStore } from '@/store'
 import { system } from '@/system/system';
-import Window from '@components/Window/Window'
+import Window from '@/components/Wrapper/Wrapper'
 
 import { ReactComponent as PlaySVG } from '@assets/icon/toolbar/player/play.svg';
 import { ReactComponent as PauseSVG } from '@assets/icon/toolbar/player/pause.svg';

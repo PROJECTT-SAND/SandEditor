@@ -1,5 +1,5 @@
 import style from './Browser.module.scss';
-import Window from '@components/Window/Window';
+import Window from '@/components/Wrapper/Wrapper';
 import example from '@assets/example1.png';
 
 export default function Folder() {

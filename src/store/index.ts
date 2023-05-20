@@ -1,18 +1,6 @@
 import create, { StateCreator } from 'zustand';
+import { codes, logs, objects, viewerController } from '@/types';
 
-// import { viewerController } from './stroes/viewerController'
-
-interface viewerController {
-	mouseIsEnterViewer: boolean;
-	isGrid: boolean;
-	currentLifeCycle: number;
-	toolState: number;
-	optionState: object;
-	setMouseIsEnterViewer: (value: boolean) => void;
-	setCurrentLifeCycle: (value: number) => void;
-	setToolState: (value: number) => void;
-	setOptionState: (value: object) => void;
-}
 const createViewerController: StateCreator<viewerController> = (set) => ({
 	mouseIsEnterViewer: false,
 	isGrid: false,
@@ -28,10 +16,6 @@ const createViewerController: StateCreator<viewerController> = (set) => ({
 	setOptionState: (value) => set(() => ({ optionState: value })),
 });
 
-interface objects {
-	objValue: object;
-	setObjValue: (objName: string, pos: object) => void;
-}
 const createObjects: StateCreator<objects> = (set) => ({
 	objValue: {
 		example1: { x: 0, y: 0 },
@@ -41,16 +25,10 @@ const createObjects: StateCreator<objects> = (set) => ({
 	},
 });
 
-interface logs {
-	logs: any[];
-}
 const createLogs: StateCreator<logs> = (set) => ({
 	logs: [],
 });
 
-interface codes {
-	codes: any;
-}
 const createCodes: StateCreator<codes> = (set) => ({
 	codes: {
 		'qwe.sdcod': `func null start(obj:obj)

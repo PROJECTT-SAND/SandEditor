@@ -1,5 +1,5 @@
 import style from './Viewport.module.scss';
-import React, { useState, useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import { useBoundStore } from '@/store'
 import { createScene, pointerMoveEvent, clickEvent, setStoreValue } from './threejs';
 

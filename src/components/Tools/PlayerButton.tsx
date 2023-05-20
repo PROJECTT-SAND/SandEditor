@@ -1,7 +1,7 @@
-import style from './Toolbar.module.scss';
+import style from './Tools.module.scss';
 import React from 'react';
 import { useBoundStore } from '@/store'
-import { ButtonState } from '@/constants'
+import { ButtonLifeCycleState } from '@/constants'
 
 const PlayerButton: React.FC<{
   PlayerButtonEnum: any;
@@ -13,7 +13,7 @@ const PlayerButton: React.FC<{
 
   return (
     <button
-      data-state={ButtonState[store.currentLifeCycle][PlayerButtonEnum]}
+      data-state={ButtonLifeCycleState[store.currentLifeCycle][PlayerButtonEnum]}
       className={style_}
       onClick={func}>
 

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import shallow from 'zustand/shallow';
 import style from './Terminal.module.scss';
-import Window from '@components/Window/Window';
+import Window from '@/components/Wrapper/Wrapper';
 import { system } from '@/system/system';
 import { useBoundStore } from '@/store';
 

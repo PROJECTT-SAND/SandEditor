@@ -1,4 +1,4 @@
-import style from './Window.module.scss';
+import style from './Wrapper.module.scss';
 
 interface WrapperProps {
   children: React.ReactNode;

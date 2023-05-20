@@ -1,4 +1,4 @@
-import style from './Toolbar.module.scss';
+import style from './Tools.module.scss';
 import React, { useState } from 'react';
 import { useBoundStore } from '@/store'
 
