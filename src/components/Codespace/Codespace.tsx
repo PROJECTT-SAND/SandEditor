@@ -1,19 +1,14 @@
-import React, { useState, useRef } from "react";
-import Editor, { DiffEditor, useMonaco, loader } from "@monaco-editor/react";
+import React, { useState, useRef, useEffect } from "react";
+import Editor, { OnChange, useMonaco } from "@monaco-editor/react";
 import style from "./Codespace.module.scss";
 import Window from "@/components/Wrapper/Wrapper";
 import { useBoundStore } from "@/store";
-import { monarchLanguage } from "@/SendBoxCodeLang";
+import { file } from '@/types'
+import Declaration_types from '@/types/sandeditor/types.d.ts?raw';
 
 export default function WorkSpace() {
-  interface File {
-    fullName: string,
-    fileName: string,
-    extension: string,
-  }
-
   function WorkMenu() {
-    const [workMenu, setWorkMenu] = useState<File[]>([
+    const [workMenu, setWorkMenu] = useState<file[]>([
       {
         fullName: "asd.sdcod",
         fileName: "asd",
@@ -47,40 +42,52 @@ export default function WorkSpace() {
     );
   }
 
-  const editorRef = useRef(null);
+  const { codes, setCodes } = useBoundStore();
+  const monaco = useMonaco();
+  const language = "typescript";
 
-  const languageID = "SendBoxCodeLang";
+  const editorOnChange = (code: any) => {
+    // setCodes("asd", code);
 
-  function handleEditorDidMount(editor: any, monaco: any) {
-    editorRef.current = editor;
-
-    monaco.languages.register({ id: languageID });
-    monaco.languages.setMonarchTokensProvider(languageID, monarchLanguage);
+    // try {
+    //   let aaa = new Function(code);
+    //   aaa();
+    // } catch (e) {
+    //   console.error(e);
+    // }
   }
 
-  // function showValue() {
-  //   alert(editorRef.current.getValue());
-  // }
+  useEffect(() => {
+    if (!monaco) return;
 
-  // useStore.setState({codes: , ...useStore});
+    monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
+      target: monaco.languages.typescript.ScriptTarget.ES2016,
+      allowNonTsExtensions: true,
+      moduleResolution: monaco.languages.typescript.ModuleResolutionKind.NodeJs,
+      module: monaco.languages.typescript.ModuleKind.CommonJS,
+      noEmit: true,
+      typeRoots: ["node_modules/@types"]
+    })
+
+    monaco.languages.typescript.typescriptDefaults.setExtraLibs([
+      // { content: Declaration_process, filePath: 'file:///node_modules/@types/process/index.d.ts' },
+      { content: Declaration_types },
+    ])
+    // monaco.editor.defineTheme()
+  }, [monaco])
 
   return (
     <div className={style.workSpace}>
       <WorkMenu />
-      <Window customStyle={{ borderRadius: "10px 10px 0px 0px" }}>
-        {/*
-        func null start(obj:obj)
-          obj.[x, y, size] = [10, 20, 100]
-
-          for(10)
-            obj.X += 10
-        */}
-        <Editor
-          theme="vs-dark"
-          defaultLanguage={languageID}
-          onMount={handleEditorDidMount}
-        />
-      </Window>
+      <Editor
+        theme="vs-dark"
+        language={language}
+        onChange={editorOnChange}
+        path={'file:///index.ts'}
+        options={{
+          fontSize: 18
+        }}
+      />
     </div>
   );
 }

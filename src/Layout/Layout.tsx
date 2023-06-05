@@ -1,6 +1,6 @@
 import style from "./Layout.module.scss";
 import { useState } from "react";
-import { Viewport, Toolbar, Objects, Browser, Workspace, Terminal } from '@components/index';
+import { Viewport, Toolbar, Objects, Browser, Workspace, Terminal, Inspecter } from '@components/index';
 
 export default function Layout() {
   const [leftBottomLayoutSize, setleftBottomLayoutSize] = useState(60);
@@ -15,13 +15,16 @@ export default function Layout() {
         </div>
         <div className={style.layout_left_bottom}>
           <div className={style.objects} style={{ width: `${leftBottomLayoutSize}%` }}><Objects /></div>
-          <span className={style.window_controller} style={{ left: `${leftBottomLayoutSize}%` }}></span>
+          {/* <span className={style.window_controller} style={{ left: `${leftBottomLayoutSize}%` }}></span> */}
           <div className={style.folder}><Browser /></div>
         </div>
       </div>
       <div className={style.layout_right}>
-        <div className={style.workspace} style={{ height: `${rightLayoutSize}%` }}><Workspace /></div>
-        <span className={style.window_controller} style={{ top: `${rightLayoutSize}%` }}></span>
+        <div className={style.layout_right_top}>
+          <div className={style.workspace} style={{ height: `${99}%` }}><Workspace /></div>
+          <div className={style.inspecter}><Inspecter /></div>
+        </div>
+        {/* <span className={style.window_controller} style={{ top: `${rightLayoutSize}%` }}></span> */}
         <div className={style.console}><Terminal /></div>
       </div>
     </div>

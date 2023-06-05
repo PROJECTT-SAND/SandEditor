@@ -1,28 +1,33 @@
+$button_active_color: #2772db;
+$button_border_color: rgb(31, 31, 33);
+$button_bg_color: #4f5158;
+$button_bg_hover_color: #575b67;
+
 .viewerController {
 	display: flex;
 	align-items: center;
-	gap: 35px;
+	gap: 15px;
 	margin-left: auto;
 	padding: 6px;
 	width: fit-content;
 
 	button {
-		width: 40px;
-		height: 40px;
-		background-color: #595959;
+		width: 35px;
+		height: 28px;
+		background-color: $button_bg_color;
 
 		&:hover {
-			background-color: #4e4e4e;
+			background-color: $button_bg_hover_color;
 		}
 	}
 
 	svg {
-		fill: #fff;
+		fill: rgb(215, 217, 221);
 		margin-top: 2px;
 	}
 
 	.positionIndicator {
-		color: #fff;
+		color: rgb(182, 182, 182);
 		display: flex;
 		gap: 6px;
 		font-size: 12px;
@@ -35,64 +40,50 @@
 
 	.options {
 		display: flex;
-		gap: 12px;
+		gap: 5px;
 
 		button {
-			border-radius: 10px;
+			border-radius: 7px;
+			border: 1px solid $button_border_color;
+
+			svg {
+				width: 16px;
+				height: 16px;
+			}
 		}
 
 		.option_active {
-			background: #3280ed;
+			background: $button_active_color;
 
 			&:hover {
-				background: #2274e7;
-			}
-		}
-
-		.showGrid {
-			svg {
-				width: 22px;
-				height: 22px;
-			}
-		}
-
-		.fullScreen {
-			svg {
-				width: 22px;
-				height: 22px;
+				background: $button_active_color;
 			}
 		}
 	}
 
 	.tool {
-		border-radius: 10px;
+		border-radius: 7px;
 		overflow: hidden;
+		border: 1px solid $button_border_color;
 
 		svg {
-			width: 15px;
-			height: 15px;
+			width: 14px;
+			height: 14px;
 		}
 
 		.tool_active {
-			background: #3280ed;
+			background: $button_active_color;
 		}
 	}
 
 	.player {
-		border-radius: 10px;
+		border-radius: 7px;
 		overflow: hidden;
-
-		@mixin active($color) {
-			background: $color;
-
-			&:hover {
-				background: darken($color, 5%);
-			}
-		}
+		border: 1px solid $button_border_color;
 
 		svg {
-			width: 12px;
-			height: 12px;
+			width: 11px;
+			height: 11px;
 			fill: #fff;
 		}
 
@@ -110,9 +101,17 @@
 			}
 		}
 
+		@mixin active($color) {
+			background: $color;
+
+			&:hover {
+				background: darken($color, 5%);
+			}
+		}
+
 		.play {
 			&[data-state='2'] {
-				@include active(#3280ed);
+				@include active($button_active_color);
 			}
 		}
 

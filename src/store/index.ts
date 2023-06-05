@@ -1,5 +1,12 @@
 import create, { StateCreator } from 'zustand';
-import { codes, logs, objects, viewerController } from '@/types';
+import {
+	codes,
+	logs,
+	objects,
+	selectedObject,
+	viewerController,
+} from '@/types';
+import { OBJECT_TYPE } from '@/constants';
 
 const createViewerController: StateCreator<viewerController> = (set) => ({
 	mouseIsEnterViewer: false,
@@ -17,11 +24,108 @@ const createViewerController: StateCreator<viewerController> = (set) => ({
 });
 
 const createObjects: StateCreator<objects> = (set) => ({
-	objValue: {
-		example1: { x: 0, y: 0 },
+	objectDatas: {
+		'1': {
+			name: 'InGame',
+			type: OBJECT_TYPE.Scene,
+			X: 0,
+			Y: 0,
+			isHidden: false,
+			parentUUID: null,
+			UUID: '1',
+		},
+		'2': {
+			name: 'Tlqkf',
+			type: OBJECT_TYPE.Object,
+			X: 110,
+			Y: 0,
+			isHidden: true,
+			parentUUID: '1',
+			UUID: '2',
+		},
+		'3': {
+			name: 'Tlqkf2',
+			type: OBJECT_TYPE.Object,
+			X: 220,
+			Y: 0,
+			isHidden: false,
+			parentUUID: '1',
+			UUID: '3',
+		},
+		'4': {
+			name: 'Chr1',
+			type: OBJECT_TYPE.Object,
+			X: 330,
+			Y: 0,
+			isHidden: false,
+			parentUUID: '1',
+			UUID: '4',
+		},
+		'5': {
+			name: 'Head',
+			type: OBJECT_TYPE.Object,
+			X: 440,
+			Y: 0,
+			isHidden: false,
+			parentUUID: '4',
+			UUID: '5',
+		},
+		'6': {
+			name: 'arm',
+			type: OBJECT_TYPE.Object,
+			X: 550,
+			Y: 0,
+			isHidden: false,
+			parentUUID: '4',
+			UUID: '6',
+		},
+		'7': {
+			name: 'body',
+			type: OBJECT_TYPE.Object,
+			X: 660,
+			Y: 0,
+			isHidden: false,
+			parentUUID: '4',
+			UUID: '7',
+		},
 	},
-	setObjValue: (objName, pos) => {
-		// set(() => ({ objValue[objName]: pos }));
+	objectTree: [
+		{
+			uuid: '1',
+			children: [
+				{
+					uuid: '2',
+					children: [],
+				},
+				{
+					uuid: '3',
+					children: [],
+				},
+				{
+					uuid: '4',
+					children: [
+						{
+							uuid: '5',
+							children: [],
+						},
+						{
+							uuid: '6',
+							children: [],
+						},
+						{
+							uuid: '7',
+							children: [],
+						},
+					],
+				},
+			],
+		},
+	],
+	setObjectDatas: (data) => {
+		set(() => ({ objectDatas: data }));
+	},
+	setObjectTree: (treeData) => {
+		set(() => ({ objectTree: treeData }));
 	},
 });
 
@@ -31,19 +135,45 @@ const createLogs: StateCreator<logs> = (set) => ({
 
 const createCodes: StateCreator<codes> = (set) => ({
 	codes: {
-		'qwe.sdcod': `func null start(obj:obj)
-      obj.[x, y, size] = [10, 20, 100]
+		'qwe.sdcod': `process.addEventListener(process.UpdateEvent, () => {
+      this.X += 10;
+    })`,
+	},
 
-      loop(10)
-        obj.X += 10`,
+	codeFiles: {
+		'qwe.sdcod': {
+			contents: `process.addEventListener(process.UpdateEvent, () => {
+      this.X += 10;
+    })`,
+			params: { index: { type: 1, value: 0 } },
+		},
+	},
+	// [{filename: 'qwe.sdcod', content: '', params: {index: new numberParam(0)}}]
+
+	setCodes: (filename, code) => {
+		set((values) => ({
+			codes: { ...values.codes, [filename]: code },
+		}));
+	},
+
+	setCodeFiles: (filename, data) => {
+		set((values) => ({
+			codeFiles: { ...values.codeFiles, [filename]: data },
+		}));
 	},
 });
 
+const createSelectedObject: StateCreator<selectedObject> = (set) => ({
+	selectedObjectUUID: null,
+	setSelectedObjectUUID: (value) => set(() => ({ selectedObjectUUID: value })),
+});
+
 export const useBoundStore = create<
-	viewerController & objects & logs & codes
+	viewerController & objects & logs & codes & selectedObject
 >()((...a) => ({
 	...createViewerController(...a),
 	...createObjects(...a),
 	...createLogs(...a),
 	...createCodes(...a),
+	...createSelectedObject(...a),
 }));

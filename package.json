@@ -1,75 +1,75 @@
 {
-  "name": "sand-editer",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "Authors": [
-    "lavi",
-    "dacoon"
-  ],
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "@monaco-editor/react": "^4.4.6",
-    "@types/three": "^0.152.0",
-    "@types/uuid": "^9.0.1",
-    "electron": "^21.1.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "three": "^0.145.0",
-    "uuid": "^9.0.0",
-    "vite-plugin-svgr": "^3.2.0",
-    "zustand": "^4.1.2"
-  },
-  "devDependencies": {
-    "@svgr/webpack": "^7.0.0",
-    "@types/react": "^18.0.17",
-    "@types/react-dom": "^18.0.6",
-    "@vitejs/plugin-react": "^2.1.0",
-    "sass": "^1.55.0",
-    "typescript": "^4.6.4",
-    "vite": "^3.1.0",
-    "vite-tsconfig-paths": "^4.2.0"
-  },
-  "config": {
-    "forge": {
-      "packagerConfig": {
-        "icon": "./icon.ico"
-      },
-      "makers": [
-        {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "name": "sand_editer"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin"
-          ]
-        },
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {}
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {}
-        }
-      ]
-    }
-  },
-  "build": {
-    "appId": "com.sand.sandediter",
-    "productName": "SAND-editer",
-    "nsis": {
-      "oncClick": false,
-      "installerIcon": "icon.ico",
-      "createDesktopShortcut": true
-    }
-  }
+	"name": "sand-editer",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"Authors": [
+		"lavi",
+		"dacoon"
+	],
+	"scripts": {
+		"dev": "vite",
+		"build": "tsc && vite build",
+		"preview": "vite preview"
+	},
+	"dependencies": {
+		"@monaco-editor/react": "^4.4.6",
+		"@types/three": "^0.152.0",
+		"@types/uuid": "^9.0.1",
+		"electron": "^21.1.0",
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0",
+		"three": "^0.145.0",
+		"uuid": "^9.0.0",
+		"vite-plugin-svgr": "^3.2.0",
+		"zustand": "^4.1.2"
+	},
+	"devDependencies": {
+		"@svgr/webpack": "^7.0.0",
+		"@types/react": "^18.0.17",
+		"@types/react-dom": "^18.0.6",
+		"@vitejs/plugin-react": "^2.1.0",
+		"sass": "^1.55.0",
+		"typescript": "^4.6.4",
+		"vite": "^3.1.0",
+		"vite-tsconfig-paths": "^4.2.0"
+	},
+	"config": {
+		"forge": {
+			"packagerConfig": {
+				"icon": "./icon.ico"
+			},
+			"makers": [
+				{
+					"name": "@electron-forge/maker-squirrel",
+					"config": {
+						"name": "sand_editer"
+					}
+				},
+				{
+					"name": "@electron-forge/maker-zip",
+					"platforms": [
+						"darwin"
+					]
+				},
+				{
+					"name": "@electron-forge/maker-deb",
+					"config": {}
+				},
+				{
+					"name": "@electron-forge/maker-rpm",
+					"config": {}
+				}
+			]
+		}
+	},
+	"build": {
+		"appId": "com.sand.sandediter",
+		"productName": "SAND-editer",
+		"nsis": {
+			"oncClick": false,
+			"installerIcon": "icon.ico",
+			"createDesktopShortcut": true
+		}
+	}
 }

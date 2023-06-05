@@ -2,7 +2,7 @@ import style from './Wrapper.module.scss';
 
 interface WrapperProps {
   children: React.ReactNode;
-  customStyle?: object;
+  customStyle?: React.CSSProperties;
 }
 
 const Wrapper: React.FC<WrapperProps> = ({ children, customStyle }) => {

@@ -1,27 +1,36 @@
-@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard-dynamic-subset.css");
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard-dynamic-subset.css');
+
+$primary_color: #2189fa;
 
 * {
-  margin: 0px;
-  padding: 0px;
-  font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+	margin: 0px;
+	padding: 0px;
+	user-select: none;
 }
 
-html, body, #root {
-  width: 100vw;
-  height: 100vh;
+html,
+body,
+#root {
+	width: 100vw;
+	height: 100vh;
+	font-family: 'Pretendard Variable', Pretendard, -apple-system,
+		BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI',
+		'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji',
+		'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
 }
 
 body {
-  margin: 0;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: #14191f;
+	margin: 0;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	background-color: #14191f;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+	font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+		monospace;
 }
 
 button {
-  border: none;
+	border: none;
 }

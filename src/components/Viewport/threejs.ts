@@ -1,10 +1,17 @@
-import { codes, objects, logs, viewerController } from '@/types';
+import {
+	codes,
+	objects,
+	logs,
+	viewerController,
+	selectedObject,
+} from '@/types';
+import { Object as ObjectData } from '@/classes';
 import * as THREE from 'three';
 import { DragControls } from 'three/examples/jsm/controls/DragControls.js';
 
 const objValue: { [key: string]: OBJ } = {};
 const objects: THREE.Object3D<THREE.Event>[] = [];
-let storeValue: viewerController & objects & logs & codes;
+let storeValue: viewerController & objects & logs & codes & selectedObject;
 let canvasElement: HTMLCanvasElement;
 
 const Ctx = {
@@ -35,13 +42,15 @@ camera.position.z = 700;
 
 class OBJ extends THREE.Mesh {
 	material: THREE.MeshBasicMaterial;
+	dataUuid: string;
 
-	constructor() {
+	constructor(X: number, Y: number, UUID: string) {
 		super();
 		this.geometry = new THREE.CircleGeometry(15, 32);
 		this.material = new THREE.MeshBasicMaterial({ color: 0xeeeeee });
-
-		objValue[this.uuid] = this;
+		this.position.x = X;
+		this.position.y = Y;
+		this.dataUuid = UUID;
 	}
 
 	onPointerOver(e: PointerEvent) {}
@@ -89,6 +98,27 @@ export const clickEvent = (e: MouseEvent) => {
 	});
 };
 
+let controls: DragControls;
+
+export const setStoreValue = (
+	value: viewerController & objects & logs & codes & selectedObject
+) => {
+	storeValue = value;
+
+	if (storeValue.selectedObjectUUID) {
+		let obj = objValue[storeValue.selectedObjectUUID];
+		let objData = storeValue.objectDatas[storeValue.selectedObjectUUID];
+
+		obj.position.x = objData.X;
+		obj.position.y = objData.Y;
+	}
+
+	isOBJDragable =
+		storeValue.toolState === 1 && storeValue.currentLifeCycle != 3;
+
+	if (controls) controls.enabled = storeValue.toolState == 1;
+};
+
 export const createScene = (el: HTMLCanvasElement) => {
 	canvasElement = el;
 
@@ -100,7 +130,7 @@ export const createScene = (el: HTMLCanvasElement) => {
 	renderer.shadowMap.enabled = true;
 	renderer.shadowMap.type = THREE.VSMShadowMap;
 
-	const controls = new DragControls(objects, camera, renderer.domElement);
+	controls = new DragControls(objects, camera, renderer.domElement);
 
 	controls.addEventListener('dragstart', (e) => {
 		e.object.onDragStart();
@@ -108,26 +138,33 @@ export const createScene = (el: HTMLCanvasElement) => {
 
 	controls.addEventListener('dragend', (e) => {
 		e.object.onDragEnd();
+
+		storeValue.setObjectDatas({
+			...storeValue.objectDatas,
+			[e.object.dataUuid]: {
+				...storeValue.objectDatas[e.object.dataUuid],
+				X: e.object.position.x,
+				Y: e.object.position.y,
+			},
+		});
 	});
 
 	resize();
 	render();
-	test();
 };
 
-export const setStoreValue = (
-	value: viewerController & objects & logs & codes
-) => {
-	storeValue = value;
-	isOBJDragable =
-		storeValue.toolState === 1 && storeValue.currentLifeCycle != 3;
+export const initScene = () => {
+	const objectDatas = storeValue.objectDatas;
+
+	for (const uuid in objectDatas) {
+		addObject(objectDatas[uuid]);
+	}
 };
 
-const test = () => {
-	const newObject = new OBJ();
-
-	scene1.add(newObject);
-	objects.push(newObject);
+const addObject = (object: ObjectData) => {
+	objValue[object.UUID] = new OBJ(object.X, object.Y, object.UUID);
+	scene1.add(objValue[object.UUID]);
+	objects.push(objValue[object.UUID]);
 };
 
 const resize = () => {

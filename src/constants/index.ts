@@ -56,3 +56,19 @@ export const ButtonLifeCycleState = [
 	[1, 2, 1],
 	[0, 0, 2],
 ] as const;
+
+export const ProcessEvent = {
+	Update: 0,
+	Start: 1,
+} as const;
+export type ProcessEvent = (typeof ProcessEvent)[keyof typeof ProcessEvent];
+
+export const KeyboardEvent = {
+	Press: {
+		W: 0,
+	},
+	Down: {
+		Any: 0,
+	},
+} as const;
+export type KeyboardEvent = (typeof KeyboardEvent)[keyof typeof KeyboardEvent];

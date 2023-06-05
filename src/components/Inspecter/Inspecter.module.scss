@@ -1,0 +1,97 @@
+.topBar {
+	display: flex;
+	align-items: center;
+	overflow: hidden;
+	background-color: #27303d;
+	height: 24px;
+	border-radius: 6px;
+	padding-left: 0px;
+	flex-shrink: 0;
+
+	i {
+		color: #aaa;
+		font-style: normal;
+		font-size: 12px;
+		padding-top: 10px;
+		padding-left: 18px;
+		width: 100%;
+		height: 100%;
+	}
+}
+
+.Inspecter {
+	padding: 12px 0px;
+	color: #fff;
+
+	input,
+	select {
+		width: 100%;
+		height: 20px;
+		padding-left: 7px;
+		background: rgb(51, 51, 51);
+		border: 1px solid rgb(78, 78, 78);
+		// outline: 2px solid #c6cdd6;
+		color: #fff;
+		border-radius: 8px;
+	}
+
+	.label {
+		font-size: 13px;
+		width: 80px;
+		display: inline-block;
+		color: #c6cdd6;
+		margin-right: 12px;
+	}
+
+	.select_none {
+		color: #bfc0c2;
+		margin: 0px 20px;
+	}
+
+	.property_wrap {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+
+		.container {
+			display: flex;
+			align-items: center;
+			background: #fff1;
+			padding: 4px 6px;
+
+			.button_arrow {
+				width: 18px;
+				height: 18px;
+				margin-right: 3px;
+				flex-shrink: 0;
+			}
+
+			.container_icon {
+				height: 20px;
+				width: 20px;
+				margin-right: 4px;
+				flex-shrink: 0;
+			}
+
+			.label {
+				margin-right: 30px;
+			}
+		}
+
+		.property {
+			display: flex;
+			align-items: center;
+			margin: 0px 12px 0px 20px;
+		}
+
+		.btnAdd {
+			margin: 15px 30px;
+			padding: 5px 0px;
+			border-radius: 5px;
+
+			background: rgb(51, 51, 51);
+			border: 1px solid rgb(78, 78, 78);
+			color: #fff;
+		}
+	}
+}

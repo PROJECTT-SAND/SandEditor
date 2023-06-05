@@ -1,3 +1,5 @@
+import { Object } from '@/classes';
+
 export interface viewerController {
 	mouseIsEnterViewer: boolean;
 	isGrid: boolean;
@@ -11,8 +13,16 @@ export interface viewerController {
 }
 
 export interface objects {
-	objValue: object;
-	setObjValue: (objName: string, pos: object) => void;
+	objectDatas: { [uuid: string]: Object };
+	objectTree: objectTreeNode[];
+	setObjectDatas: (data: { [uuid: string]: Object }) => void;
+	setObjectTree: (treeData: objectTreeNode[]) => void;
+}
+
+export interface file {
+	fullName: string;
+	fileName: string;
+	extension: string;
 }
 
 export interface logs {
@@ -20,7 +30,23 @@ export interface logs {
 }
 
 export interface codes {
-	codes: any;
+	codes: { [key: string]: String };
+
+	codeFiles: {
+		[key: string]: {
+			contents: string;
+			params: { [key: string]: { type: number; value: any } };
+		};
+	};
+
+	setCodes: (filename: string, code: string) => void;
+
+	setCodeFiles: (filename: string, data: any) => void;
+}
+
+export interface selectedObject {
+	selectedObjectUUID: string | null;
+	setSelectedObjectUUID: (value: string) => void;
 }
 
 export interface objectTreeNode {

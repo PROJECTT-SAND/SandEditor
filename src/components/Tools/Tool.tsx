@@ -7,17 +7,13 @@ const Tool: React.FC<{
   toolEnum: number;
   children: React.ReactNode;
 }> = ({ style_, toolEnum, children }) => {
-  const store = useBoundStore();
-  const [selectedTool, setSelectedTool] = useState(0);
-  const isToolSelected = selectedTool === toolEnum;
+  const { toolState, setToolState } = useBoundStore();
+  const isToolSelected = toolState === toolEnum;
 
-  useEffect(() => {
-    store.setToolState(selectedTool);
-  }, [selectedTool]);
 
   const setTool = () => {
-    if (selectedTool !== toolEnum) {
-      setSelectedTool(toolEnum)
+    if (toolState !== toolEnum) {
+      setToolState(toolEnum)
     }
   }
 
