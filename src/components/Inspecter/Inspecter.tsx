@@ -5,7 +5,7 @@ import { ReactComponent as ArrowDownSVG } from '@assets/icon/object/arrow_down.s
 import { ReactComponent as ControllerSVG } from '@assets/icon/inspecter/controller.svg';
 
 export default function Folder() {
-  const { objectDatas, setObjectDatas, selectedObjectUUID, codes, codeFiles } = useBoundStore();
+  const { objectDatas, setObjectDatas, selectedObjectUUID, codeFiles } = useBoundStore();
 
   const asdf = (a: any) => {
     console.log(a)
@@ -46,7 +46,7 @@ export default function Folder() {
               <div className={style.label}>Controller</div>
 
               <select onInput={asdf}>
-                {Object.keys(codes).map((fileName, index) => {
+                {Object.keys(codeFiles).map((fileName, index) => {
                   return <option value={fileName} key={index} onInput={(e) => { setObjectParam('Controller', e.currentTarget.value) }}>{fileName}</option>
                 })
                 }
@@ -54,16 +54,16 @@ export default function Folder() {
             </div>
 
             {
-              Object.entries(codeFiles['qwe.sdcod'].params).map(([key, { type, value }], index) => {
-                return (
-                  <div className={style.property} key={index}>
-                    <div className={style.label}>{key}</div>
-                    {type == 1 ?
-                      <input type="text" value={value ?? ''} onInput={asdf}></input> : ''
-                    }
-                  </div>
-                )
-              })
+              // Object.entries(codeFiles['qwe.sdcod'].params).map(([key, { type, value }], index) => {
+              //   return (
+              //     <div className={style.property} key={index}>
+              //       <div className={style.label}>{key}</div>
+              //       {type == 1 ?
+              //         <input type="text" value={value ?? ''} onInput={asdf}></input> : ''
+              //       }
+              //     </div>
+              //   )
+              // })
             }
 
             <button className={style.btnAdd}>Add Controller</button>

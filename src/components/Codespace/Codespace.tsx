@@ -42,12 +42,14 @@ export default function WorkSpace() {
     );
   }
 
-  const { codes, setCodes } = useBoundStore();
+  const { codeFiles, setCodeFiles } = useBoundStore();
   const monaco = useMonaco();
   const language = "typescript";
 
-  const editorOnChange = (code: any) => {
-    // setCodes("asd", code);
+  const editorOnChange = (code: string | undefined) => {
+    if (!code) return;
+
+    setCodeFiles('12312', code);
 
     // try {
     //   let aaa = new Function(code);

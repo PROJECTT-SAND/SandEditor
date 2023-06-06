@@ -5,7 +5,7 @@
 	overflow: hidden;
 	background-color: #27303d;
 	height: 24px;
-	border-radius: 10px;
+	border-radius: 5px;
 
 	i {
 		color: #fff;
@@ -21,6 +21,18 @@
 		background-color: #333f50;
 		width: 50px;
 		height: 100%;
+	}
+
+	.topBar_add {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		svg {
+			stroke: #fff;
+			width: 15px;
+			height: 15px;
+		}
 	}
 }
 
@@ -42,20 +54,32 @@
 		height: 62px;
 		border: 1px solid #0000;
 
-		img {
-			width: 55px;
+		&:hover {
+			background-color: #ffffff0e;
+			border: 1px solid #d3d3d350;
+		}
+
+		&.file_selected {
+			background-color: #ffffff0e;
+			border: 1px solid #d3d3d350;
+		}
+
+		img,
+		svg {
+			// width: 55px;
 			object-fit: scale-down;
-			margin: auto 0px;
+			// margin: auto 0px;
 		}
 
 		span {
 			font-size: 12px;
 			color: #fff;
+			max-width: 70px;
+			word-break: break-all;
+			display: -webkit-inline-box;
+			-webkit-box-orient: vertical;
+			-webkit-line-clamp: 2;
+			overflow: hidden;
 		}
-	}
-
-	.file:hover {
-		background-color: #ffffff10;
-		border: 1px solid #ffffff80;
 	}
 }

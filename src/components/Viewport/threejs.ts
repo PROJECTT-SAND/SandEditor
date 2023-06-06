@@ -32,6 +32,8 @@ const mouse = new THREE.Vector2();
 const scene1 = new THREE.Scene();
 // const scene2 = new THREE.Scene();
 
+scene1.background = new THREE.Color(0x111111);
+
 const camera = new THREE.PerspectiveCamera(
 	75,
 	Ctx.Width / Ctx.Height,
@@ -39,6 +41,12 @@ const camera = new THREE.PerspectiveCamera(
 	1000
 );
 camera.position.z = 700;
+
+let qqaq = new THREE.BoxGeometry(1, 1);
+var geo = new THREE.EdgesGeometry(qqaq);
+var mat = new THREE.LineBasicMaterial({ color: 0xaaaaaa });
+var wireframe = new THREE.LineSegments(geo, mat);
+scene1.add(wireframe);
 
 class OBJ extends THREE.Mesh {
 	material: THREE.MeshBasicMaterial;
@@ -60,7 +68,7 @@ class OBJ extends THREE.Mesh {
 	onClick(e: MouseEvent) {}
 
 	onDragStart() {
-		this.material.color.setHex(0x123456);
+		this.material.color.setHex(0xaaaaaa);
 	}
 
 	onDragEnd() {
@@ -79,7 +87,7 @@ export const pointerMoveEvent = (e: PointerEvent) => {
 
 		if (isNewHoveredItem) {
 			const hoveredItem = hovered[key];
-			hoveredItem.object.onPointerOut(e);
+			// hoveredItem.object.onPointerOut(e);
 			delete hovered[key];
 		}
 	});
@@ -87,7 +95,7 @@ export const pointerMoveEvent = (e: PointerEvent) => {
 	intersects.forEach((hit) => {
 		if (!hovered[hit.object.uuid]) {
 			hovered[hit.object.uuid] = hit;
-			hit.object.onPointerOver(e);
+			// hit.object.onPointerOver(e);
 		}
 	});
 };
@@ -111,6 +119,11 @@ export const setStoreValue = (
 
 		obj.position.x = objData.X;
 		obj.position.y = objData.Y;
+
+		wireframe.position.x = objData.X;
+		wireframe.position.y = objData.Y;
+		wireframe.scale.x = 30;
+		wireframe.scale.y = 30;
 	}
 
 	isOBJDragable =
@@ -134,6 +147,8 @@ export const createScene = (el: HTMLCanvasElement) => {
 
 	controls.addEventListener('dragstart', (e) => {
 		e.object.onDragStart();
+
+		storeValue.setSelectedObjectUUID(e.object.dataUuid);
 	});
 
 	controls.addEventListener('dragend', (e) => {
@@ -157,11 +172,11 @@ export const initScene = () => {
 	const objectDatas = storeValue.objectDatas;
 
 	for (const uuid in objectDatas) {
-		addObject(objectDatas[uuid]);
+		addSceneObject(objectDatas[uuid]);
 	}
 };
 
-const addObject = (object: ObjectData) => {
+export const addSceneObject = (object: ObjectData) => {
 	objValue[object.UUID] = new OBJ(object.X, object.Y, object.UUID);
 	scene1.add(objValue[object.UUID]);
 	objects.push(objValue[object.UUID]);

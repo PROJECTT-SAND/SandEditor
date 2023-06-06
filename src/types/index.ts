@@ -30,7 +30,7 @@ export interface logs {
 }
 
 export interface codes {
-	codes: { [key: string]: String };
+	// codes: { [key: string]: String };
 
 	codeFiles: {
 		[key: string]: {
@@ -39,7 +39,7 @@ export interface codes {
 		};
 	};
 
-	setCodes: (filename: string, code: string) => void;
+	// setCodes: (filename: string, code: string) => void;
 
 	setCodeFiles: (filename: string, data: any) => void;
 }

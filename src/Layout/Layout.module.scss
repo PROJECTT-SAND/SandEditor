@@ -1,3 +1,61 @@
+.wrapper {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+
+.menu {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	color: #aaa;
+	font-size: 13px;
+	padding: 6px 25px;
+
+	.menu_container_left,
+	.menu_container_right {
+		display: flex;
+		align-items: center;
+		gap: 30px;
+	}
+
+	.menu_container_middle {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+	}
+
+	.manu_item {
+		cursor: pointer;
+
+		&:hover {
+			color: #fff;
+		}
+	}
+
+	.manu_button {
+		cursor: pointer;
+		background: #fff1;
+		padding: 5px 8px;
+		border-radius: 4px;
+	}
+
+	.manu_projectName {
+		background: none;
+		border: 1px solid #fff1;
+		border-radius: 4px;
+		color: #fff;
+		padding: 5px 10px;
+		width: 220px;
+	}
+
+	svg {
+		width: 25px;
+		height: 25px;
+	}
+}
+
 .layout {
 	display: flex;
 	width: 100%;

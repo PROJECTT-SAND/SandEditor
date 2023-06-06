@@ -34,90 +34,90 @@ const createObjects: StateCreator<objects> = (set) => ({
 			parentUUID: null,
 			UUID: '1',
 		},
-		'2': {
-			name: 'Tlqkf',
-			type: OBJECT_TYPE.Object,
-			X: 110,
-			Y: 0,
-			isHidden: true,
-			parentUUID: '1',
-			UUID: '2',
-		},
-		'3': {
-			name: 'Tlqkf2',
-			type: OBJECT_TYPE.Object,
-			X: 220,
-			Y: 0,
-			isHidden: false,
-			parentUUID: '1',
-			UUID: '3',
-		},
-		'4': {
-			name: 'Chr1',
-			type: OBJECT_TYPE.Object,
-			X: 330,
-			Y: 0,
-			isHidden: false,
-			parentUUID: '1',
-			UUID: '4',
-		},
-		'5': {
-			name: 'Head',
-			type: OBJECT_TYPE.Object,
-			X: 440,
-			Y: 0,
-			isHidden: false,
-			parentUUID: '4',
-			UUID: '5',
-		},
-		'6': {
-			name: 'arm',
-			type: OBJECT_TYPE.Object,
-			X: 550,
-			Y: 0,
-			isHidden: false,
-			parentUUID: '4',
-			UUID: '6',
-		},
-		'7': {
-			name: 'body',
-			type: OBJECT_TYPE.Object,
-			X: 660,
-			Y: 0,
-			isHidden: false,
-			parentUUID: '4',
-			UUID: '7',
-		},
+		// '2': {
+		// 	name: 'Tlqkf',
+		// 	type: OBJECT_TYPE.Object,
+		// 	X: 110,
+		// 	Y: 0,
+		// 	isHidden: true,
+		// 	parentUUID: '1',
+		// 	UUID: '2',
+		// },
+		// '3': {
+		// 	name: 'Tlqkf2',
+		// 	type: OBJECT_TYPE.Object,
+		// 	X: 220,
+		// 	Y: 0,
+		// 	isHidden: false,
+		// 	parentUUID: '1',
+		// 	UUID: '3',
+		// },
+		// '4': {
+		// 	name: 'Chr1',
+		// 	type: OBJECT_TYPE.Object,
+		// 	X: 330,
+		// 	Y: 0,
+		// 	isHidden: false,
+		// 	parentUUID: '1',
+		// 	UUID: '4',
+		// },
+		// '5': {
+		// 	name: 'Head',
+		// 	type: OBJECT_TYPE.Object,
+		// 	X: 440,
+		// 	Y: 0,
+		// 	isHidden: false,
+		// 	parentUUID: '4',
+		// 	UUID: '5',
+		// },
+		// '6': {
+		// 	name: 'arm',
+		// 	type: OBJECT_TYPE.Object,
+		// 	X: 550,
+		// 	Y: 0,
+		// 	isHidden: false,
+		// 	parentUUID: '4',
+		// 	UUID: '6',
+		// },
+		// '7': {
+		// 	name: 'body',
+		// 	type: OBJECT_TYPE.Object,
+		// 	X: 660,
+		// 	Y: 0,
+		// 	isHidden: false,
+		// 	parentUUID: '4',
+		// 	UUID: '7',
+		// },
 	},
 	objectTree: [
 		{
 			uuid: '1',
 			children: [
-				{
-					uuid: '2',
-					children: [],
-				},
-				{
-					uuid: '3',
-					children: [],
-				},
-				{
-					uuid: '4',
-					children: [
-						{
-							uuid: '5',
-							children: [],
-						},
-						{
-							uuid: '6',
-							children: [],
-						},
-						{
-							uuid: '7',
-							children: [],
-						},
-					],
-				},
+				// {
+				// 	uuid: '2',
+				// 	children: [],
+				// },
+				// {
+				// 	uuid: '3',
+				// 	children: [],
+				// },
+				// {
+				// 	uuid: '4',
+				// 	children: [
+				// 		{
+				// 			uuid: '5',
+				// 			children: [],
+				// 		},
+				// 		{
+				// 			uuid: '6',
+				// 			children: [],
+				// 		},
+				// 		{
+				// 			uuid: '7',
+				// 			children: [],
+				// 		},
+				// 	],
+				// },
 			],
 		},
 	],
@@ -134,28 +134,14 @@ const createLogs: StateCreator<logs> = (set) => ({
 });
 
 const createCodes: StateCreator<codes> = (set) => ({
-	codes: {
-		'qwe.sdcod': `process.addEventListener(process.UpdateEvent, () => {
-      this.X += 10;
-    })`,
-	},
-
 	codeFiles: {
-		'qwe.sdcod': {
-			contents: `process.addEventListener(process.UpdateEvent, () => {
-      this.X += 10;
-    })`,
-			params: { index: { type: 1, value: 0 } },
-		},
+		// 'qwe.sdcod': {
+		// 	contents: `process.addEventListener(process.UpdateEvent, () => {
+		//   this.X += 10;
+		// })`,
+		// 	params: { index: { type: 1, value: 0 } },
+		// },
 	},
-	// [{filename: 'qwe.sdcod', content: '', params: {index: new numberParam(0)}}]
-
-	setCodes: (filename, code) => {
-		set((values) => ({
-			codes: { ...values.codes, [filename]: code },
-		}));
-	},
-
 	setCodeFiles: (filename, data) => {
 		set((values) => ({
 			codeFiles: { ...values.codeFiles, [filename]: data },

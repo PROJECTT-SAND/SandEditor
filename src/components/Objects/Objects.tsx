@@ -6,6 +6,7 @@ import { OBJECT_TYPE } from '@/constants'
 import { Object } from '@/classes'
 import { objectTreeNode, TreePos } from '@/types'
 import { useBoundStore } from "@/store";
+import { addSceneObject } from '@components/Viewport/threejs';
 
 import folderIcon from '@assets/icon/object/folder.svg';
 import arrowDownIcon from '@assets/icon/object/arrow_down.svg';
@@ -14,9 +15,8 @@ import arrowUpIcon from '@assets/icon/object/arrow_up.svg';
 import { ReactComponent as AddSVG } from '@assets/icon/add.svg';
 import { ReactComponent as SearchSVG } from '@assets/icon/search.svg';
 
-
 export default function Objects() {
-  const { objectDatas, setObjectDatas, objectTree, setObjectTree, setSelectedObjectUUID } = useBoundStore();
+  const { objectDatas, setObjectDatas, objectTree, setObjectTree, selectedObjectUUID, setSelectedObjectUUID } = useBoundStore();
   const [isOpened, setIsOpened] = useState<{ [key: string]: boolean }>({});
   // const [selectedObject, setSelectedObject] = useState<Object | null>(null);
   const [selectedTree, setSelectedTree] = useState<TreePos>([]);
@@ -35,8 +35,9 @@ export default function Objects() {
     let newObject = new Object(name, type, false, parentUUID);
     let selectedTreeNode = searchNode(treePos);
 
-    setObjectDatas({ ...objectDatas, [newObject.UUID]: newObject });
     selectedTreeNode.children.push({ uuid: newObject.UUID, children: [] });
+    setObjectDatas({ ...objectDatas, [newObject.UUID]: newObject });
+    addSceneObject(newObject);
   }
 
   const ObjectTree: React.FC<{ treeData: objectTreeNode[], currentTree: TreePos }> = ({ treeData, currentTree }) => {
@@ -56,7 +57,7 @@ export default function Objects() {
   const ObjectTreeNode: React.FC<objectTreeNode & { currentTree: TreePos }> = ({ uuid, currentTree, children }) => {
     const isLeafNode = children.length == 0;
     const isRoot = currentTree.length == 1;
-    const isSelected = JSON.stringify(selectedTree) == JSON.stringify(currentTree);
+    const isSelected = selectedObjectUUID == uuid;
     const objectData = objectDatas[uuid];
     const name = objectData.name;
     let icon = folderIcon;
@@ -111,7 +112,7 @@ export default function Objects() {
           <SearchSVG />
           <i>검색</i>
         </div>
-        <button className={style.addObject}><AddSVG /></button>
+        <button className={style.addObject} onClick={() => { if (selectedObjectUUID) addObject('aaa', OBJECT_TYPE.Object, selectedObjectUUID, selectedTree) }}><AddSVG /></button>
       </div>
       <div className={style.objects}>
         <ObjectTree treeData={objectTree} currentTree={[]} />
