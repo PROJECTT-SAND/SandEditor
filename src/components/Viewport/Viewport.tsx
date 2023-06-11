@@ -1,21 +1,17 @@
 import style from './Viewport.module.scss';
 import { useRef, useEffect } from 'react';
 import { useBoundStore } from '@/store'
-import { createScene, pointerMoveEvent, clickEvent, setStoreValue, initScene } from './threejs';
+import { createScene, initScene } from './threejs';
 
 export default function Viewer() {
   const { setMouseIsEnterViewer, objectDatas } = useBoundStore();
   const canvas = useRef<HTMLCanvasElement>(null);
-
-  setStoreValue(useBoundStore());
 
   useEffect(() => {
     if (canvas.current == null) return;
 
     createScene(canvas.current);
     initScene();
-    canvas.current.addEventListener('pointermove', (e) => pointerMoveEvent(e))
-    canvas.current.addEventListener('click', (e) => clickEvent(e))
   }, [])
 
   return (

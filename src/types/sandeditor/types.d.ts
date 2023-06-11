@@ -1,3 +1,7 @@
+declare const threeScene: THREE.Scene;
+
+// ----------------------------------------------------------------
+
 const ProcessEvent = {
 	Update: 0,
 	Start: 1,

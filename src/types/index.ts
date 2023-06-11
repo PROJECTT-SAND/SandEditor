@@ -29,24 +29,26 @@ export interface logs {
 	logs: any[];
 }
 
+export interface codeFile {
+	contents: string;
+	params: { [key: string]: { type: number; value: any } };
+}
+
 export interface codes {
 	// codes: { [key: string]: String };
 
 	codeFiles: {
-		[key: string]: {
-			contents: string;
-			params: { [key: string]: { type: number; value: any } };
-		};
+		[key: string]: codeFile;
 	};
 
 	// setCodes: (filename: string, code: string) => void;
 
-	setCodeFiles: (filename: string, data: any) => void;
+	setCodeFiles: (filename: string, data: codeFile) => void;
 }
 
 export interface selectedObject {
 	selectedObjectUUID: string | null;
-	setSelectedObjectUUID: (value: string) => void;
+	setSelectedObjectUUID: (value: string | null) => void;
 }
 
 export interface objectTreeNode {

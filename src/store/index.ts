@@ -135,12 +135,10 @@ const createLogs: StateCreator<logs> = (set) => ({
 
 const createCodes: StateCreator<codes> = (set) => ({
 	codeFiles: {
-		// 'qwe.sdcod': {
-		// 	contents: `process.addEventListener(process.UpdateEvent, () => {
-		//   this.X += 10;
-		// })`,
-		// 	params: { index: { type: 1, value: 0 } },
-		// },
+		test: {
+			contents: '',
+			params: {},
+		},
 	},
 	setCodeFiles: (filename, data) => {
 		set((values) => ({

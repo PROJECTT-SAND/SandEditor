@@ -49,14 +49,10 @@ export default function WorkSpace() {
   const editorOnChange = (code: string | undefined) => {
     if (!code) return;
 
-    setCodeFiles('12312', code);
-
-    // try {
-    //   let aaa = new Function(code);
-    //   aaa();
-    // } catch (e) {
-    //   console.error(e);
-    // }
+    setCodeFiles('test', {
+      contents: code,
+      params: {}
+    });
   }
 
   useEffect(() => {

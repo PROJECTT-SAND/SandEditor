@@ -16,7 +16,7 @@
 		"noEmit": true,
 		"jsx": "react-jsx",
 		"types": ["vite-plugin-svgr/client"],
-		"typeRoots": ["./types"],
+		"typeRoots": ["./types/raw-loader", "./types/global"],
 		"baseUrl": ".",
 		"paths": {
 			"@/*": ["./src/*"],

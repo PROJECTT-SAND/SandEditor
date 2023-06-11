@@ -1,56 +1,10 @@
-import {
-	codes,
-	objects,
-	logs,
-	viewerController,
-	selectedObject,
-} from '@/types';
 import { Object as ObjectData } from '@/classes';
+import { useBoundStore } from '@/store';
 import * as THREE from 'three';
 import { DragControls } from 'three/examples/jsm/controls/DragControls.js';
 
-const objValue: { [key: string]: OBJ } = {};
-const objects: THREE.Object3D<THREE.Event>[] = [];
-let storeValue: viewerController & objects & logs & codes & selectedObject;
-let canvasElement: HTMLCanvasElement;
-
-const Ctx = {
-	Width: window.innerWidth,
-	Height: window.innerHeight,
-};
-
-let isOBJDragable = false;
-
-let renderer: THREE.WebGLRenderer;
-const textureLoader = new THREE.TextureLoader();
-
-let intersects: THREE.Intersection<OBJ>[] = [];
-let hovered: { [key: string]: THREE.Intersection<OBJ> } = {};
-const raycaster = new THREE.Raycaster();
-const mouse = new THREE.Vector2();
-
-const scene1 = new THREE.Scene();
-// const scene2 = new THREE.Scene();
-
-scene1.background = new THREE.Color(0x111111);
-
-const camera = new THREE.PerspectiveCamera(
-	75,
-	Ctx.Width / Ctx.Height,
-	0.1,
-	1000
-);
-camera.position.z = 700;
-
-let qqaq = new THREE.BoxGeometry(1, 1);
-var geo = new THREE.EdgesGeometry(qqaq);
-var mat = new THREE.LineBasicMaterial({ color: 0xaaaaaa });
-var wireframe = new THREE.LineSegments(geo, mat);
-scene1.add(wireframe);
-
 class OBJ extends THREE.Mesh {
 	material: THREE.MeshBasicMaterial;
-	dataUuid: string;
 
 	constructor(X: number, Y: number, UUID: string) {
 		super();
@@ -58,7 +12,7 @@ class OBJ extends THREE.Mesh {
 		this.material = new THREE.MeshBasicMaterial({ color: 0xeeeeee });
 		this.position.x = X;
 		this.position.y = Y;
-		this.dataUuid = UUID;
+		this.uuid = UUID;
 	}
 
 	onPointerOver(e: PointerEvent) {}
@@ -76,46 +30,49 @@ class OBJ extends THREE.Mesh {
 	}
 }
 
-export const pointerMoveEvent = (e: PointerEvent) => {
-	mouse.set((e.offsetX / Ctx.Width) * 2 - 1, -(e.offsetY / Ctx.Height) * 2 + 1);
-	raycaster.setFromCamera(mouse, camera);
-	intersects = raycaster.intersectObjects(scene1.children, true);
-
-	Object.keys(hovered).forEach((key) => {
-		const hit = intersects.find((hit) => hit.object.uuid === key);
-		const isNewHoveredItem = hit === undefined;
-
-		if (isNewHoveredItem) {
-			const hoveredItem = hovered[key];
-			// hoveredItem.object.onPointerOut(e);
-			delete hovered[key];
-		}
-	});
-
-	intersects.forEach((hit) => {
-		if (!hovered[hit.object.uuid]) {
-			hovered[hit.object.uuid] = hit;
-			// hit.object.onPointerOver(e);
-		}
-	});
+let isOBJDragable = false;
+let store = useBoundStore.getState();
+let canvasElem: HTMLCanvasElement;
+const Ctx = {
+	W: window.innerWidth,
+	H: window.innerHeight,
 };
 
-export const clickEvent = (e: MouseEvent) => {
-	intersects.forEach((hit) => {
-		if (hit.object.onClick) hit.object.onClick(e);
-	});
-};
+let renderer: THREE.WebGLRenderer;
+// const textureLoader = new THREE.TextureLoader();
+// var threeScene = new THREE.Scene();
+
+window.threeScene = new THREE.Scene();
+
+// const scene1 = new THREE.Scene();
+window.threeScene.background = new THREE.Color(0x111111);
+// const scene2 = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, Ctx.W / Ctx.H, 0.1, 1000);
+camera.position.z = 700;
 
 let controls: DragControls;
+// let intersects: THREE.Intersection<OBJ>[] = [];
+// const hovered: { [key: string]: THREE.Intersection<OBJ> } = {};
+// const raycaster = new THREE.Raycaster();
+// const mouseVector = new THREE.Vector2();
 
-export const setStoreValue = (
-	value: viewerController & objects & logs & codes & selectedObject
-) => {
-	storeValue = value;
+const wireframeBoxGeo = new THREE.BoxGeometry(1, 1);
+const wireframeGeo = new THREE.EdgesGeometry(wireframeBoxGeo);
+const wireframeMat = new THREE.LineBasicMaterial({ color: 0xaaaaaa });
+const wireframe = new THREE.LineSegments(wireframeGeo, wireframeMat);
+window.threeScene.add(wireframe);
 
-	if (storeValue.selectedObjectUUID) {
-		let obj = objValue[storeValue.selectedObjectUUID];
-		let objData = storeValue.objectDatas[storeValue.selectedObjectUUID];
+useBoundStore.subscribe((state) => {
+	store = state;
+
+	if (store.selectedObjectUUID) {
+		let obj = window.threeScene.getObjectByProperty(
+			'uuid',
+			store.selectedObjectUUID
+		);
+		if (!obj) return;
+
+		let objData = store.objectDatas[store.selectedObjectUUID];
 
 		obj.position.x = objData.X;
 		obj.position.y = objData.Y;
@@ -124,40 +81,48 @@ export const setStoreValue = (
 		wireframe.position.y = objData.Y;
 		wireframe.scale.x = 30;
 		wireframe.scale.y = 30;
+	} else {
+		wireframe.scale.x = 0;
+		wireframe.scale.y = 0;
 	}
 
-	isOBJDragable =
-		storeValue.toolState === 1 && storeValue.currentLifeCycle != 3;
+	isOBJDragable = store.toolState === 1 && store.currentLifeCycle != 3;
 
-	if (controls) controls.enabled = storeValue.toolState == 1;
-};
+	if (controls) controls.enabled = isOBJDragable;
+});
 
 export const createScene = (el: HTMLCanvasElement) => {
-	canvasElement = el;
+	canvasElem = el;
 
 	renderer = new THREE.WebGLRenderer({
 		antialias: true,
-		canvas: canvasElement,
+		canvas: canvasElem,
 	});
 	renderer.autoClear = false;
 	renderer.shadowMap.enabled = true;
 	renderer.shadowMap.type = THREE.VSMShadowMap;
 
-	controls = new DragControls(objects, camera, renderer.domElement);
+	controls = new DragControls(
+		window.threeScene.children,
+		camera,
+		renderer.domElement
+	);
 
 	controls.addEventListener('dragstart', (e) => {
 		e.object.onDragStart();
 
-		storeValue.setSelectedObjectUUID(e.object.dataUuid);
+		store.setSelectedObjectUUID(e.object.uuid);
 	});
 
 	controls.addEventListener('dragend', (e) => {
 		e.object.onDragEnd();
+		e.object.position.x = Math.round(e.object.position.x * 10) / 10;
+		e.object.position.y = Math.round(e.object.position.y * 10) / 10;
 
-		storeValue.setObjectDatas({
-			...storeValue.objectDatas,
-			[e.object.dataUuid]: {
-				...storeValue.objectDatas[e.object.dataUuid],
+		store.setObjectDatas({
+			...store.objectDatas,
+			[e.object.uuid]: {
+				...store.objectDatas[e.object.uuid],
 				X: e.object.position.x,
 				Y: e.object.position.y,
 			},
@@ -169,7 +134,7 @@ export const createScene = (el: HTMLCanvasElement) => {
 };
 
 export const initScene = () => {
-	const objectDatas = storeValue.objectDatas;
+	const objectDatas = store.objectDatas;
 
 	for (const uuid in objectDatas) {
 		addSceneObject(objectDatas[uuid]);
@@ -177,16 +142,16 @@ export const initScene = () => {
 };
 
 export const addSceneObject = (object: ObjectData) => {
-	objValue[object.UUID] = new OBJ(object.X, object.Y, object.UUID);
-	scene1.add(objValue[object.UUID]);
-	objects.push(objValue[object.UUID]);
+	let newObj = new OBJ(object.X, object.Y, object.UUID);
+	window.threeScene.add(newObj);
 };
 
 const resize = () => {
-	Ctx.Width = canvasElement.clientWidth;
-	Ctx.Height = canvasElement.clientHeight;
-	renderer.setSize(Ctx.Width, Ctx.Height);
-	camera.aspect = Ctx.Width / Ctx.Height;
+	Ctx.W = canvasElem.clientWidth;
+	Ctx.H = canvasElem.clientHeight;
+
+	renderer.setSize(Ctx.W, Ctx.H);
+	camera.aspect = Ctx.W / Ctx.H;
 	camera.updateProjectionMatrix();
 };
 
@@ -195,5 +160,5 @@ const render = () => {
 	renderer.clear();
 	// renderer.render(scene2, camera);
 	// renderer.clearDepth();
-	renderer.render(scene1, camera);
+	renderer.render(window.threeScene, camera);
 };
