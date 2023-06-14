@@ -64,11 +64,7 @@ export const ProcessEvent = {
 export type ProcessEvent = (typeof ProcessEvent)[keyof typeof ProcessEvent];
 
 export const KeyboardEvent = {
-	Press: {
-		W: 0,
-	},
-	Down: {
-		Any: 0,
-	},
+	Press: 0,
+	Down: 1,
 } as const;
 export type KeyboardEvent = (typeof KeyboardEvent)[keyof typeof KeyboardEvent];

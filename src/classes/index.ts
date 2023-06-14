@@ -26,7 +26,7 @@ export class Object {
 	}
 }
 
-export class EventEmitter<T> {
+export class EventEmitter<T extends number> {
 	target: EventTarget;
 
 	constructor() {
@@ -38,7 +38,7 @@ export class EventEmitter<T> {
 		callback: EventListenerOrEventListenerObject | null,
 		options?: boolean | AddEventListenerOptions | undefined
 	) {
-		return this.target.addEventListener(typeof type, callback, options);
+		return this.target.addEventListener(type.toString(), callback, options);
 	}
 
 	removeEventListener(
@@ -46,12 +46,12 @@ export class EventEmitter<T> {
 		callback: EventListenerOrEventListenerObject | null,
 		options?: boolean | EventListenerOptions | undefined
 	) {
-		return this.target.removeEventListener(typeof type, callback, options);
+		return this.target.removeEventListener(type.toString(), callback, options);
 	}
 
 	dispatchEvent(type: T, detail?: any) {
 		return this.target.dispatchEvent(
-			new CustomEvent(typeof type, { detail, cancelable: true })
+			new CustomEvent(type.toString(), { detail, cancelable: true })
 		);
 	}
 }

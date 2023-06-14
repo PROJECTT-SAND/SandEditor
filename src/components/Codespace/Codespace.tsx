@@ -83,7 +83,7 @@ export default function WorkSpace() {
         onChange={editorOnChange}
         path={'file:///index.ts'}
         options={{
-          fontSize: 18
+          fontSize: 15
         }}
       />
     </div>
