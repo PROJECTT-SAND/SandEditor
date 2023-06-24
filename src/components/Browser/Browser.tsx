@@ -8,14 +8,25 @@ import { ReactComponent as ControllerSVG } from '@assets/icon/browser/controller
 import { useState } from 'react';
 
 export default function Folder() {
-  const { codeFiles, setCodeFiles } = useBoundStore();
+  const { codeFiles, setCodeFiles, workMenu, setWorkMenu, selectedWorkMenu, setSelectedWorkMenu } = useBoundStore();
   const [selectedFile, setSelectedFile] = useState<string | null>(null);
 
-  const addObject = () => {
-    setCodeFiles(Math.random().toString(), { contents: '', params: {} });
+  const selectFile = (filename: string) => {
+    setSelectedFile(filename);
+    setWorkMenu([...workMenu, { fullName: filename, fileName: filename, extension: "" }]);
+
+    if (selectedWorkMenu) {
+      setSelectedWorkMenu(selectedWorkMenu + 1);
+    } else {
+      setSelectedWorkMenu(0);
+    }
   }
 
-
+  const addObject = () => {
+    let filename = Math.random().toString();
+    setCodeFiles(filename, { contents: '', params: {} });
+    setWorkMenu([...workMenu, { fullName: filename, fileName: filename, extension: "" }]);
+  }
 
   return (
     <Window>
@@ -33,7 +44,7 @@ export default function Folder() {
             let isSelected = selectedFile == filename;
 
             return (
-              <div className={`${style.file} ${isSelected ? style.file_selected : ''}`} key={index} onClick={() => { setSelectedFile(filename) }}>
+              <div className={`${style.file} ${isSelected ? style.file_selected : ''}`} key={index} onClick={() => { selectFile(filename) }}>
                 <ControllerSVG />
                 <span>{filename}</span>
               </div>

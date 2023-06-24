@@ -3,6 +3,25 @@
 	height: 100%;
 	position: relative;
 
+	.cameraPos {
+		display: flex;
+		flex-direction: column;
+		position: absolute;
+		top: 20px;
+		left: 20px;
+		color: #777;
+		font-size: 12px;
+		gap: 3px;
+
+		.prop {
+			display: flex;
+
+			.propName {
+				width: 65px;
+			}
+		}
+	}
+
 	.canvas {
 		touch-action: none;
 		width: 100%;

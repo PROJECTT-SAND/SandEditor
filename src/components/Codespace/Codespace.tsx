@@ -7,49 +7,57 @@ import { file } from '@/types'
 import Declaration_types from '@/types/sandeditor/types.d.ts?raw';
 
 export default function WorkSpace() {
-  function WorkMenu() {
-    const [workMenu, setWorkMenu] = useState<file[]>([
-      {
-        fullName: "asd.sdcod",
-        fileName: "asd",
-        extension: "sdcod",
-      },
-      {
-        fullName: "qwe.sdcod",
-        fileName: "qwe",
-        extension: "sdcod",
-      },
-    ]);
+  const { codeFiles, setCodeFiles, workMenu, setWorkMenu, selectedWorkMenu, setSelectedWorkMenu } = useBoundStore();
 
-    const [selectedMenu, setSelectedMenu] = useState(1);
+  function WorkMenu() {
+    const closeWorkMenu = (index: number) => {
+      if (selectedWorkMenu == null) return;
+      let tmp = [...workMenu];
+      tmp.splice(index, 1);
+
+      setWorkMenu(tmp);
+
+      if (selectedWorkMenu == 0) {
+        setSelectedWorkMenu(null);
+      } else {
+        setSelectedWorkMenu((selectedWorkMenu - 1));
+      }
+    }
+
+    const selectWorkMenu = (index: number) => {
+      setSelectedWorkMenu(index);
+    }
 
     return (
       <div className={style.workMenu}>
         {workMenu.map(({ fileName, extension }, i) => (
           <div
             className={
-              selectedMenu === i
-                ? `${style.menuItemSelected} ${style.menuItem}`
-                : style.menuItem
+              `${selectedWorkMenu === i ? style.menuItemSelected : ''} ${style.menuItem}`
             }
             key={i}
+            onClick={() => { selectWorkMenu(i) }}
           >
-            <span className={style.menuItemContent}>{fileName}</span>.
-            {extension}
+            <span>
+              <span className={style.menuItemContent}>{fileName}</span>
+              .
+              {extension}
+            </span>
+
+            <div className={style.close} onClick={() => { closeWorkMenu(i) }}></div>
           </div>
         ))}
       </div>
     );
   }
 
-  const { codeFiles, setCodeFiles } = useBoundStore();
   const monaco = useMonaco();
   const language = "typescript";
 
   const editorOnChange = (code: string | undefined) => {
-    if (!code) return;
+    if (!code || selectedWorkMenu == null) return;
 
-    setCodeFiles('test', {
+    setCodeFiles(workMenu[selectedWorkMenu].fileName, {
       contents: code,
       params: {}
     });
@@ -59,7 +67,7 @@ export default function WorkSpace() {
     if (!monaco) return;
 
     monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
-      target: monaco.languages.typescript.ScriptTarget.ES2016,
+      target: monaco.languages.typescript.ScriptTarget.Latest,
       allowNonTsExtensions: true,
       moduleResolution: monaco.languages.typescript.ModuleResolutionKind.NodeJs,
       module: monaco.languages.typescript.ModuleKind.CommonJS,
@@ -77,15 +85,22 @@ export default function WorkSpace() {
   return (
     <div className={style.workSpace}>
       <WorkMenu />
-      <Editor
-        theme="vs-dark"
-        language={language}
-        onChange={editorOnChange}
-        path={'file:///index.ts'}
-        options={{
-          fontSize: 15
-        }}
-      />
+
+      <div className={style.editor_wrap}>
+        {selectedWorkMenu != null ?
+          <Editor
+            theme="vs-dark"
+            language={language}
+            onChange={editorOnChange}
+            path={'file:///index.ts'}
+            options={{
+              fontSize: 15,
+              tabSize: 2
+            }}
+          />
+          : ''
+        }
+      </div>
     </div>
   );
 }

@@ -1,0 +1,151 @@
+.settings_wrapper {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 20;
+	pointer-events: none;
+	color: #eee;
+}
+
+.settings {
+	pointer-events: all;
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	height: 100%;
+	max-width: 900px;
+	max-height: 650px;
+	border-radius: 20px;
+	background: rgb(49, 48, 59);
+	overflow: hidden;
+	box-shadow: 0px -6px 40px -5px rgba(3, 4, 4, 0.467);
+}
+
+.topbar {
+	height: 47px;
+	padding: 0px 30px;
+	padding-top: 2px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-shrink: 0;
+	background: rgb(43, 43, 54);
+	border-bottom: 1px solid rgb(63, 62, 77);
+
+	span {
+		color: #999;
+	}
+}
+
+.search_wrapper {
+	input {
+		border-radius: 6px;
+		border: 1px solid #111;
+		padding: 5px 6px;
+		background: #222;
+	}
+}
+
+.close {
+	background: rgb(227, 47, 47);
+	width: 12px;
+	height: 12px;
+	outline: 1px solid rgb(197, 38, 38);
+	border-radius: 100px;
+	box-shadow: 0px -2px 12px -2px rgba(74, 53, 53, 0.467);
+	cursor: pointer;
+
+	&:hover {
+		background: rgb(197, 40, 40);
+	}
+}
+
+.contents_wrapper {
+	display: flex;
+	width: 100%;
+	height: 100%;
+}
+
+.sidebar {
+	width: 160px;
+	display: flex;
+	flex-direction: column;
+	flex-shrink: 0;
+	gap: 2px;
+	padding: 20px 12px;
+	overflow-x: hidden;
+	overflow-y: auto;
+	background: rgb(43, 43, 54);
+	font-size: 14px;
+
+	div {
+		padding: 5px 12px;
+		border-radius: 6px;
+
+		&:hover {
+			background: #0001;
+		}
+	}
+
+	.sidebar_item_highlight {
+		outline: 1px solid #fff2;
+	}
+}
+
+.contents {
+	width: 100%;
+	padding: 30px 60px 30px 45px;
+	overflow-y: auto;
+
+	.contents_item {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		margin-bottom: 15px;
+		margin-left: 3px;
+
+		input {
+			border-radius: 6px;
+			border: 1px solid #111;
+			padding: 5px 6px;
+			background: #222;
+		}
+	}
+
+	hr {
+		width: 100%;
+		height: 1px;
+		background: rgb(61, 61, 67);
+		border: none;
+		margin-bottom: 15px;
+		display: block;
+	}
+
+	h1 {
+		font-size: 25px;
+		font-weight: 500;
+		padding-bottom: 5px;
+	}
+
+	h2 {
+		font-size: 18px;
+		font-weight: 400;
+		margin-bottom: 18px;
+		margin-top: 20px;
+	}
+
+	h3 {
+		font-size: 14px;
+		font-weight: 300;
+	}
+
+	i {
+		font-style: normal;
+		font-size: 12px;
+		font-weight: 300;
+		color: #aaa;
+	}
+}

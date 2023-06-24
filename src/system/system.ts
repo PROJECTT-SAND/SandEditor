@@ -1,9 +1,23 @@
 import { EventEmitter } from '@/classes';
-import { ProcessEvent, KeyboardEvent } from '@/constants';
+import { ProcessEvent, KeyboardEvent, KeyType } from '@/constants';
 import { useBoundStore } from '@/store';
 import log from './log';
 
-const { objectDatas, setCurrentLifeCycle } = useBoundStore.getState();
+const { setCurrentLifeCycle } = useBoundStore.getState();
+
+export const commands: { [key: string]: any } = {
+	sys: {
+		start: { type: 'command', args: [], label: 'Start the system' },
+		pause: { type: 'command', args: [], label: 'Pause the system' },
+		stop: { type: 'command', args: [], label: 'Stop the system' },
+	},
+};
+
+useBoundStore.subscribe((state) => {
+	if (state.currentLifeCycle == 5) {
+		stopSystem();
+	}
+});
 
 const processEventTarget = new EventEmitter<ProcessEvent>();
 const keyboardEventTarget = new EventEmitter<KeyboardEvent>();
@@ -24,9 +38,61 @@ const keyboard = {
 
 	on: (
 		type: KeyboardEvent,
-		callback: EventListenerOrEventListenerObject | null
+		callback: Function,
+		options?: {
+			keyType?: KeyType[];
+			shift?: boolean;
+			alt?: boolean;
+			ctrl?: boolean;
+			//--
+			once?: boolean;
+			capture?: false;
+			passive?: false;
+		}
 	) => {
-		keyboardEventTarget.addEventListener(type, callback);
+		let listenerOption: {
+			once?: boolean;
+			capture?: boolean;
+			passive?: boolean;
+		} = {};
+
+		if (options?.once !== undefined) {
+			listenerOption.once = options.once;
+		}
+		if (options?.capture !== undefined) {
+			listenerOption.capture = options.capture;
+		}
+		if (options?.passive !== undefined) {
+			listenerOption.passive = options.passive;
+		}
+
+		keyboardEventTarget.addEventListener(
+			type,
+			(e) => {
+				if (options?.keyType !== undefined) {
+					if (options.keyType.every((key) => key !== e.detail.keyCode)) {
+						return;
+					}
+				}
+				if (options?.alt !== undefined) {
+					if (options?.alt !== e.detail.altKey) {
+						return;
+					}
+				}
+				if (options?.ctrl !== undefined) {
+					if (options?.ctrl !== e.detail.ctrlKey) {
+						return;
+					}
+				}
+				if (options?.shift !== undefined) {
+					if (options?.shift !== e.detail.shiftKey) {
+						return;
+					}
+				}
+				callback(e.detail);
+			},
+			listenerOption
+		);
 		keyboard.callbacks.push(callback);
 	},
 };
@@ -36,10 +102,13 @@ const getObject = () => {
 };
 
 const resetObjPos = () => {
+	const { objectDatas } = useBoundStore.getState();
+
 	for (let uuid in objectDatas) {
 		let sceneObj = window.threeScene.getObjectByProperty('uuid', uuid);
 
 		if (!sceneObj) return;
+
 		sceneObj.position.x = objectDatas[uuid].X;
 		sceneObj.position.y = objectDatas[uuid].Y;
 	}
@@ -48,14 +117,13 @@ const resetObjPos = () => {
 let requestID: number;
 
 const setProcessEvent = () => {
-	requestID = requestAnimationFrame(setProcessEvent);
+	processEventTarget.dispatchEvent(ProcessEvent.Start);
+	update();
+};
+
+const update = () => {
+	requestID = requestAnimationFrame(update);
 	processEventTarget.dispatchEvent(ProcessEvent.Update);
-
-	const { currentLifeCycle } = useBoundStore.getState();
-
-	if (currentLifeCycle == 5) {
-		stopSystem();
-	}
 };
 
 const removeProcessEvent = () => {
@@ -73,6 +141,9 @@ let onKeyDown = (e: globalThis.KeyboardEvent) => {
 
 const setKeyboardEvent = () => {
 	document.addEventListener('keydown', onKeyDown);
+	document.addEventListener('keyup', (e) => {
+		keyboardEventTarget.dispatchEvent(KeyboardEvent.Up, e);
+	});
 };
 
 const removeKeyboardEvent = () => {
@@ -83,6 +154,8 @@ const removeKeyboardEvent = () => {
 		keyboardEventTarget.removeEventListener(KeyboardEvent.Down, callback);
 	});
 };
+
+document.body;
 
 const playSystem = () => {
 	setKeyboardEvent();
@@ -96,33 +169,63 @@ const stopSystem = () => {
 };
 
 /*
-let obj = getObject();
-let asdf = 0;
-let aaahelpme = 0.1;
-// log.text(JSON.stringify(obj));
+const obj = getObject();
+let speedX = 0;
+let speedY = 0;
+const speedJump = 17;
+let isJumping = false;
 
-
-process.on(ProcessEvent.Start, () => {
-  obj.scale.x = 10;
-});
-
-process.on(ProcessEvent.Update, () => {
-	asdf += aaahelpme;
-
-	obj.position.x = Math.sin(asdf) * 200;
-	obj.position.y = Math.cos(asdf) * 200;
-});
+let key = {}
+Object.keys(KeyType).forEach((keyType) => {
+  key[keyType] = false;
+})
 
 keyboard.on(KeyboardEvent.Press, (e) => {
-    console.log(e.detail.key);
+  Object.entries(KeyType).forEach(([keyType, keyCode]) => {
+    if(e.keyCode == keyCode) {
+      key[keyType] = true;
+    }
+  })
+})
 
-    if(e.detail.key == 'w') {
-        aaahelpme += 0.01;
+keyboard.on(KeyboardEvent.Up, (e) => {
+  Object.entries(KeyType).forEach(([keyType, keyCode]) => {
+    if(e.keyCode == keyCode) {
+      key[keyType] = false;
     }
-    if(e.detail.key == 's') {
-        aaahelpme -= 0.01;
-    }
-});
+  })
+})
+
+process.on(ProcessEvent.Update, () => {
+  if(key.A) {
+    speedX = -10;
+  }
+  if(key.D) {
+    speedX = 10;
+  }
+  if(!key.D && !key.A) {
+    speedX = 0;
+  }
+  if(key.D && key.A) {
+    speedX = 0;
+  }
+
+  if(!isJumping && key.SpaceBar) {
+    isJumping = true;
+    speedY = speedJump;
+  }
+
+  if(isJumping) {
+    speedY -= 1;
+  }
+  obj.position.x += speedX;
+  obj.position.y += speedY;
+  if(obj.position.y < 0) {
+    speedY = 0;
+    obj.position.y = 0;
+    isJumping = false;
+  }
+})
 */
 
 export const system = {
@@ -130,7 +233,8 @@ export const system = {
 		return new Promise((resolve, reject) => {
 			try {
 				(async () => {
-					const { setCurrentLifeCycle, codeFiles } = useBoundStore.getState();
+					const { setCurrentLifeCycle, codeFiles, objectDatas } =
+						useBoundStore.getState();
 
 					log.command(Props);
 					const prefix = Props.split(' ')[0];
@@ -141,12 +245,18 @@ export const system = {
 							log.text('시스템: 실행 중');
 							setCurrentLifeCycle(2);
 
+							for (let key in objectDatas) {
+								let objectData = objectDatas[key];
+								codeFiles[objectData.controller[0]].contents;
+							}
+
 							const context = {
 								log,
 								process,
 								ProcessEvent,
 								keyboard,
 								KeyboardEvent,
+								KeyType,
 								getObject,
 							};
 							const codeContext = `const{${Object.keys(
@@ -156,8 +266,8 @@ export const system = {
 							const codeFunc = new Function(code).bind(context);
 
 							try {
-								playSystem();
 								codeFunc();
+								playSystem();
 							} catch (err) {
 								console.error(err);
 							}

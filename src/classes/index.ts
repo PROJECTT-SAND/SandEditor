@@ -9,6 +9,7 @@ export class Object {
 	isHidden: boolean;
 	parentUUID: string | null;
 	UUID: string;
+	controller: string[];
 
 	constructor(
 		name: string,
@@ -23,6 +24,7 @@ export class Object {
 		this.Y = 0;
 		this.isHidden = isHidden;
 		this.parentUUID = parentUUID;
+		this.controller = [];
 	}
 }
 
@@ -55,31 +57,3 @@ export class EventEmitter<T extends number> {
 		);
 	}
 }
-
-// export class aaa extends EventEmitter<Process> {
-// 	// update() {
-// 	// 	this.dispatchEvent(ProcessEvent.Update, null);
-// 	// }
-
-// 	// Start() {
-// 	// 	this.dispatchEvent(ProcessEvent.Start, null);
-// 	// }
-
-// 	on(
-// 		type: Process,
-// 		callback: EventListenerOrEventListenerObject | null,
-// 		options?: boolean | AddEventListenerOptions | undefined
-// 	) {
-// 		return this.addEventListener(type, callback, options);
-// 	}
-// }
-
-// const processEventTarget = new EventEmitter<Process>();
-
-// const process = {
-// 	on: (type: Process, callback: EventListenerOrEventListenerObject | null) => {
-// 		processEventTarget.addEventListener(type, callback);
-// 	},
-// };
-
-// processEventTarget.dispatchEvent(Process.Start);

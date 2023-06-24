@@ -6,7 +6,7 @@ import { OBJECT_TYPE } from '@/constants'
 import { Object } from '@/classes'
 import { objectTreeNode, TreePos } from '@/types'
 import { useBoundStore } from "@/store";
-import { addSceneObject } from '@components/Viewport/threejs';
+import { addSceneObject } from '@/system/threejs';
 
 import folderIcon from '@assets/icon/object/folder.svg';
 import arrowDownIcon from '@assets/icon/object/arrow_down.svg';

@@ -11,7 +11,6 @@ import { ReactComponent as ShowgridSVG } from '@assets/icon/toolbar/option/showg
 import { ReactComponent as HandSVG } from '@assets/icon/toolbar/tool/hand.svg';
 import { ReactComponent as MoveSVG } from '@assets/icon/toolbar/tool/move.svg';
 
-import PositionIndicator from './PosIndicator';
 import Option from './Option';
 import PlayerButton from './PlayerButton';
 import Tool from './Tool';
@@ -60,8 +59,6 @@ export default function ViewerController() {
   return (
     <Window>
       <div className={style.viewerController}>
-        <PositionIndicator />
-
         <div className={style.options}>
           <Option style_={style.showGrid} optionEnum={OPTION.FullScreen}>
             <GullscreenSVG />

@@ -7,21 +7,19 @@ const Option: React.FC<{
   optionEnum: number;
   children: React.ReactNode;
 }> = ({ style_, optionEnum, children }) => {
-  const [optionsState, setOptionsState] = useState([false, false]);
-  const store = useBoundStore();
-  const isActive = optionsState[optionEnum];
+  const { optionState, setOptionState } = useBoundStore();
+  let aaaa = ['showGrid', 'fullScreen'];
+  // tlqkf 인덱싱해야됨 ㅅㅄㅄㅄㅄㅄㅂ
+  const currentState = optionState[aaaa[optionEnum]];
 
   const setOption = () => {
-    let value = [...optionsState];
-    value[optionEnum] = !value[optionEnum];
-
-    setOptionsState(value);
+    setOptionState({ ...optionState, [aaaa[optionEnum]]: !currentState });
   }
 
   return (
     <div className={style_}>
       <button
-        className={isActive ? style.option_active : ""}
+        className={currentState ? style.option_active : ""}
         onClick={setOption}>
 
         {children}

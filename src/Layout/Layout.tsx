@@ -1,35 +1,16 @@
 import style from "./Layout.module.scss";
 import { useState } from "react";
-import { Viewport, Toolbar, Objects, Browser, Workspace, Terminal, Inspecter } from '@components/index';
-
-import { ReactComponent as IconSVG } from '@assets/icon.svg';
+import { Viewport, Toolbar, Objects, Browser, Workspace, Terminal, Inspecter, Menu, Settings } from '@components/index';
 
 export default function Layout() {
-  const [leftBottomLayoutSize, setleftBottomLayoutSize] = useState(60);
-  const [rightLayoutSize, setrightLayoutSize] = useState(60);
-
-  const [projectName, setProjectName] = useState('project-1');
-
-  const setProjectNameValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setProjectName(e.currentTarget.value);
-  }
+  const [leftBottomLayoutSize, setLeftBottomLayoutSize] = useState(60);
+  const [rightLayoutSize, setRightLayoutSize] = useState(60);
 
   return (
     <div className={style.wrapper}>
+      <Settings />
       <div className={style.menu}>
-        <div className={style.menu_container_left}>
-          <IconSVG />
-          <div className={style.manu_item}>menu</div>
-          <div className={style.manu_item}>setting</div>
-        </div>
-        <div className={style.menu_container_middle}>
-          {/* <div className={style.manu_item}>project-1</div> */}
-          <input type='text' value={projectName} onChange={setProjectNameValue} className={style.manu_projectName}></input>
-          <div className={style.manu_button}>share</div>
-        </div>
-        <div className={style.menu_container_right}>
-          <div className={style.manu_item}>account</div>
-        </div>
+        <Menu />
       </div>
       <div className={style.layout}>
         <div className={style.layout_left}>

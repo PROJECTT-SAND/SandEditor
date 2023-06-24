@@ -5,11 +5,18 @@ export interface viewerController {
 	isGrid: boolean;
 	currentLifeCycle: number;
 	toolState: number;
-	optionState: object;
+	optionState: {
+		showGrid: boolean;
+		fullScreen: boolean;
+	};
+	zoom: number;
+	cameraPos: { x: number; y: number };
+	setZoom: (zoom: number) => void;
+	setCameraPos: (value: { x: number; y: number }) => void;
 	setMouseIsEnterViewer: (value: boolean) => void;
 	setCurrentLifeCycle: (value: number) => void;
 	setToolState: (value: number) => void;
-	setOptionState: (value: object) => void;
+	setOptionState: (value: { showGrid: boolean; fullScreen: boolean }) => void;
 }
 
 export interface objects {
@@ -29,6 +36,13 @@ export interface logs {
 	logs: any[];
 }
 
+export interface codespace {
+	workMenu: file[];
+	selectedWorkMenu: null | number;
+	setWorkMenu: (data: file[]) => void;
+	setSelectedWorkMenu: (index: number | null) => void;
+}
+
 export interface codeFile {
 	contents: string;
 	params: { [key: string]: { type: number; value: any } };
@@ -44,6 +58,11 @@ export interface codes {
 	// setCodes: (filename: string, code: string) => void;
 
 	setCodeFiles: (filename: string, data: codeFile) => void;
+}
+
+export interface UI {
+	isSettingsOpen: boolean;
+	setIsSettingsOpen: (value: boolean) => void;
 }
 
 export interface selectedObject {

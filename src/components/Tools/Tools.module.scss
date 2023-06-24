@@ -3,17 +3,19 @@ $button_border_color: rgb(31, 31, 33);
 $button_bg_color: #4f5158;
 $button_bg_hover_color: #575b67;
 
+$button_border_radius: 6px;
+
 .viewerController {
 	display: flex;
 	align-items: center;
-	gap: 15px;
+	gap: 9px;
 	margin-left: auto;
-	padding: 6px;
+	padding: 6px 10px;
 	width: fit-content;
 
 	button {
-		width: 35px;
-		height: 28px;
+		width: 30px;
+		height: 24px;
 		background-color: $button_bg_color;
 
 		&:hover {
@@ -40,10 +42,10 @@ $button_bg_hover_color: #575b67;
 
 	.options {
 		display: flex;
-		gap: 5px;
+		gap: 4px;
 
 		button {
-			border-radius: 7px;
+			border-radius: $button_border_radius;
 			border: 1px solid $button_border_color;
 
 			svg {
@@ -62,13 +64,13 @@ $button_bg_hover_color: #575b67;
 	}
 
 	.tool {
-		border-radius: 7px;
+		border-radius: $button_border_radius;
 		overflow: hidden;
 		border: 1px solid $button_border_color;
 
 		svg {
-			width: 14px;
-			height: 14px;
+			width: 12px;
+			height: 12px;
 		}
 
 		.tool_active {
@@ -77,13 +79,13 @@ $button_bg_hover_color: #575b67;
 	}
 
 	.player {
-		border-radius: 7px;
+		border-radius: $button_border_radius;
 		overflow: hidden;
 		border: 1px solid $button_border_color;
 
 		svg {
-			width: 11px;
-			height: 11px;
+			width: 10px;
+			height: 10px;
 			fill: #fff;
 		}
 
