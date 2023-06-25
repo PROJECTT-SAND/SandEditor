@@ -33,6 +33,14 @@ export const OBJECT_TYPE = {
 } as const;
 export type OBJECT_TYPE = (typeof OBJECT_TYPE)[keyof typeof OBJECT_TYPE];
 
+export const LOG_KIND = {
+	Command: 0,
+	Text: 1,
+	Warning: 2,
+	Error: 3,
+};
+export type LOG_KIND = (typeof LOG_KIND)[keyof typeof LOG_KIND];
+
 export const ButtonState = {
 	DISABLED: 0,
 	DEFAULT: 1,

@@ -1,12 +1,14 @@
 import { useBoundStore } from '../store';
+import moment from 'moment';
+import { LOG_KIND } from '@/constants';
 
-function _log(kind: any, Props: any) {
+function _log(kind: number, content: string) {
 	let logsValue = useBoundStore.getState().logs;
 
 	logsValue.push({
 		kind,
-		content: Props,
-		time: new Date(),
+		content,
+		time: moment().format('hh:mm:ss'),
 	});
 
 	useBoundStore.setState({
@@ -16,8 +18,8 @@ function _log(kind: any, Props: any) {
 }
 
 export default {
-	command: (Props: any) => _log('command', Props),
-	text: (Props: any) => _log('text', Props),
-	warning: (Props: any) => _log('warning', Props),
-	error: (Props: any) => _log('error', Props),
+	command: (content: string) => _log(LOG_KIND.Command, content),
+	text: (content: string) => _log(LOG_KIND.Text, content),
+	warning: (content: string) => _log(LOG_KIND.Warning, content),
+	error: (content: string) => _log(LOG_KIND.Error, content),
 };

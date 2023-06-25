@@ -6,6 +6,7 @@ $color_warning: rgb(255, 228, 75);
 $color_target: rgb(68, 142, 240);
 $color_target_old: rgb(106, 112, 120);
 $color_object: rgb(255, 164, 112);
+$color_time: rgba(154, 157, 167, 0.7);
 
 .topBar {
 	display: flex;
@@ -34,7 +35,6 @@ $color_object: rgb(255, 164, 112);
 
 	.console {
 		color: #fff;
-		line-height: 1.6rem;
 		font-size: 14px;
 		display: flex;
 		flex-direction: column;
@@ -68,6 +68,44 @@ $color_object: rgb(255, 164, 112);
 			}
 		}
 
+		.logLine {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			height: 25px;
+			padding-right: 12px;
+
+			.contents {
+				display: flex;
+				align-items: center;
+
+				.contents_icon {
+					margin-right: 5px;
+					width: 15px;
+					height: 15px;
+					padding-bottom: 2px;
+
+					svg {
+						width: 15px;
+						height: 15px;
+					}
+				}
+			}
+
+			.time {
+				display: flex;
+				align-items: center;
+				color: $color_time;
+				font-size: 12px;
+
+				svg {
+					width: 12px;
+					fill: $color_time;
+					margin-left: 5px;
+				}
+			}
+		}
+
 		.text {
 			color: $color_text;
 			background: $color_text_bg;
@@ -82,14 +120,9 @@ $color_object: rgb(255, 164, 112);
 			color: $color_error;
 			background: $color_error_bg;
 			padding-left: 8px;
-			display: flex;
-			align-items: center;
-			gap: 4px;
 
-			svg {
-				width: 15px;
+			.contents_icon svg {
 				fill: $color_error;
-				padding-bottom: 2px;
 			}
 		}
 
@@ -110,6 +143,8 @@ $color_object: rgb(255, 164, 112);
 
 		.prompt_wrap {
 			display: flex;
+			align-items: center;
+			height: 25px;
 			// height: 100px;
 
 			.prompt {

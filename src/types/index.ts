@@ -1,4 +1,5 @@
 import { Object } from '@/classes';
+import { LOG_KIND } from '@/constants';
 
 export interface viewerController {
 	mouseIsEnterViewer: boolean;
@@ -33,7 +34,11 @@ export interface file {
 }
 
 export interface logs {
-	logs: any[];
+	logs: {
+		kind: LOG_KIND;
+		content: string;
+		time: string;
+	}[];
 }
 
 export interface codespace {

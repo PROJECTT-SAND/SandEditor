@@ -5,8 +5,10 @@ import Window from '@/components/Wrapper/Wrapper';
 import { system } from '@/system/system';
 import { useBoundStore } from '@/store';
 import { commands } from '@/system/system';
+import { LOG_KIND } from '@/constants';
 
 import { ReactComponent as ErrorSVG } from '@assets/icon/terminal/error.svg';
+import { ReactComponent as TimeSVG } from '@assets/icon/terminal/time.svg';
 
 
 export default function Console() {
@@ -15,7 +17,7 @@ export default function Console() {
 
   useEffect(() => {
     if (!ref.current) return
-    ref.current.scrollTop = ref.current.scrollHeight - ref.current.clientHeight;;
+    ref.current.scrollTop = ref.current.scrollHeight - ref.current.clientHeight;
   }, [logs]);
 
   const Prompt = () => {
@@ -78,29 +80,44 @@ export default function Console() {
   function Console() {
     let result: any = [];
 
-    logs.map((item: any, key) => {
+    logs.map((item, key) => {
       switch (item.kind) {
-        case 'command':
+        case LOG_KIND.Command:
           result.push(
-            <div key={key}>
-              <span className={`${style.target} ${style.target_old}`}>&#62;</span>
-              {item.content}
+            <div key={key} className={`${style.logLine} ${style.command}`}>
+              <div className={style.contents}>
+                <span className={`${style.target} ${style.target_old}`}>&#62;</span>
+                {item.content}
+              </div>
+              <div className={style.time}>{item.time}<TimeSVG /></div>
             </div>
           );
           break;
-        case 'error':
+        case LOG_KIND.Error:
           result.push(
-            <div key={key} className={style.errer}><ErrorSVG />{item.content}</div>
+            <div key={key} className={`${style.logLine} ${style.errer}`}>
+              <div className={style.contents}>
+                <div className={style.contents_icon}><ErrorSVG /></div>
+                {item.content}
+              </div>
+              <div className={style.time}>{item.time}<TimeSVG /></div>
+            </div>
           );
           break;
-        case 'warning':
+        case LOG_KIND.Warning:
           result.push(
-            <div key={key} className={style.warning}>{item.content}</div>
+            <div key={key} className={`${style.logLine} ${style.warning}`}>
+              <div className={style.contents}>{item.content}</div>
+              <div className={style.time}>{item.time}<TimeSVG /></div>
+            </div>
           );
           break;
-        case 'text':
+        case LOG_KIND.Text:
           result.push(
-            <div key={key} className={style.text}>{item.content}</div>
+            <div key={key} className={`${style.logLine} ${style.text}`}>
+              <div className={style.contents}>{item.content}</div>
+              <div className={style.time}>{item.time}<TimeSVG /></div>
+            </div>
           );
           break;
       }
