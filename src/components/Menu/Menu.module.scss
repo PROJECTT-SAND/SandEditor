@@ -3,14 +3,15 @@
 	align-items: center;
 	justify-content: space-between;
 	color: #aaa;
-	font-size: 13px;
-	padding: 6px 25px;
+	background: #0002;
+	font-size: 12px;
+	padding: 3px 16px;
 
 	.menu_container_left,
 	.menu_container_right {
 		display: flex;
 		align-items: center;
-		gap: 30px;
+		gap: 10px;
 	}
 
 	.menu_container_middle {
@@ -21,6 +22,7 @@
 
 	.manu_item {
 		cursor: pointer;
+		padding: 4px 5px;
 
 		&:hover {
 			color: #fff;
@@ -35,16 +37,17 @@
 	}
 
 	.manu_projectName {
-		background: none;
-		border: 1px solid #fff1;
+		background: rgba(15, 15, 19, 0.42);
+		border: 1px solid #b7bdc81c;
 		border-radius: 4px;
-		color: #fff;
-		padding: 5px 10px;
+		color: #ddd;
+		padding: 3px 8px;
 		width: 220px;
 	}
 
 	svg {
-		width: 25px;
-		height: 25px;
+		width: 23px;
+		height: 23px;
+		margin-right: 3px;
 	}
 }
