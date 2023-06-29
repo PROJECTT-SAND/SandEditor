@@ -5,6 +5,7 @@ import { Viewport, Toolbar, Objects, Browser, Workspace, Terminal, Inspecter, Me
 export default function Layout() {
   const [leftBottomLayoutSize, setLeftBottomLayoutSize] = useState(60);
   const [rightLayoutSize, setRightLayoutSize] = useState(600);
+  const [inspecterSize, setInspecterSize] = useState(400);
 
   return (
     <div className={style.wrapper}>
@@ -26,8 +27,8 @@ export default function Layout() {
         </div>
         <div className={style.layout_right}>
           <div className={style.layout_right_top} style={{ height: `${rightLayoutSize}px` }}>
-            <div className={style.workspace}><Workspace /></div>
-            <div className={style.inspecter}><Inspecter /></div>
+            <div className={style.workspace} ><Workspace /></div>
+            <div className={style.inspecter} style={{ width: `${inspecterSize}px` }}><Inspecter /></div>
           </div>
           {/* <span className={style.window_controller} style={{ top: `${rightLayoutSize}%` }}></span> */}
           <div className={style.console}><Terminal /></div>
