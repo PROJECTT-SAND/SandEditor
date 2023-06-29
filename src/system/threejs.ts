@@ -70,18 +70,17 @@ window.threeScene.add(wireframe);
 const gridHelper = new THREE.GridHelper(10000, 50, 0x555555, 0x333333);
 gridHelper.rotation.x = Math.PI / 2;
 uiScene.add(gridHelper);
+gridHelper.visible = false;
 
-const axesHelper = new THREE.AxesHelper(100000);
-// @ts-ignore
-axesHelper.material.transparent = true;
-// @ts-ignore
-axesHelper.material.opacity = 0.5;
+// const axesHelper = new THREE.AxesHelper(100000);
+// axesHelper.material.transparent = true;
+// axesHelper.material.opacity = 0.5;
 // axesHelper.setColors();
-uiScene.add(axesHelper);
+// uiScene.add(axesHelper);
 
-const stats = new Stats();
-stats.showPanel(0);
-document.body.appendChild(stats.dom);
+// const stats = new Stats();
+// stats.showPanel(0);
+// document.body.appendChild(stats.dom);
 
 // const material = new THREE.LineBasicMaterial({
 // 	color: 0x0000ff,
@@ -285,11 +284,11 @@ export const addSceneObject = (object: ObjectData) => {
 };
 
 const render = () => {
-	stats.begin();
+	// stats.begin();
 	requestAnimationFrame(render);
 	renderer.clear();
 	renderer.render(uiScene, camera);
 	renderer.clearDepth();
 	renderer.render(window.threeScene, camera);
-	stats.end();
+	// stats.end();
 };
