@@ -7,8 +7,19 @@ import Declaration_types from '@/types/sandeditor/types.d.ts?raw';
 
 import { ReactComponent as CloseSVG } from '@assets/image/icon/codespace/close.svg';
 
+import scssVaribles from '@assets/scss/_variables.scss'
+
 export default function WorkSpace() {
   const { codeFiles, setCodeFiles, workMenu, setWorkMenu, selectedWorkMenu, setSelectedWorkMenu } = useBoundStore();
+
+  let tmp = scssVaribles.replace(':export ', '');
+  let scssLabel = tmp.match(/\w+(?=:\s)/g);
+  let scssValue = tmp.match(/(?<=: )[^;]+(?=;)/g);
+  let scssVariblesJson: { [key: string]: string } = {};
+
+  scssLabel?.forEach((label, index) => {
+    scssVariblesJson[label] = scssValue![index];
+  })
 
   function WorkMenu() {
     const closeWorkMenu = (index: number) => {
@@ -80,7 +91,14 @@ export default function WorkSpace() {
       // { content: Declaration_process, filePath: 'file:///node_modules/@types/process/index.d.ts' },
       { content: Declaration_types },
     ])
-    // monaco.editor.defineTheme()
+    monaco.editor.defineTheme('sandEditor', {
+      base: 'vs-dark',
+      inherit: true,
+      rules: [],
+      colors: {
+        "editor.background": scssVariblesJson.codespace_color,
+      }
+    })
   }, [monaco])
 
   return (
@@ -90,7 +108,7 @@ export default function WorkSpace() {
       <div className={style.editor_wrap}>
         {selectedWorkMenu != null ?
           <Editor
-            theme="vs-dark"
+            theme="sandEditor"
             language={language}
             onChange={editorOnChange}
             path={'file:///index.ts'}

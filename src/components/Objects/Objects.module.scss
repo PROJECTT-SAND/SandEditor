@@ -1,187 +1,189 @@
+@use "@assets/scss/_variables.scss" as *;
+
 .topBar {
-	display: flex;
-	align-items: center;
-	overflow: hidden;
-	flex-shrink: 0;
-	background-color: #333f50;
-	height: 24px;
-	border-radius: 5px;
-	padding: 0px 5px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  flex-shrink: 0;
+  background-color: $base3_color;
+  height: 24px;
+  // border-radius: 5px;
+  padding: 0px 5px;
 
-	button {
-		height: 100%;
-		width: 40px;
-		background-color: #333f50;
-	}
+  button {
+    height: 100%;
+    width: 40px;
+    background-color: $base3_color;
+  }
 
-	.searchBar {
-		width: 100%;
-		// height: 100%;
-		background-color: #27303d;
-		border: 1px solid rgb(35, 47, 68);
-		// padding: 1px;
-		border-radius: 5px;
-		display: flex;
-		align-items: center;
-		padding: 2px 0px;
-		padding-left: 12px;
+  .searchBar {
+    width: 100%;
+    // height: 100%;
+    background-color: $base2_color;
+    border: 1px solid $topbar_border_color;
+    // padding: 1px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    padding: 2px 0px;
+    padding-left: 12px;
 
-		svg {
-			width: 12px;
-			height: 12px;
-			fill: #aaa;
-		}
+    svg {
+      width: 12px;
+      height: 12px;
+      fill: $topbar_contents_color;
+    }
 
-		i {
-			color: #aaa;
-			font-style: normal;
-			font-size: 12px;
-			margin-left: 5px;
-		}
-	}
+    i {
+      color: $topbar_contents_color;
+      font-style: normal;
+      font-size: 12px;
+      margin-left: 5px;
+    }
+  }
 
-	.addObject {
-		display: flex;
-		align-items: center;
-		justify-content: center;
+  .addObject {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-		svg {
-			width: 15px;
-			stroke: #ffffff;
-		}
-	}
+    svg {
+      width: 15px;
+      stroke: #ffffff;
+    }
+  }
 }
 
 .objects {
-	height: 100%;
-	padding: 12px 18px 80px 18px;
-	overflow-y: auto;
+  height: 100%;
+  padding: 10px 10px 80px 10px;
+  overflow-y: auto;
 
-	&::-webkit-scrollbar {
-		width: 8px;
-		background-color: transparent;
-	}
+  &::-webkit-scrollbar {
+    width: 8px;
+    background-color: transparent;
+  }
 
-	&::-webkit-scrollbar-thumb {
-		background: #2a3038;
-		margin: 10px;
-		border-radius: 100px;
-	}
+  &::-webkit-scrollbar-thumb {
+    background: #2a3038;
+    margin: 10px;
+    border-radius: 100px;
+  }
 
-	.object_folder1 {
-		display: flex;
-		flex-direction: column;
-		// gap: 10px;
-		// background: #222a35;
-		border-radius: 7px;
-		width: 0px;
-		position: relative;
-		width: 100%;
+  .object_folder1 {
+    display: flex;
+    flex-direction: column;
+    // gap: 10px;
+    // background: #222a35;
+    border-radius: 7px;
+    width: 0px;
+    position: relative;
+    width: 100%;
 
-		.object_gfdfgs {
-			position: absolute;
-			width: 100%;
-		}
+    .object_gfdfgs {
+      position: absolute;
+      width: 100%;
+    }
 
-		.object_aaaaa {
-			display: flex;
-			align-items: center;
-			width: 100%;
-			height: 100%;
-		}
+    .object_aaaaa {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+    }
 
-		.treeline {
-			width: 8px;
-			height: 1px;
-			background-color: #fff1;
-			margin-right: 2px;
-		}
+    .treeline {
+      width: 8px;
+      height: 1px;
+      background-color: #fff1;
+      margin-right: 2px;
+    }
 
-		.object {
-			color: #fff;
-			height: 23px;
-			border-radius: 7px;
-			display: flex;
-			align-items: center;
-			overflow: hidden;
+    .object {
+      color: #fff;
+      height: 23px;
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
 
-			&:hover {
-				background: #333f5019;
-			}
+      &:hover {
+        background: $base3_color;
+      }
 
-			&.object_selected {
-				outline: 1px solid #ffffff20;
-			}
+      &.object_selected {
+        outline: 1px solid #7379912f;
+      }
 
-			.object_arrow {
-				width: 22px;
-				height: 100%;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				flex-shrink: 0;
+      .object_arrow {
+        width: 22px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
 
-				img {
-					width: 10px;
-				}
-			}
+        img {
+          width: 10px;
+        }
+      }
 
-			.object_icon {
-				width: 18px;
-				height: 100%;
-				border-radius: 5px;
-				margin-left: 5px;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				flex-shrink: 0;
+      .object_icon {
+        width: 18px;
+        height: 100%;
+        border-radius: 5px;
+        margin-left: 7px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
 
-				img {
-					width: 10px;
-				}
-			}
+        img {
+          width: 10px;
+        }
+      }
 
-			.object_name {
-				font-size: 13px;
-				margin-left: 4px;
-				margin-right: auto;
+      .object_name {
+        font-size: 12px;
+        margin-left: 4px;
+        margin-right: auto;
 
-				// &:hover {
-				// 	background: #0002;
-				// }
-			}
+        // &:hover {
+        // 	background: #0002;
+        // }
+      }
 
-			.object_see {
-				width: 30px;
-				height: 100%;
-				// background: #27303d;
-				flex-shrink: 0;
+      .object_see {
+        width: 30px;
+        height: 100%;
+        // background: $base2_color;
+        flex-shrink: 0;
 
-				&:hover {
-					background: #212935;
-				}
-			}
+        &:hover {
+          background: #212935;
+        }
+      }
 
-			.object_goto {
-				width: 35px;
-				height: 100%;
-				// background: #27303d;
-				flex-shrink: 0;
+      .object_goto {
+        width: 35px;
+        height: 100%;
+        // background: $base2_color;
+        flex-shrink: 0;
 
-				&:hover {
-					background: #212935;
-				}
-			}
-		}
+        &:hover {
+          background: #212935;
+        }
+      }
+    }
 
-		.object_child {
-			border-left: 1px solid #fff1;
-			margin-left: 10px;
-			// padding-left: 10px;
-			display: flex;
-			flex-direction: column;
-			gap: 22px;
-			padding-bottom: 12px;
-		}
-	}
+    .object_child {
+      border-left: 1px solid #fff1;
+      margin-left: 10px;
+      // padding-left: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+      padding-bottom: 12px;
+    }
+  }
 }

@@ -1,160 +1,150 @@
-$color_text: rgb(206, 206, 206);
-$color_text_bg: rgba(233, 233, 233, 0.056);
-$color_error: rgb(255, 77, 77);
-$color_error_bg: rgba(214, 71, 71, 0.139);
-$color_warning: rgb(255, 228, 75);
-$color_target: rgb(68, 142, 240);
-$color_target_old: rgb(106, 112, 120);
-$color_object: rgb(255, 164, 112);
-$color_time: rgba(154, 157, 167, 0.7);
+@use "@assets/scss/_variables.scss" as *;
 
 .topBar {
-	display: flex;
-	align-items: center;
-	overflow: hidden;
-	background-color: #27303d;
-	height: 24px;
-	border-radius: 6px;
-	padding-left: 0px;
-	flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background-color: $base2_color;
+  height: 24px;
+  padding-left: 0px;
+  flex-shrink: 0;
 
-	i {
-		color: #aaa;
-		font-style: normal;
-		font-size: 12px;
-		padding-top: 10px;
-		padding-left: 18px;
-		width: 100%;
-		height: 100%;
-	}
+  i {
+    color: $topbar_contents_color;
+    font-style: normal;
+    font-size: 12px;
+    padding-top: 10px;
+    padding-left: 18px;
+    width: 100%;
+    height: 100%;
+  }
 }
 
 .console_wrap {
-	padding: 5px 20px 12px 12px;
-	// overflow-y: auto;
+  padding: 5px 20px 12px 12px;
+  // overflow-y: auto;
 
-	.console {
-		color: #fff;
-		font-size: 14px;
-		display: flex;
-		flex-direction: column;
-		font-family: monospace, Pretendard;
+  .console {
+    color: #fff;
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
 
-		.suggest_wrap {
-			position: relative;
-			height: 0px;
+    .suggest_wrap {
+      position: relative;
+      height: 0px;
 
-			.suggest {
-				position: absolute;
-				bottom: 0px;
-				left: 0px;
-				width: 400px;
-				padding: 6px 12px;
-				border-radius: 4px;
-				overflow: hidden;
-				display: flex;
-				flex-direction: column;
-				gap: 4px;
-				line-height: 1.1;
-				font-weight: 600;
+      .suggest {
+        position: absolute;
+        bottom: 0px;
+        left: 0px;
+        width: 400px;
+        padding: 6px 12px;
+        border-radius: 4px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        line-height: 1.1;
+        font-weight: 600;
 
-				&.suggest_show {
-					background: #161b22;
-				}
+        &.suggest_show {
+          background: #161b22;
+        }
 
-				.suggest_item_select {
-					background: #161b23;
-				}
-			}
-		}
+        .suggest_item_select {
+          background: #282e38;
+        }
+      }
+    }
 
-		.logLine {
-			display: flex;
-			align-items: center;
-			justify-content: space-between;
-			height: 25px;
-			padding-right: 12px;
+    .logLine {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 25px;
+      padding-right: 12px;
 
-			.contents {
-				display: flex;
-				align-items: center;
+      .contents {
+        display: flex;
+        align-items: center;
 
-				.contents_icon {
-					margin-right: 5px;
-					width: 15px;
-					height: 15px;
-					padding-bottom: 2px;
+        .contents_icon {
+          margin-right: 5px;
+          width: 15px;
+          height: 15px;
+          padding-bottom: 2px;
 
-					svg {
-						width: 15px;
-						height: 15px;
-					}
-				}
-			}
+          svg {
+            width: 15px;
+            height: 15px;
+          }
+        }
+      }
 
-			.time {
-				display: flex;
-				align-items: center;
-				color: $color_time;
-				font-size: 12px;
+      .time {
+        display: flex;
+        align-items: center;
+        color: $color_time;
+        font-size: 12px;
 
-				svg {
-					width: 12px;
-					fill: $color_time;
-					margin-left: 5px;
-				}
-			}
-		}
+        svg {
+          width: 12px;
+          fill: $color_time;
+          margin-left: 5px;
+        }
+      }
+    }
 
-		.text {
-			color: $color_text;
-			background: $color_text_bg;
-			padding-left: 8px;
-		}
+    .text {
+      color: $color_text;
+      background: $color_text_bg;
+      padding-left: 8px;
+    }
 
-		.warning {
-			color: $color_warning;
-		}
+    .warning {
+      color: $color_warning;
+    }
 
-		.errer {
-			color: $color_error;
-			background: $color_error_bg;
-			padding-left: 8px;
+    .errer {
+      color: $color_error;
+      background: $color_error_bg;
+      padding-left: 8px;
 
-			.contents_icon svg {
-				fill: $color_error;
-			}
-		}
+      .contents_icon svg {
+        fill: $color_error;
+      }
+    }
 
-		.target {
-			color: $color_target;
-			margin-right: 8px;
-			font-weight: 800;
+    .target {
+      color: $color_target;
+      margin-right: 8px;
+      font-weight: 800;
 
-			&.target_old {
-				color: $color_target_old;
-			}
-		}
+      &.target_old {
+        color: $color_target_old;
+      }
+    }
 
-		.object {
-			color: $color_object;
-			text-decoration: underline;
-		}
+    .object {
+      color: $color_object;
+      text-decoration: underline;
+    }
 
-		.prompt_wrap {
-			display: flex;
-			align-items: center;
-			height: 25px;
-			// height: 100px;
+    .prompt_wrap {
+      display: flex;
+      align-items: center;
+      height: 25px;
+      // height: 100px;
 
-			.prompt {
-				width: 100%;
-				outline: none;
-				background: none;
-				border: none;
-				color: #fff;
-				font-size: 16px;
-			}
-		}
-	}
+      .prompt {
+        width: 100%;
+        outline: none;
+        background: none;
+        border: none;
+        color: #fff;
+        font-size: 16px;
+      }
+    }
+  }
 }

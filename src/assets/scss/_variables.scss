@@ -1,0 +1,31 @@
+$primary_color: #2189fa;
+$base0_color: #11161b;
+$base1_color: #1b222b;
+$base2_color: #27303d;
+$base3_color: #333f50;
+$topbar_contents_color: #aaaaaa;
+$topbar_border_color: #374253;
+$wrapper_border_color: #222a35;
+$codespace_color: #1b222b;
+//#35395C
+
+:export {
+  codespace_color: $codespace_color;
+}
+
+// tools
+$button_active_color: #2772db;
+$button_border_color: #2a2a2d;
+$button_bg_color: #4f5158;
+$button_bg_hover_color: #575b67;
+
+// terminal
+$color_text: rgb(206, 206, 206);
+$color_text_bg: rgba(233, 233, 233, 0.056);
+$color_error: rgb(255, 77, 77);
+$color_error_bg: rgba(214, 71, 71, 0.139);
+$color_warning: rgb(255, 228, 75);
+$color_target: rgb(68, 142, 240);
+$color_target_old: rgb(106, 112, 120);
+$color_object: rgb(255, 164, 112);
+$color_time: rgba(154, 157, 167, 0.7);

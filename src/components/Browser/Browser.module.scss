@@ -1,85 +1,85 @@
+@use "@assets/scss/_variables.scss" as *;
+
 .topBar {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	overflow: hidden;
-	background-color: #27303d;
-	height: 24px;
-	border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden;
+  background-color: $base2_color;
+  height: 24px;
+  // border-radius: 5px;
 
-	i {
-		color: #fff;
-		font-style: normal;
-		font-size: 13px;
-		width: 100%;
-		height: 100%;
-		padding-left: 20px;
-		padding-top: 8px;
-	}
+  i {
+    color: $topbar_contents_color;
+    font-style: normal;
+    font-size: 13px;
+    width: 100%;
+    height: 100%;
+    padding-left: 20px;
+    padding-top: 8px;
+  }
 
-	button {
-		background-color: #333f50;
-		width: 50px;
-		height: 100%;
-	}
+  button {
+    background-color: $base3_color;
+    width: 50px;
+    height: 100%;
+  }
 
-	.topBar_add {
-		display: flex;
-		align-items: center;
-		justify-content: center;
+  .topBar_add {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-		svg {
-			stroke: #fff;
-			width: 15px;
-			height: 15px;
-		}
-	}
+    svg {
+      stroke: #fff;
+      width: 15px;
+      height: 15px;
+    }
+  }
 }
 
 .folder {
-	display: grid;
-	grid-template-columns: repeat(3, 1fr);
-	gap: 14px 10px;
-	margin: 20px 20px 0px 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(85px, auto));
+  gap: 12px 0px;
+  margin: 12px 15px 0px 15px;
 
-	.file {
-		display: flex;
-		flex-direction: column;
-		justify-self: center;
-		align-items: center;
-		gap: 6px;
-		padding: 6px 8px 10px 8px;
-		border-radius: 10px;
-		width: 62px;
-		height: 62px;
-		border: 1px solid #0000;
+  .file {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 8px 10px 8px;
+    border-radius: 10px;
+    width: 62px;
+    height: 62px;
+    background: #0002;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    margin: 0px auto;
 
-		&:hover {
-			background-color: #ffffff0e;
-			border: 1px solid #d3d3d350;
-		}
+    &:hover,
+    &.file_selected {
+      background-color: rgba(255, 255, 255, 0.028);
+      border: 1px solid rgb(70, 76, 84);
+    }
 
-		&.file_selected {
-			background-color: #ffffff0e;
-			border: 1px solid #d3d3d350;
-		}
+    img,
+    svg {
+      // width: 55px;
+      object-fit: scale-down;
+      // margin: auto 0px;
+    }
 
-		img,
-		svg {
-			// width: 55px;
-			object-fit: scale-down;
-			// margin: auto 0px;
-		}
-
-		span {
-			font-size: 12px;
-			color: #fff;
-			max-width: 70px;
-			word-break: break-all;
-			display: -webkit-inline-box;
-			-webkit-box-orient: vertical;
-			-webkit-line-clamp: 2;
-			overflow: hidden;
-		}
-	}
+    span {
+      font-size: 12px;
+      color: #fff;
+      max-width: 70px;
+      word-break: break-all;
+      display: -webkit-inline-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+    }
+  }
 }
