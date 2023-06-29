@@ -3,8 +3,8 @@ import Window from '@/components/Wrapper/Wrapper';
 import example from '@assets/example1.png';
 import { useBoundStore } from "@/store";
 
-import { ReactComponent as AddSVG } from '@assets/icon/add.svg';
-import { ReactComponent as ControllerSVG } from '@assets/icon/browser/controller.svg';
+import { ReactComponent as AddSVG } from '@assets/image/icon/add.svg';
+import { ReactComponent as ControllerSVG } from '@assets/image/icon/browser/controller.svg';
 import { useState } from 'react';
 
 export default function Folder() {

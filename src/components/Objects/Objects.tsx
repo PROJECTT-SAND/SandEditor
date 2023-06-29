@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
+import { useState } from 'react';
 import style from './Objects.module.scss';
 import Window from '@/components/Wrapper/Wrapper';
 import { OBJECT_TYPE } from '@/constants'
@@ -8,12 +7,12 @@ import { objectTreeNode, TreePos } from '@/types'
 import { useBoundStore } from "@/store";
 import { addSceneObject } from '@/system/threejs';
 
-import folderIcon from '@assets/icon/object/folder.svg';
-import arrowDownIcon from '@assets/icon/object/arrow_down.svg';
-import arrowUpIcon from '@assets/icon/object/arrow_up.svg';
+import folderIcon from '@assets/image/icon/object/folder.svg';
+import arrowDownIcon from '@assets/image/icon/object/arrow_down.svg';
+import arrowUpIcon from '@assets/image/icon/object/arrow_up.svg';
 
-import { ReactComponent as AddSVG } from '@assets/icon/add.svg';
-import { ReactComponent as SearchSVG } from '@assets/icon/search.svg';
+import { ReactComponent as AddSVG } from '@assets/image/icon/add.svg';
+import { ReactComponent as SearchSVG } from '@assets/image/icon/search.svg';
 
 export default function Objects() {
   const { objectDatas, setObjectDatas, objectTree, setObjectTree, selectedObjectUUID, setSelectedObjectUUID } = useBoundStore();

@@ -3,13 +3,13 @@ import { useBoundStore } from '@/store'
 import { system } from '@/system/system';
 import Window from '@/components/Wrapper/Wrapper'
 
-import { ReactComponent as PlaySVG } from '@assets/icon/toolbar/player/play.svg';
-import { ReactComponent as PauseSVG } from '@assets/icon/toolbar/player/pause.svg';
-import { ReactComponent as StopSVG } from '@assets/icon/toolbar/player/stop.svg';
-import { ReactComponent as GullscreenSVG } from '@assets/icon/toolbar/option/fullscreen.svg';
-import { ReactComponent as ShowgridSVG } from '@assets/icon/toolbar/option/showgrid.svg';
-import { ReactComponent as HandSVG } from '@assets/icon/toolbar/tool/hand.svg';
-import { ReactComponent as MoveSVG } from '@assets/icon/toolbar/tool/move.svg';
+import { ReactComponent as PlaySVG } from '@assets/image/icon/toolbar/player/play.svg';
+import { ReactComponent as PauseSVG } from '@assets/image/icon/toolbar/player/pause.svg';
+import { ReactComponent as StopSVG } from '@assets/image/icon/toolbar/player/stop.svg';
+import { ReactComponent as GullscreenSVG } from '@assets/image/icon/toolbar/option/fullscreen.svg';
+import { ReactComponent as ShowgridSVG } from '@assets/image/icon/toolbar/option/showgrid.svg';
+import { ReactComponent as HandSVG } from '@assets/image/icon/toolbar/tool/hand.svg';
+import { ReactComponent as MoveSVG } from '@assets/image/icon/toolbar/tool/move.svg';
 
 import Option from './Option';
 import PlayerButton from './PlayerButton';

@@ -7,8 +7,8 @@ import { useBoundStore } from '@/store';
 import { commands } from '@/system/system';
 import { LOG_KIND } from '@/constants';
 
-import { ReactComponent as ErrorSVG } from '@assets/icon/terminal/error.svg';
-import { ReactComponent as TimeSVG } from '@assets/icon/terminal/time.svg';
+import { ReactComponent as ErrorSVG } from '@assets/image/icon/terminal/error.svg';
+import { ReactComponent as TimeSVG } from '@assets/image/icon/terminal/time.svg';
 
 
 export default function Console() {

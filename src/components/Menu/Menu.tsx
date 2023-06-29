@@ -1,5 +1,5 @@
 import style from "./Menu.module.scss";
-import { ReactComponent as IconSVG } from '@assets/icon.svg';
+import { ReactComponent as IconSVG } from '@assets/image/icon.svg';
 import { useState } from "react";
 import { useBoundStore } from "@/store";
 

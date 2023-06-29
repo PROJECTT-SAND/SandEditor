@@ -1,10 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import Editor, { OnChange, useMonaco } from "@monaco-editor/react";
 import style from "./Codespace.module.scss";
-import Window from "@/components/Wrapper/Wrapper";
 import { useBoundStore } from "@/store";
 import { file } from '@/types'
 import Declaration_types from '@/types/sandeditor/types.d.ts?raw';
+
+import { ReactComponent as CloseSVG } from '@assets/image/icon/codespace/close.svg';
 
 export default function WorkSpace() {
   const { codeFiles, setCodeFiles, workMenu, setWorkMenu, selectedWorkMenu, setSelectedWorkMenu } = useBoundStore();
@@ -44,7 +45,7 @@ export default function WorkSpace() {
               {extension}
             </span>
 
-            <div className={style.close} onClick={() => { closeWorkMenu(i) }}></div>
+            <div className={style.close} onClick={() => { closeWorkMenu(i) }}><CloseSVG /></div>
           </div>
         ))}
       </div>

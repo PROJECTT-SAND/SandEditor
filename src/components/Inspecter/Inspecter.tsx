@@ -1,8 +1,8 @@
 import style from './Inspecter.module.scss';
 import Window from '@/components/Wrapper/Wrapper';
 import { useBoundStore } from "@/store";
-import { ReactComponent as ArrowDownSVG } from '@assets/icon/object/arrow_down.svg';
-import { ReactComponent as ControllerSVG } from '@assets/icon/inspecter/controller.svg';
+import { ReactComponent as ArrowDownSVG } from '@assets/image/icon/object/arrow_down.svg';
+import { ReactComponent as ControllerSVG } from '@assets/image/icon/inspecter/controller.svg';
 
 export default function Folder() {
   const { objectDatas, setObjectDatas, selectedObjectUUID, codeFiles } = useBoundStore();
