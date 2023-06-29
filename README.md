@@ -21,12 +21,6 @@
 
 SAND-Editer (alias) is a programming language(or game engine) for coding beginners.
 
-## Install
-
-Windows
-  - [SAND-Editer.zip (300MB)](https://a.com)
-  - [Installer](https://a.com)
-
 ## Documentation
 
 None.
