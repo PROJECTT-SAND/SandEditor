@@ -1,13 +1,49 @@
 @use "@assets/scss/_variables.scss" as *;
 $button_border_radius: 6px;
 
-.viewerController {
+.tools_wrap {
+  &.tools_fullscreen {
+    position: absolute;
+    overflow: hidden;
+    bottom: 0px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    width: 600px;
+    height: 65px;
+    z-index: 30;
+
+    .tools {
+      position: absolute;
+      box-sizing: border-box;
+      bottom: 15px;
+      left: 50%;
+      transform: translate(-50%, 0);
+      background: rgba($base1_color, 0.4);
+      border: 1px solid rgba($wrapper_border_color, 0.2);
+      transition: bottom 0.3s;
+      justify-content: center;
+      padding: 8px 10px;
+      border-radius: 8px;
+      gap: 10px;
+      flex-direction: row-reverse;
+
+      &.tools_hide {
+        bottom: -55px;
+      }
+    }
+  }
+}
+
+.tools {
+  background-color: $base1_color;
+  border: 1px solid $wrapper_border_color;
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: 7px;
-  margin-left: auto;
+  // margin-left: auto;
   padding: 6px 10px;
-  width: fit-content;
+  // width: fit-content;
 
   button {
     width: 32px;

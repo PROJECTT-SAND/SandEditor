@@ -36,6 +36,7 @@ class OBJ extends THREE.Mesh {
 
 let store = useBoundStore.getState();
 let canvasElem: HTMLCanvasElement;
+let wrapperElem: HTMLDivElement;
 let renderer: THREE.WebGLRenderer;
 // const textureLoader = new THREE.TextureLoader();
 window.threeScene = new THREE.Scene();
@@ -230,27 +231,28 @@ const dragendEvent = (e: THREE.Event) => {
 	});
 };
 
-const resize = () => {
-	Ctx.set(canvasElem.clientWidth, canvasElem.clientHeight);
+export const resize = () => {
+	if (!wrapperElem || !renderer) return;
+	Ctx.set(wrapperElem.clientWidth, wrapperElem.clientHeight);
+
 	camera.aspect = Ctx.x / Ctx.y;
 	cameraWidth = cameraHeight * camera.aspect;
 	cameraFov.set(cameraWidth, cameraHeight);
+	camera.updateProjectionMatrix();
 
 	renderer.setSize(Ctx.x, Ctx.y);
-	camera.updateProjectionMatrix();
 };
-
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-export const createScene = (el: HTMLCanvasElement) => {
+export const createScene = (el: HTMLCanvasElement, wrap: HTMLDivElement) => {
 	canvasElem = el;
+	wrapperElem = wrap;
 
 	renderer = new THREE.WebGLRenderer({
 		antialias: true,
 		canvas: canvasElem,
 	});
-
 	renderer.autoClear = false;
 	renderer.shadowMap.enabled = true;
 	renderer.shadowMap.type = THREE.VSMShadowMap;
@@ -261,6 +263,7 @@ export const createScene = (el: HTMLCanvasElement) => {
 	canvasElem.addEventListener('mousemove', mousemoveEvent);
 	canvasElem.addEventListener('mousedown', mousedownEvent);
 	canvasElem.addEventListener('mouseup', mouseupEvent);
+	window.addEventListener('resize', resize);
 	controls.addEventListener('dragstart', dragstartEvent);
 	controls.addEventListener('dragend', dragendEvent);
 

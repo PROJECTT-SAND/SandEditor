@@ -1,38 +1,65 @@
+@use "@assets/scss/_variables.scss" as *;
+
+.viewer_wrap {
+  background: #000;
+  // background: $base1_color;
+  width: 100%;
+  height: 100%;
+
+  &.viewer_wrap_fullscreen {
+    z-index: 20;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
 .viewer {
-	width: 100%;
-	height: 100%;
-	position: relative;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  aspect-ratio: 16 / 9;
 
-	.cameraPos {
-		display: flex;
-		flex-direction: column;
-		position: absolute;
-		top: 20px;
-		left: 20px;
-		color: #777;
-		font-size: 12px;
-		gap: 3px;
+  &.viewer_fullscreen {
+    width: min(calc((100vh - 10px) * 16 / 9), 100vw) !important;
+    height: min(calc(100vw / 16 * 9), calc(100vh - 10px)) !important;
+  }
 
-		.prop {
-			display: flex;
+  .cameraPos {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: #777;
+    font-size: 12px;
+    gap: 3px;
 
-			.propName {
-				width: 65px;
-			}
-		}
-	}
+    .prop {
+      display: flex;
 
-	.canvas {
-		touch-action: none;
-		width: 100%;
-		height: 100%;
+      .propName {
+        width: 65px;
+      }
+    }
+  }
 
-		&.edit {
-			background: #333;
-		}
+  .canvas {
+    touch-action: none;
+    width: 100%;
+    height: 100%;
 
-		&.start {
-			background: #000;
-		}
-	}
+    &.edit {
+      background: #333;
+    }
+
+    &.start {
+      background: #000;
+    }
+  }
 }

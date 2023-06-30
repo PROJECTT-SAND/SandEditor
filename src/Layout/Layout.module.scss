@@ -38,7 +38,7 @@
 
     .viewer_viewer {
       width: 100%;
-      height: calc(800px / 16 * 9);
+      aspect-ratio: 16 / 9;
     }
 
     .viewer_controller {
