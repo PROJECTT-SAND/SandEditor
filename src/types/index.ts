@@ -43,9 +43,9 @@ export interface logs {
 
 export interface codespace {
 	workMenu: file[];
-	selectedWorkMenu: null | number;
+	selectedWorkMenu: number;
 	setWorkMenu: (data: file[]) => void;
-	setSelectedWorkMenu: (index: number | null) => void;
+	setSelectedWorkMenu: (index: number) => void;
 }
 
 export interface codeFile {

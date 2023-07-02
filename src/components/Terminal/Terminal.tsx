@@ -13,17 +13,17 @@ import { ReactComponent as TimeSVG } from '@assets/image/icon/terminal/time.svg'
 
 export default function Console() {
   const logs = useBoundStore(store => Object.values(store.logs), shallow);
-  const ref = useRef<HTMLDivElement>(null);
+  const wrapperElem = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!ref.current) return
-    ref.current.scrollTop = ref.current.scrollHeight - ref.current.clientHeight;
+    if (!wrapperElem.current) return
+    wrapperElem.current.scrollTop = wrapperElem.current.scrollHeight - wrapperElem.current.clientHeight;
   }, [logs]);
 
   const Prompt = () => {
     const [suggestions, setSuggestions] = useState<{ content: string, start: number, length: number }[]>([]);
 
-    const parseCommand = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const parseCommand = (e: React.FormEvent<HTMLInputElement>) => {
       let value = e.currentTarget.value.split(' ')
       let command = value[value.length - 1];
       let suggestion = [];
@@ -39,7 +39,6 @@ export default function Console() {
         let idx = suggestionPrefix.indexOf(command);
         if (idx !== -1) { suggestion.push({ content: suggestionPrefix, start: idx, length: command.length }) };
       }
-
 
       setSuggestions(suggestion);
     }
@@ -66,8 +65,8 @@ export default function Console() {
         <div className={style.prompt_wrap}>
           <span className={style.target}>&#62;</span>
           <input
+            autoFocus
             className={style.prompt}
-            // onClick={}
             onInput={parseCommand}
             onKeyDown={executeCommand}
           >
@@ -124,7 +123,7 @@ export default function Console() {
     })
 
     return (
-      <div className={style.console_wrap} ref={ref}>
+      <div className={style.console_wrap} ref={wrapperElem}>
         <code className={style.console}>
           {result}
           {/* <hr /> */}

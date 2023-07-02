@@ -35,7 +35,7 @@ const createViewerController: StateCreator<viewerController> = (set) => ({
 const createObjects: StateCreator<objects> = (set) => ({
 	objectDatas: {
 		'1': {
-			name: 'InGame',
+			name: 'Scene',
 			type: OBJECT_TYPE.Scene,
 			X: 0,
 			Y: 0,
@@ -65,7 +65,7 @@ const createLogs: StateCreator<logs> = (set) => ({
 
 const createCodespace: StateCreator<codespace> = (set) => ({
 	workMenu: [],
-	selectedWorkMenu: null,
+	selectedWorkMenu: -1,
 	setWorkMenu: (data) => {
 		set(() => ({ workMenu: data }));
 	},
