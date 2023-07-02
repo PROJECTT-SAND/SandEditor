@@ -1,24 +1,31 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import style from './Objects.module.scss';
 import Window from '@/components/Wrapper/Wrapper';
 import { OBJECT_TYPE } from '@/constants'
-import { Object } from '@/classes'
+import { Object as sandObject } from '@/classes'
 import { objectTreeNode, TreePos } from '@/types'
 import { useBoundStore } from "@/store";
 import { addSceneObject } from '@/system/threejs';
 
 import folderIcon from '@assets/image/icon/object/folder.svg';
-import arrowDownIcon from '@assets/image/icon/object/arrow_down.svg';
-import arrowUpIcon from '@assets/image/icon/object/arrow_up.svg';
-
+import { ReactComponent as ArrowDownSVG } from '@assets/image/icon/object/arrow_down.svg';
+import { ReactComponent as ArrowUpSVG } from '@assets/image/icon/object/arrow_up.svg';
 import { ReactComponent as AddSVG } from '@assets/image/icon/add.svg';
 import { ReactComponent as SearchSVG } from '@assets/image/icon/search.svg';
 
 export default function Objects() {
-  const { objectDatas, setObjectDatas, objectTree, setObjectTree, selectedObjectUUID, setSelectedObjectUUID } = useBoundStore();
+  const { objectDatas, setObjectDatas, objectTree, selectedObjectUUID, setSelectedObjectUUID } = useBoundStore();
   const [isOpened, setIsOpened] = useState<{ [key: string]: boolean }>({});
-  // const [selectedObject, setSelectedObject] = useState<Object | null>(null);
+  const [isScrollBottom, setIsScrollBottom] = useState(false);
   const [selectedTree, setSelectedTree] = useState<TreePos>([]);
+  const wrapperElem = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!wrapperElem.current) return
+    if (isScrollBottom) {
+      wrapperElem.current.scrollTop = wrapperElem.current.scrollHeight - wrapperElem.current.clientHeight;
+    }
+  }, [objectDatas]);
 
   const searchNode = (value: TreePos) => {
     let searchTree = objectTree[0];
@@ -30,13 +37,19 @@ export default function Objects() {
     return searchTree;
   }
 
-  const addObject = (name: string, type: OBJECT_TYPE, parentUUID: string, treePos: TreePos) => {
-    let newObject = new Object(name, type, false, parentUUID);
-    let selectedTreeNode = searchNode(treePos);
+  const addObject = () => {
+    if (!selectedObjectUUID || !wrapperElem.current) return;
+
+    setIsScrollBottom(wrapperElem.current.scrollTop >= wrapperElem.current.scrollHeight - wrapperElem.current.clientHeight);
+
+    let name = 'object' + Object.keys(objectDatas).length
+    let newObject = new sandObject(name, OBJECT_TYPE.Object, false, selectedObjectUUID);
+    let selectedTreeNode = searchNode(selectedTree);
 
     selectedTreeNode.children.push({ uuid: newObject.UUID, children: [] });
     setObjectDatas({ ...objectDatas, [newObject.UUID]: newObject });
     addSceneObject(newObject);
+    setIsOpened({ ...isOpened, [selectedObjectUUID]: true });
   }
 
   const ObjectTree: React.FC<{ treeData: objectTreeNode[], currentTree: TreePos }> = ({ treeData, currentTree }) => {
@@ -55,7 +68,6 @@ export default function Objects() {
 
   const ObjectTreeNode: React.FC<objectTreeNode & { currentTree: TreePos }> = ({ uuid, currentTree, children }) => {
     const isLeafNode = children.length == 0;
-    const isRoot = currentTree.length == 1;
     const isSelected = selectedObjectUUID == uuid;
     const objectData = objectDatas[uuid];
     const name = objectData.name;
@@ -78,29 +90,22 @@ export default function Objects() {
     }
 
     return (
-      <div className={style.object_folder1}>
-        <div className={style.object_gfdfgs} >
-          <div className={`${style.object} ${isSelected ? style.object_selected : ''}`}>
-            {!isRoot ?
-              <div className={style.treeline} />
-              : null
-            }
+      <div className={style.object_folder}>
+        <div className={`${style.object} ${isSelected ? style.object_selected : ''}`} onClick={treeSelect}>
+          <div className={style.object_arrow} onClick={!isLeafNode ? setFold : () => { }}>
             {!isLeafNode ?
-              <div className={style.object_arrow} onClick={setFold}>
-                <img src={(isOpened![uuid]) ? arrowDownIcon : arrowUpIcon}></img>
-              </div>
-              : null
-            }
-            <div className={style.object_aaaaa} onClick={treeSelect}>
-              <div className={style.object_icon}><img src={icon}></img></div>
-              <span className={style.object_name}>{name}</span>
-              <div className={style.object_see} onClick={setSee}></div>
-              <div className={style.object_goto}></div>
-            </div>
+              (isOpened![uuid]) ?
+                <ArrowDownSVG />
+                : <ArrowUpSVG />
+              : ''}
           </div>
-          {(isOpened![uuid]) ? <ObjectTree treeData={children} currentTree={currentTree} /> : null}
+          <div className={style.object_icon}><img src={icon}></img></div>
+          <span className={style.object_name}>{name}</span>
+          <div className={style.object_see} onClick={setSee}></div>
+          <div className={style.object_goto}></div>
         </div>
-      </div>
+        {(isOpened![uuid]) ? <ObjectTree treeData={children} currentTree={currentTree} /> : null}
+      </div >
     );
   }
 
@@ -111,9 +116,9 @@ export default function Objects() {
           <SearchSVG />
           <i>검색</i>
         </div>
-        <button className={style.addObject} onClick={() => { if (selectedObjectUUID) addObject('aaa', OBJECT_TYPE.Object, selectedObjectUUID, selectedTree) }}><AddSVG /></button>
+        <button className={style.addObject} onClick={addObject}><AddSVG /></button>
       </div>
-      <div className={style.objects}>
+      <div className={style.objects} ref={wrapperElem}>
         <ObjectTree treeData={objectTree} currentTree={[]} />
       </div>
     </Window>

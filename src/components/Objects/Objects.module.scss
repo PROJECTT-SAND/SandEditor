@@ -5,7 +5,7 @@
   align-items: center;
   overflow: hidden;
   flex-shrink: 0;
-  background-color: $base3_color;
+  background-color: $base2_color;
   height: 24px;
   // border-radius: 5px;
   padding: 0px 5px;
@@ -13,13 +13,13 @@
   button {
     height: 100%;
     width: 40px;
-    background-color: $base3_color;
+    background-color: $base2_color;
   }
 
   .searchBar {
     width: 100%;
     // height: 100%;
-    background-color: $base2_color;
+    background-color: $base3_color;
     border: 1px solid $topbar_border_color;
     // padding: 1px;
     border-radius: 5px;
@@ -56,7 +56,7 @@
 
 .objects {
   height: 100%;
-  padding: 10px 10px 80px 10px;
+  padding: 10px;
   overflow-y: auto;
 
   &::-webkit-scrollbar {
@@ -70,7 +70,7 @@
     border-radius: 100px;
   }
 
-  .object_folder1 {
+  .object_folder {
     display: flex;
     flex-direction: column;
     // gap: 10px;
@@ -79,18 +79,6 @@
     width: 0px;
     position: relative;
     width: 100%;
-
-    .object_gfdfgs {
-      position: absolute;
-      width: 100%;
-    }
-
-    .object_aaaaa {
-      display: flex;
-      align-items: center;
-      width: 100%;
-      height: 100%;
-    }
 
     .treeline {
       width: 8px;
@@ -103,6 +91,7 @@
       color: #fff;
       height: 23px;
       border-radius: 7px;
+      padding-left: 5px;
       display: flex;
       align-items: center;
       overflow: hidden;
@@ -116,14 +105,14 @@
       }
 
       .object_arrow {
-        width: 22px;
+        width: 16px;
         height: 100%;
         display: flex;
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
 
-        img {
+        svg {
           width: 10px;
         }
       }
@@ -132,7 +121,6 @@
         width: 18px;
         height: 100%;
         border-radius: 5px;
-        margin-left: 7px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -178,12 +166,14 @@
 
     .object_child {
       border-left: 1px solid #fff1;
-      margin-left: 10px;
+      margin-left: 11px;
       // padding-left: 10px;
       display: flex;
       flex-direction: column;
-      gap: 22px;
-      padding-bottom: 12px;
+      gap: 3px;
+      // padding-bottom: 23px;
+      padding-top: 3px;
+      padding-left: 6px;
     }
   }
 }
