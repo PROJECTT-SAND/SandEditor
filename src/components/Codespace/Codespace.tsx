@@ -23,20 +23,25 @@ export default function WorkSpace() {
 
   function WorkMenu() {
     const closeWorkMenu = (index: number) => {
-      if (selectedWorkMenu == null) return;
+      if (selectedWorkMenu === -1) return;
+
       let tmp = [...workMenu];
       tmp.splice(index, 1);
 
       setWorkMenu(tmp);
 
       if (selectedWorkMenu == 0) {
-        setSelectedWorkMenu(null);
+        setSelectedWorkMenu(-1);
       } else {
         setSelectedWorkMenu((selectedWorkMenu - 1));
       }
     }
 
-    const selectWorkMenu = (index: number) => {
+    const selectWorkMenu = (e: React.MouseEvent, index: number) => {
+      // @ts-ignore
+      let classList = [...e.target.classList]
+      if (!classList.includes('workMenu')) return;
+
       setSelectedWorkMenu(index);
     }
 
@@ -45,10 +50,10 @@ export default function WorkSpace() {
         {workMenu.map(({ fileName, extension }, i) => (
           <div
             className={
-              `${selectedWorkMenu === i ? style.menuItemSelected : ''} ${style.menuItem}`
+              `${selectedWorkMenu === i ? style.menuItemSelected : ''} ${style.menuItem} workMenu`
             }
             key={i}
-            onClick={() => { selectWorkMenu(i) }}
+            onClick={(e) => { selectWorkMenu(e, i) }}
           >
             <span>
               <span className={style.menuItemContent}>{fileName}</span>
@@ -106,7 +111,7 @@ export default function WorkSpace() {
       <WorkMenu />
 
       <div className={style.editor_wrap}>
-        {selectedWorkMenu != null ?
+        {(selectedWorkMenu !== -1) ?
           <Editor
             theme="sandEditor"
             language={language}
