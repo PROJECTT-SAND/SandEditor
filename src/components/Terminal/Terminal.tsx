@@ -67,6 +67,7 @@ export default function Console() {
           <input
             autoFocus
             className={style.prompt}
+            // onFocus={parseCommand}
             onInput={parseCommand}
             onKeyDown={executeCommand}
           >

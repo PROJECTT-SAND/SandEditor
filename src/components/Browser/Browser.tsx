@@ -33,7 +33,7 @@ export default function Folder() {
       <div className={style.topBar}>
         <i>C:/users/user/desktop/game</i>
         <button className={style.topBar_back}></button>
-        <button className={style.topBar_add} onClick={addObject}><AddSVG /></button>
+        <button className={style.topBar_add} onClick={addObject} title='컨트롤러 추가'><AddSVG /></button>
       </div>
       <div className={style.folder}>
         {/* <div className={style.file}><img src={example} alt='야쓰'></img><span>1111</span></div>

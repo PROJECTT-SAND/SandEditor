@@ -274,17 +274,17 @@ export const system = {
 
 							log.text('시스템: 실행 완료');
 							setCurrentLifeCycle(3);
-						}
-						if (command == 'pause') {
+						} else if (command == 'pause') {
 							log.text('시스템: 일시정지');
 							setCurrentLifeCycle(4);
-						}
-						if (command == 'stop') {
+						} else if (command == 'stop') {
 							log.text('시스템: 중지 중');
 							setCurrentLifeCycle(5);
 							stopSystem();
 							log.text('시스템: 중지 완료');
 							setCurrentLifeCycle(1);
+						} else {
+							log.error('알 수 없는 명령어');
 						}
 					} else {
 						log.error('알 수 없는 명령어');

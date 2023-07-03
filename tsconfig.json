@@ -15,8 +15,7 @@
 		"isolatedModules": true,
 		"noEmit": true,
 		"jsx": "react-jsx",
-		"types": ["vite-plugin-svgr/client"],
-		"typeRoots": ["./types/raw-loader", "./types/global"],
+		"typeRoots": ["./types/declare", "./types/global"],
 		"baseUrl": ".",
 		"paths": {
 			"@/*": ["./src/*"],
