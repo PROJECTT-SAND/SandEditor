@@ -101,8 +101,8 @@ export default function Objects() {
           </div>
           <div className={style.object_icon}><img src={icon}></img></div>
           <span className={style.object_name}>{name}</span>
-          <div className={style.object_see} onClick={setSee}></div>
-          <div className={style.object_goto}></div>
+          // <div className={style.object_see} onClick={setSee}></div>
+          // <div className={style.object_goto}></div>
         </div>
         {(isOpened![uuid]) ? <ObjectTree treeData={children} currentTree={currentTree} /> : null}
       </div >

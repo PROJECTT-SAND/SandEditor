@@ -32,14 +32,14 @@
   justify-content: space-between;
   color: $topbar_contents_color;
   background: $base0_color;
-  font-size: 12px;
-  padding: 4px 16px;
+  font-size: 10px;
+  padding: 2px 14px;
 
   .menu_container_left,
   .menu_container_right {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
   }
 
   .menu_container_middle {

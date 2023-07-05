@@ -41,16 +41,20 @@ export default function Folder() {
             }
 
             <div className={style.container}>
+              <div>
               <span className={style.button_arrow}><ArrowDownSVG /></span>
+              <input className={style.dsdadf} type="checkbox"></input>
               <span className={style.container_icon}><ControllerSVG /></span>
-              <div className={style.label}>Controller</div>
+              <div className={style.label}>asdf.sand</div>
+              </div>
 
-              <select onInput={asdf}>
-                {Object.keys(codeFiles).map((fileName, index) => {
-                  return <option value={fileName} key={index} onInput={(e) => { setObjectParam('Controller', e.currentTarget.value) }}>{fileName}</option>
-                })
+              //<select onInput={asdf}>
+              //  {//Object.keys(codeFiles).map((fileName, index) => {
+              //    return <option value={fileName} key={index} onInput={(e) => { setObjectParam('Controller', e.currentTarget.value) }}>{fileName}</option>
+              //  })
                 }
               </select>
+              <button className={style.options}>...</button>
             </div>
 
             {
@@ -67,6 +71,7 @@ export default function Folder() {
             }
 
             <button className={style.btnAdd}>Add Controller</button>
+            <button className={style.btn_delete}></button>
 
             {/* 
             <div className={style.property}>
