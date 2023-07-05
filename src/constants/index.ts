@@ -28,8 +28,9 @@ export const PLAYER = {
 export type PLAYER = (typeof PLAYER)[keyof typeof PLAYER];
 
 export const OBJECT_TYPE = {
-	Scene: 0,
-	Object: 1,
+	Scene: 1,
+	Camera: 2,
+	Object: 3,
 } as const;
 export type OBJECT_TYPE = (typeof OBJECT_TYPE)[keyof typeof OBJECT_TYPE];
 

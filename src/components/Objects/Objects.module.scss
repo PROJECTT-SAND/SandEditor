@@ -46,10 +46,38 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
 
-    svg {
+    &.addObject_disabled {
+      cursor: not-allowed;
+
+      .addObject_add svg {
+        stroke: #ffffff58;
+      }
+
+      .addObject_dropdown svg {
+        fill: #ffffff58;
+      }
+    }
+
+    .addObject_add {
       width: 15px;
-      stroke: #ffffff;
+      height: 15px;
+      padding-right: 1px;
+
+      svg {
+        stroke: #ffffff;
+      }
+    }
+
+    .addObject_dropdown {
+      width: 5px;
+      padding-top: 2px;
+
+      svg {
+        display: block;
+        fill: #ffffff;
+      }
     }
   }
 }
@@ -95,6 +123,7 @@
       display: flex;
       align-items: center;
       overflow: hidden;
+      cursor: pointer;
 
       &:hover {
         background: $base3_color;

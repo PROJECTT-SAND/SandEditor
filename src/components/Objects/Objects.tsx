@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import style from './Objects.module.scss';
 import Window from '@/components/Wrapper/Wrapper';
 import { OBJECT_TYPE } from '@/constants'
-import { Object as sandObject } from '@/classes'
+import { SandObjectBase, SandObject } from '@/classes'
 import { objectTreeNode, TreePos } from '@/types'
 import { useBoundStore } from "@/store";
 import { addSceneObject } from '@/system/threejs';
@@ -11,14 +11,34 @@ import folderIcon from '@assets/image/icon/object/folder.svg';
 import { ReactComponent as ArrowDownSVG } from '@assets/image/icon/object/arrow_down.svg';
 import { ReactComponent as ArrowUpSVG } from '@assets/image/icon/object/arrow_up.svg';
 import { ReactComponent as AddSVG } from '@assets/image/icon/add.svg';
+import { ReactComponent as DropdownSVG } from '@assets/image/icon/object/dropdown.svg';
 import { ReactComponent as SearchSVG } from '@assets/image/icon/search.svg';
 
 export default function Objects() {
-  const { objectDatas, setObjectDatas, objectTree, selectedObjectUUID, setSelectedObjectUUID } = useBoundStore();
+  const { objectDatas, setObjectDatas, objectTree, setObjectTree, selectedObjectUUID, setSelectedObjectUUID } = useBoundStore();
   const [isOpened, setIsOpened] = useState<{ [key: string]: boolean }>({});
   const [isScrollBottom, setIsScrollBottom] = useState(false);
   const [selectedTree, setSelectedTree] = useState<TreePos>([]);
+  const [isCanAdd, setIsCanAdd] = useState(false);
   const wrapperElem = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const Scene = new SandObjectBase('Scene', OBJECT_TYPE.Scene, null);
+    const Camera = new SandObjectBase('Camera', OBJECT_TYPE.Camera, Scene.UUID);
+
+    setObjectDatas({ [Scene.UUID]: Scene, [Camera.UUID]: Camera })
+    setObjectTree(
+      [{
+        uuid: Scene.UUID,
+        children: [
+          {
+            uuid: Camera.UUID,
+            children: [],
+          },
+        ],
+      }],
+    )
+  }, []);
 
   useEffect(() => {
     if (!wrapperElem.current) return
@@ -38,12 +58,12 @@ export default function Objects() {
   }
 
   const addObject = () => {
-    if (!selectedObjectUUID || !wrapperElem.current) return;
+    if (!selectedObjectUUID || !wrapperElem.current || !isCanAdd) return;
 
     setIsScrollBottom(wrapperElem.current.scrollTop >= wrapperElem.current.scrollHeight - wrapperElem.current.clientHeight);
 
-    let name = 'object' + Object.keys(objectDatas).length
-    let newObject = new sandObject(name, OBJECT_TYPE.Object, false, selectedObjectUUID);
+    let name = 'object' + (Object.keys(objectDatas).length - 1)
+    let newObject = new SandObject(name, OBJECT_TYPE.Object, false, selectedObjectUUID);
     let selectedTreeNode = searchNode(selectedTree);
 
     selectedTreeNode.children.push({ uuid: newObject.UUID, children: [] });
@@ -81,6 +101,7 @@ export default function Objects() {
     }
 
     const treeSelect = () => {
+      setIsCanAdd(objectData.type != OBJECT_TYPE.Camera);
       setSelectedTree(currentTree);
       setSelectedObjectUUID(uuid);
     }
@@ -116,7 +137,14 @@ export default function Objects() {
           <SearchSVG />
           <i>검색</i>
         </div>
-        <button className={style.addObject} onClick={addObject}><AddSVG /></button>
+        <button
+          className={`${style.addObject} ${!isCanAdd ? style.addObject_disabled : ''}`}
+          onClick={addObject}
+          title='오브젝트 추가'
+        >
+          <div className={style.addObject_add}><AddSVG /></div>
+          <div className={style.addObject_dropdown}><DropdownSVG /></div>
+        </button>
       </div>
       <div className={style.objects} ref={wrapperElem}>
         <ObjectTree treeData={objectTree} currentTree={[]} />

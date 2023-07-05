@@ -7,6 +7,8 @@ import {
 	viewerController,
 	UI,
 	codespace,
+	TreePos,
+	objectTreeNode,
 } from '@/types';
 import { OBJECT_TYPE } from '@/constants';
 
@@ -33,24 +35,8 @@ const createViewerController: StateCreator<viewerController> = (set) => ({
 });
 
 const createObjects: StateCreator<objects> = (set) => ({
-	objectDatas: {
-		'1': {
-			name: 'Scene',
-			type: OBJECT_TYPE.Scene,
-			X: 0,
-			Y: 0,
-			isHidden: false,
-			parentUUID: null,
-			UUID: '1',
-			controller: ['test'],
-		},
-	},
-	objectTree: [
-		{
-			uuid: '1',
-			children: [],
-		},
-	],
+	objectDatas: {},
+	objectTree: [],
 	setObjectDatas: (data) => {
 		set(() => ({ objectDatas: data }));
 	},

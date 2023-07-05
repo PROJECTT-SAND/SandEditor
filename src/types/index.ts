@@ -1,4 +1,4 @@
-import { Object } from '@/classes';
+import { SandObjectBase } from '@/classes';
 import { LOG_KIND } from '@/constants';
 
 export interface viewerController {
@@ -21,9 +21,9 @@ export interface viewerController {
 }
 
 export interface objects {
-	objectDatas: { [uuid: string]: Object };
+	objectDatas: { [uuid: string]: SandObjectBase };
 	objectTree: objectTreeNode[];
-	setObjectDatas: (data: { [uuid: string]: Object }) => void;
+	setObjectDatas: (data: { [uuid: string]: SandObjectBase }) => void;
 	setObjectTree: (treeData: objectTreeNode[]) => void;
 }
 

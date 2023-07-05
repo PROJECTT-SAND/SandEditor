@@ -36,6 +36,10 @@
     border-radius: 8px;
   }
 
+  select {
+    cursor: pointer;
+  }
+
   .label {
     font-size: 13px;
     width: 130px;
@@ -80,6 +84,21 @@
       }
     }
 
+    .objectInfo {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+
+      .objectInfo_icon {
+        width: 10px;
+        height: 10px;
+
+        fill: #fff;
+      }
+
+      .objectInfo_name {}
+    }
+
     .property {
       display: flex;
       align-items: center;
@@ -94,6 +113,7 @@
       background: $base3_color;
       border: 1px solid $topbar_border_color;
       color: #fff;
+      cursor: pointer;
     }
   }
 }

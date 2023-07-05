@@ -1,14 +1,24 @@
 import { OBJECT_TYPE, ProcessEvent } from '@/constants';
 import { v4 as uuidv4 } from 'uuid';
 
-export class Object {
+export class SandObjectBase {
 	name: string;
 	type: OBJECT_TYPE;
+	parentUUID: string | null;
+	UUID: string;
+
+	constructor(name: string, type: OBJECT_TYPE, parentUUID: string | null) {
+		this.UUID = uuidv4();
+		this.name = name;
+		this.type = type;
+		this.parentUUID = parentUUID;
+	}
+}
+
+export class SandObject extends SandObjectBase {
 	X: number;
 	Y: number;
 	isHidden: boolean;
-	parentUUID: string | null;
-	UUID: string;
 	controller: string[];
 
 	constructor(
@@ -17,13 +27,10 @@ export class Object {
 		isHidden: boolean,
 		parentUUID: string | null
 	) {
-		this.UUID = uuidv4();
-		this.name = name;
-		this.type = type;
+		super(name, type, parentUUID);
 		this.X = 0;
 		this.Y = 0;
 		this.isHidden = isHidden;
-		this.parentUUID = parentUUID;
 		this.controller = [];
 	}
 }
