@@ -55,17 +55,19 @@ export default function Folder() {
 
             {objectDatas[selectedObjectUUID].type == OBJECT_TYPE.Object ?
               <div className={style.container}>
-                <span className={style.button_arrow}><ArrowDownSVG /></span>
-                <span className={style.container_icon}><ControllerSVG /></span>
-                <div className={style.label}>Controller</div>
+                <div>
+                  <span className={style.button_arrow}><ArrowDownSVG /></span>
+                  <input className={style.dsdadf} type="checkbox"></input>
+                  <span className={style.container_icon}><ControllerSVG /></span>
+                  <div className={style.label}>asdf.sand</div>
+                </div>
 
-                <select onInput={asdf}>
-                  {
-                    Object.keys(codeFiles).map((fileName, index) => {
-                      return <option value={fileName} key={index} onInput={(e) => { setObjectParam('Controller', e.currentTarget.value) }}>{fileName}</option>
-                    })
-                  }
-                </select>
+                {/* <select onInput={asdf}>
+                {Object.keys(codeFiles).map((fileName, index) => {
+                  return <option value={fileName} key={index} onInput={(e) => { setObjectParam('Controller', e.currentTarget.value) }}>{fileName}</option>
+                })
+                }
+              </select> */}
               </div>
               : ''
             }
@@ -87,6 +89,7 @@ export default function Folder() {
               <button className={style.btnAdd}>Add Controller</button>
               : ''
             }
+            <button className={style.btn_delete}></button>
 
             {/* 
             <div className={style.property}>

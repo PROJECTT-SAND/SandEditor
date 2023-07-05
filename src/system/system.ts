@@ -262,7 +262,7 @@ export const system = {
 							const codeContext = `const{${Object.keys(
 								context
 							).toString()}}=this;`;
-							const code = `${codeContext + codeFiles.test.contents}`;
+							const code = `'use strict';${codeContext + codeFiles.test.contents}`;
 							const codeFunc = new Function(code).bind(context);
 
 							try {
