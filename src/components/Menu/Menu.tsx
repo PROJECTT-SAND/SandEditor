@@ -45,11 +45,11 @@ export default function Menu() {
       <div className={`${style.menu} ${hideMenu ? style.menu_hide : ''}`}>
         <div className={style.menu_container_left}>
           <IconSVG />
-          // <div className={style.manu_item}>Menu</div>
-          Layout
-          Account
+          {/* <div className={style.manu_item}>Menu</div> */}
+          <div className={style.manu_item}>Layout</div>
+          <div className={style.manu_item}>Account</div>
           <div className={style.manu_item} onClick={clickIsSettingsOpen}>Setting</div>
-          Help
+          <div className={style.manu_item}>Help</div>
         </div>
         <div className={style.menu_container_middle}>
           {/* <div className={style.manu_item}>project-1</div> */}

@@ -5,7 +5,7 @@ import { Viewport, Toolbar, Objects, Browser, Workspace, Terminal, Inspecter, Me
 export default function Layout() {
   const [leftBottomLayoutSize, setLeftBottomLayoutSize] = useState(60);
   const [rightLayoutSize, setRightLayoutSize] = useState(600);
-  const [inspecterSize, setInspecterSize] = useState(400);
+  const [inspecterSize, setInspecterSize] = useState(250);
 
   return (
     <div className={style.wrapper}>

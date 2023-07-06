@@ -88,6 +88,10 @@
     .workspace {
       width: 100%;
     }
+
+    .inspecter {
+      flex-shrink: 0;
+    }
   }
 
   .window_controller {
