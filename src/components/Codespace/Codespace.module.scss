@@ -19,6 +19,34 @@
     border: 1px solid $wrapper_border_color;
   }
 
+  .editor_placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    width: 100%;
+    height: 100%;
+
+    h5 {
+      font-size: 20px;
+      color: #464651;
+    }
+
+    span {
+      color: #464651;
+    }
+
+    svg {
+      width: 200px;
+      height: 200px;
+
+      path {
+        fill: rgba(0, 0, 0, 0.221);
+      }
+    }
+  }
+
   .workMenu {
     height: 35px;
     display: flex;
@@ -26,7 +54,7 @@
     // border-radius: 8px 8px 0 0;
 
     .menuItemSelected {
-      background: $codespace_color  !important;
+      background: $codespace_color !important;
     }
 
     .menuItem {

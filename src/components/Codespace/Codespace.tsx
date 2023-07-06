@@ -6,6 +6,7 @@ import { file } from '@/types'
 import Declaration_types from '@/types/sandeditor/types.d.ts?raw';
 
 import { ReactComponent as CloseSVG } from '@assets/image/icon/codespace/close.svg';
+import { ReactComponent as IconSVG } from '@assets/image/icon_full.svg';
 
 import scssVaribles from '@assets/scss/_variables.scss'
 
@@ -122,7 +123,12 @@ export default function WorkSpace() {
               tabSize: 2
             }}
           />
-          : ''
+          :
+          <div className={style.editor_placeholder}>
+            <IconSVG />
+            <h5>SandEditor</h5>
+            <span>브라우저에서 컨트롤러 파일을 선택하거나 추가하세요</span>
+          </div>
         }
       </div>
     </div>
