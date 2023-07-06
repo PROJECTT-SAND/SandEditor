@@ -8,6 +8,10 @@ import { useBoundStore } from "@/store";
 import { addSceneObject } from '@/system/threejs';
 
 import folderIcon from '@assets/image/icon/object/folder.svg';
+import { ReactComponent as FolderIconSVG } from '@assets/image/icon/object/folder.svg';
+import { ReactComponent as SceneIconSVG } from '@assets/image/icon/object/scene.svg';
+import { ReactComponent as CameraIconSVG } from '@assets/image/icon/object/camera.svg';
+
 import { ReactComponent as ArrowDownSVG } from '@assets/image/icon/object/arrow_down.svg';
 import { ReactComponent as ArrowUpSVG } from '@assets/image/icon/object/arrow_up.svg';
 import { ReactComponent as AddSVG } from '@assets/image/icon/add.svg';
@@ -91,7 +95,7 @@ export default function Objects() {
     const isSelected = selectedObjectUUID == uuid;
     const objectData = objectDatas[uuid];
     const name = objectData.name;
-    let icon = folderIcon;
+    let IconSVG;
 
     const setFold = () => {
       setIsOpened({ ...isOpened, [uuid]: !isOpened![uuid] });
@@ -106,8 +110,19 @@ export default function Objects() {
       setSelectedObjectUUID(uuid);
     }
 
-    if (objectData.type == OBJECT_TYPE.Scene) {
-      icon = folderIcon
+    switch (objectData.type) {
+      case OBJECT_TYPE.Camera:
+        IconSVG = CameraIconSVG;
+        break;
+      case OBJECT_TYPE.Scene:
+        IconSVG = SceneIconSVG;
+        break;
+      case OBJECT_TYPE.Object:
+        IconSVG = FolderIconSVG;
+        break;
+      default:
+        IconSVG = FolderIconSVG;
+        break;
     }
 
     return (
@@ -120,10 +135,8 @@ export default function Objects() {
                 : <ArrowUpSVG />
               : ''}
           </div>
-          <div className={style.object_icon}><img src={icon}></img></div>
+          <div className={style.object_icon}><IconSVG /></div>
           <span className={style.object_name}>{name}</span>
-          // <div className={style.object_see} onClick={setSee}></div>
-          // <div className={style.object_goto}></div>
         </div>
         {(isOpened![uuid]) ? <ObjectTree treeData={children} currentTree={currentTree} /> : null}
       </div >

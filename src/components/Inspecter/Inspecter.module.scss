@@ -22,12 +22,11 @@
 }
 
 .Inspecter {
-  padding: 12px 0px;
+  padding: 10px 0px;
   color: #fff;
 
   input,
   select {
-    width: 100%;
     height: 20px;
     padding-left: 7px;
     background: $base3_color;
@@ -40,13 +39,28 @@
     cursor: pointer;
   }
 
-  .label {
+  .property_label {
     font-size: 13px;
-    width: 130px;
+    width: 100px;
     text-align: end;
     display: inline-block;
     color: $topbar_contents_color;
     margin-right: 12px;
+  }
+
+  .property_input_wrap {
+    width: 100%;
+    min-width: 0px;
+
+    input {
+      width: inherit;
+      box-sizing: border-box;
+    }
+
+    .property_input_checkbox {
+      width: auto;
+      margin-right: auto;
+    }
   }
 
   .select_none {
@@ -57,46 +71,123 @@
   .property_wrap {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
 
-    .container {
+    .controller {
       display: flex;
       align-items: center;
+
       background: #2c323e;
-      padding: 3px;
+      padding: 1px 3px;
+      gap: 3px;
 
       .button_arrow {
         width: 16px;
         height: 16px;
-        margin-right: 3px;
+        flex-shrink: 0;
+        padding: 4px;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .controller_check {
+        width: 12px;
+        height: 12px;
+      }
+
+      .controller_icon {
+        height: 18px;
+        width: 18px;
+        // margin-right: 4px;
         flex-shrink: 0;
       }
 
-      .container_icon {
-        height: 20px;
-        width: 20px;
-        margin-right: 4px;
-        flex-shrink: 0;
-      }
-
-      .label {
+      .controller_label {
         margin-right: 30px;
+        font-size: 13px;
       }
     }
 
     .objectInfo {
       display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
+      flex-direction: column;
+      padding: 0px 10px;
+      gap: 5px;
 
-      .objectInfo_icon {
-        width: 10px;
-        height: 10px;
-
-        fill: #fff;
+      .objectInfo_line {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 5px;
       }
 
-      .objectInfo_name {}
+      .objectInfo_icon {
+        width: 25px;
+        height: 25px;
+        padding: 5px;
+        flex-shrink: 0;
+        border-radius: 8px;
+        box-sizing: border-box;
+        cursor: pointer;
+
+        &:hover {
+          background: #fff2;
+        }
+
+        svg {
+          fill: #fff;
+        }
+      }
+
+      .objectInfo_name {
+        width: 100%;
+      }
+
+      button {
+        padding: 3px;
+        border-radius: 5px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+
+        svg {
+          width: 17px;
+          height: 17px;
+        }
+      }
+
+      .btn_delete {
+        background: #e3393931;
+
+        &:hover {
+          background: #e339394a;
+        }
+
+        svg {
+          fill: #ec3131;
+        }
+      }
+
+      .btn_see,
+      .btn_goto {
+        width: 100%;
+        justify-content: center;
+        background: #6a73a431;
+
+        &:hover {
+          background: #6a73a45d;
+        }
+
+        svg {
+          fill: #9298ba;
+        }
+      }
+    }
+
+    hr {
+      border-color: #2c323e;
     }
 
     .property {

@@ -1,26 +1,69 @@
 import style from './Inspecter.module.scss';
 import Window from '@/components/Wrapper/Wrapper';
 import { useBoundStore } from "@/store";
+import { OBJECT_TYPE } from '@/constants';
+
+import { ReactComponent as FolderIconSVG } from '@assets/image/icon/object/folder.svg';
+import { ReactComponent as SceneIconSVG } from '@assets/image/icon/object/scene.svg';
+import { ReactComponent as CameraIconSVG } from '@assets/image/icon/object/camera.svg';
+
+import { ReactComponent as DeleteSVG } from '@assets/image/icon/inspecter/delete.svg';
+import { ReactComponent as TargetSVG } from '@assets/image/icon/inspecter/target.svg';
+import { ReactComponent as SeeSVG } from '@assets/image/icon/inspecter/see.svg';
 import { ReactComponent as ArrowDownSVG } from '@assets/image/icon/object/arrow_down.svg';
 import { ReactComponent as ControllerSVG } from '@assets/image/icon/inspecter/controller.svg';
-import { OBJECT_TYPE } from '@/constants';
+import { useEffect, useState } from 'react';
+import { SandObjectBase } from '@/classes';
 
 export default function Folder() {
   const { objectDatas, setObjectDatas, selectedObjectUUID, codeFiles } = useBoundStore();
-  let ignorePropsName = ['type', 'parentUUID', 'UUID', 'name'];
+  const [currentOBJ, setCurrentOBJ] = useState<SandObjectBase>();
+  const ignorePropsName = ['type', 'parentUUID', 'UUID', 'name', 'controller'];
 
-  const asdf = (a: any) => {
-    console.log(a)
-  }
+  useEffect(() => {
+    if (!selectedObjectUUID) return;
+    setCurrentOBJ(objectDatas[selectedObjectUUID]);
+  }, [selectedObjectUUID, objectDatas]);
 
   const setObjectParam = (key: string, value: any) => {
-    if (selectedObjectUUID == null) return;
+    if (selectedObjectUUID == null || currentOBJ == null) return;
 
-    const selectedObject = objectDatas[selectedObjectUUID];
-    let tmp = { ...selectedObject };
+    let tmp = { ...currentOBJ };
     tmp[key as keyof Object] = value;
-
     setObjectDatas({ ...objectDatas, [selectedObjectUUID]: tmp });
+  }
+
+  const deleteObject = () => {
+    if (selectedObjectUUID == null || currentOBJ == null) return;
+    alert("오브젝트를 삭제하시겠습니까?")
+
+    // let tmp = { ...objectDatas };
+    // delete tmp.selectedObjectUUID;
+    // setObjectDatas(tmp);
+  }
+
+  const ObjectIcon = () => {
+    if (!currentOBJ) return (<></>);
+
+    let IconSVG;
+    switch (currentOBJ.type) {
+      case OBJECT_TYPE.Camera:
+        IconSVG = CameraIconSVG;
+        break;
+      case OBJECT_TYPE.Scene:
+        IconSVG = SceneIconSVG;
+        break;
+      case OBJECT_TYPE.Object:
+        IconSVG = FolderIconSVG;
+        break;
+      default:
+        IconSVG = FolderIconSVG;
+        break;
+    }
+
+    return (
+      <IconSVG />
+    )
   }
 
   return (
@@ -29,81 +72,65 @@ export default function Folder() {
         <i>Inspecter</i>
       </div>
       <div className={style.Inspecter}>
-        {(selectedObjectUUID != null) ?
+        {(selectedObjectUUID != null && currentOBJ != null) ?
           <div className={style.property_wrap}>
+            {/* Object Info */}
             <div className={style.objectInfo}>
-              <div className={style.objectInfo_icon}>{objectDatas[selectedObjectUUID].type}</div>
-              {/* <div className={style.objectInfo_name}>{objectDatas[selectedObjectUUID].name}</div> */}
-              <input
-                type="text"
-                value={objectDatas[selectedObjectUUID].name ?? ''}
-                className={style.objectInfo_name}
-              ></input>
+              <div className={style.objectInfo_line}>
+                <div className={style.objectInfo_icon}><ObjectIcon /></div>
+                <input
+                  type="text"
+                  value={currentOBJ.name ?? ''}
+                  className={style.objectInfo_name}
+                  readOnly={currentOBJ.type != OBJECT_TYPE.Object}
+                  onInput={(e) => { setObjectParam("name", e.currentTarget.value) }}
+                ></input>
+              </div>
+              {currentOBJ.type == OBJECT_TYPE.Object ?
+                <div className={style.objectInfo_line}>
+                  <button className={style.btn_see}><SeeSVG /></button>
+                  <button className={style.btn_goto}><TargetSVG /></button>
+                  <button className={style.btn_delete} onClick={deleteObject}><DeleteSVG /></button>
+                </div>
+                : ''}
             </div>
-            {
-              Object.entries(objectDatas[selectedObjectUUID]).map(([key, value], index) => {
+            <hr />
+            {/* Object Property */
+              Object.entries(currentOBJ).map(([key, value], index) => {
                 if (ignorePropsName.includes(key)) return;
-
                 return (
                   <div className={style.property} key={index}>
-                    <div className={style.label}>{key}</div>
-                    <input type="text" value={value ?? ''} onInput={(e) => { setObjectParam(key, e.currentTarget.value) }}></input>
+                    <div className={style.property_label}>{key}</div>
+                    <div className={style.property_input_wrap}>
+                      {typeof value == "number" ?
+                        <input type="number" value={value} onInput={(e) => { setObjectParam(key, Number(e.currentTarget.value)) }}></input>
+                        : typeof value == "boolean" ?
+                          <input type="checkbox" checked={value} className={style.property_input_checkbox} onChange={(e) => { setObjectParam(key, e.currentTarget.checked) }}></input>
+                          : typeof value == "string" ?
+                            <input type="text" value={value} onInput={(e) => { setObjectParam(key, e.currentTarget.value) }}></input>
+                            : ''}
+                    </div>
                   </div>
                 )
               })
             }
 
-            {objectDatas[selectedObjectUUID].type == OBJECT_TYPE.Object ?
-              <div className={style.container}>
-                <div>
+            {/* Controller */
+              currentOBJ.type == OBJECT_TYPE.Object ?
+                <div className={style.controller}>
                   <span className={style.button_arrow}><ArrowDownSVG /></span>
-                  <input className={style.dsdadf} type="checkbox"></input>
-                  <span className={style.container_icon}><ControllerSVG /></span>
-                  <div className={style.label}>asdf.sand</div>
+                  <input className={style.controller_check} type="checkbox"></input>
+                  <span className={style.controller_icon}><ControllerSVG /></span>
+                  <div className={style.controller_label}>asdf.sand</div>
                 </div>
-
-                {/* <select onInput={asdf}>
-                {Object.keys(codeFiles).map((fileName, index) => {
-                  return <option value={fileName} key={index} onInput={(e) => { setObjectParam('Controller', e.currentTarget.value) }}>{fileName}</option>
-                })
-                }
-              </select> */}
-              </div>
-              : ''
+                : ''
             }
 
-            {
-              // Object.entries(codeFiles['qwe.sdcod'].params).map(([key, { type, value }], index) => {
-              //   return (
-              //     <div className={style.property} key={index}>
-              //       <div className={style.label}>{key}</div>
-              //       {type == 1 ?
-              //         <input type="text" value={value ?? ''} onInput={asdf}></input> : ''
-              //       }
-              //     </div>
-              //   )
-              // })
+            {/* Add Controller */
+              currentOBJ.type == OBJECT_TYPE.Object ?
+                <button className={style.btnAdd}>Add Controller</button>
+                : ''
             }
-
-            {objectDatas[selectedObjectUUID].type == OBJECT_TYPE.Object ?
-              <button className={style.btnAdd}>Add Controller</button>
-              : ''
-            }
-            <button className={style.btn_delete}></button>
-
-            {/* 
-            <div className={style.property}>
-              <div>name</div>
-              <input type="text" value={selectedObject?.name} ></input>
-            </div>
-            <div className={style.property}>
-              <div>X</div>
-              <input type="text" value={selectedObject?.X} ></input>
-            </div>
-            <div className={style.property}>
-              <div>Y</div>
-              <input type="text" value={selectedObject?.Y} ></input>
-            </div> */}
           </div>
           :
           <span className={style.select_none}>오브젝트를 선택해주세요.</span>

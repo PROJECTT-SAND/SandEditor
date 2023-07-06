@@ -1,5 +1,5 @@
-import { Object as ObjectData } from '@/classes';
-import { LIFECYCLE, TOOL } from '@/constants';
+import { SandObject, SandObjectBase } from '@/classes';
+import { LIFECYCLE, OBJECT_TYPE, TOOL } from '@/constants';
 import { useBoundStore } from '@/store';
 import * as THREE from 'three';
 import { DragControls } from 'three/examples/jsm/controls/DragControls.js';
@@ -105,6 +105,16 @@ useBoundStore.subscribe((state) => {
 
 	if (state.currentLifeCycle == LIFECYCLE.RUNNING) {
 		setWireframe(0, 0, 0, 0);
+	}
+
+	for (const uuid in state.objectDatas) {
+		let objData = state.objectDatas[uuid];
+		if (objData.type !== OBJECT_TYPE.Object) continue;
+		let obj = window.threeScene.getObjectByProperty('uuid', uuid);
+		if (obj == undefined) continue;
+
+		obj.position.x = objData.X;
+		obj.position.y = objData.Y;
 	}
 
 	if (controls)
@@ -277,11 +287,14 @@ const initObjects = () => {
 	const objectDatas = store.objectDatas;
 
 	for (const uuid in objectDatas) {
+		if (objectDatas[uuid].type !== OBJECT_TYPE.Object) return;
+		if (objectDatas[uuid] instanceof SandObject) return;
+
 		addSceneObject(objectDatas[uuid]);
 	}
 };
 
-export const addSceneObject = (object: ObjectData) => {
+export const addSceneObject = (object: SandObject) => {
 	let newObj = new OBJ(object.X, object.Y, object.UUID);
 	window.threeScene.add(newObj);
 };
