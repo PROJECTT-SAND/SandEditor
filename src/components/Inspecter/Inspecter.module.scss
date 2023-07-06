@@ -57,6 +57,10 @@
       box-sizing: border-box;
     }
 
+    input[type=number] {
+      appearance: textfield;
+    }
+
     .property_input_checkbox {
       width: auto;
       margin-right: auto;
@@ -171,8 +175,8 @@
       }
 
       .btn_see,
-      .btn_goto {
-        width: 100%;
+      .btn_goto,
+      .btn_lock {
         justify-content: center;
         background: #6a73a431;
 
@@ -183,6 +187,10 @@
         svg {
           fill: #9298ba;
         }
+      }
+
+      .btn_goto {
+        width: 100%;
       }
     }
 

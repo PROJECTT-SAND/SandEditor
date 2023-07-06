@@ -18,20 +18,25 @@ export class SandObjectBase {
 export class SandObject extends SandObjectBase {
 	X: number;
 	Y: number;
-	isHidden: boolean;
+	visible?: boolean;
 	controller: string[];
 
 	constructor(
 		name: string,
 		type: OBJECT_TYPE,
-		isHidden: boolean,
-		parentUUID: string | null
+		parentUUID: string | null,
+		visible?: boolean
 	) {
 		super(name, type, parentUUID);
 		this.X = 0;
 		this.Y = 0;
-		this.isHidden = isHidden;
 		this.controller = [];
+
+		if (visible) {
+			this.visible = visible;
+		} else {
+			this.visible = true;
+		}
 	}
 }
 

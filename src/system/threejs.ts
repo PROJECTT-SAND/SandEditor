@@ -8,7 +8,7 @@ import Stats from 'stats.js';
 class OBJ extends THREE.Mesh {
 	material: THREE.MeshBasicMaterial;
 
-	constructor(X: number, Y: number, UUID: string) {
+	constructor(X: number, Y: number, UUID: string, visible?: boolean) {
 		super();
 		this.geometry = new THREE.CircleGeometry(15, 32);
 		this.material = new THREE.MeshBasicMaterial({ color: 0xeeeeee });
@@ -17,6 +17,7 @@ class OBJ extends THREE.Mesh {
 		this.position.z = 0;
 		this.uuid = UUID;
 		this.material.transparent = true;
+		if (visible) this.visible = visible;
 	}
 
 	onPointerOver(e: MouseEvent) {}
@@ -68,7 +69,7 @@ const wireframe = new THREE.LineSegments(
 );
 window.threeScene.add(wireframe);
 
-const gridHelper = new THREE.GridHelper(10000, 50, 0x555555, 0x333333);
+const gridHelper = new THREE.GridHelper(10000, 10000 / 100, 0x555555, 0x333333);
 gridHelper.rotation.x = Math.PI / 2;
 uiScene.add(gridHelper);
 gridHelper.visible = false;
@@ -103,18 +104,30 @@ gridHelper.visible = false;
 useBoundStore.subscribe((state) => {
 	store = state;
 
-	if (state.currentLifeCycle == LIFECYCLE.RUNNING) {
+	if (
+		state.currentLifeCycle == LIFECYCLE.RUNNING ||
+		!state.selectedObjectUUID
+	) {
 		setWireframe(0, 0, 0, 0);
+	} else {
+		let obj = getObjectByUUID(state.selectedObjectUUID);
+
+		if (obj) {
+			setWireframe(obj.position.x, obj.position.x, 30, 30);
+		} else {
+			setWireframe(0, 0, 0, 0);
+		}
 	}
 
 	for (const uuid in state.objectDatas) {
 		let objData = state.objectDatas[uuid];
 		if (objData.type !== OBJECT_TYPE.Object) continue;
-		let obj = window.threeScene.getObjectByProperty('uuid', uuid);
+		let obj = getObjectByUUID(uuid);
 		if (obj == undefined) continue;
 
 		obj.position.x = objData.X;
 		obj.position.y = objData.Y;
+		obj.visible = objData.visible;
 	}
 
 	if (controls)
@@ -126,6 +139,10 @@ useBoundStore.subscribe((state) => {
 	camera.zoom = state.zoom;
 	camera.updateProjectionMatrix();
 });
+
+const getObjectByUUID = (uuid: string) => {
+	return window.threeScene.getObjectByProperty('uuid', uuid);
+};
 
 const setWireframe = (x: number, y: number, sizeX: number, sizeY: number) => {
 	wireframe.position.x = x;
@@ -204,7 +221,7 @@ const mouseupEvent = (e: MouseEvent) => {
 
 const dragstartEvent = (e: THREE.Event) => {
 	let uuid = e.object.uuid;
-	let obj = window.threeScene.getObjectByProperty('uuid', uuid);
+	let obj = getObjectByUUID(uuid);
 	let objData = store.objectDatas[uuid];
 
 	if (!obj) return;
@@ -252,6 +269,12 @@ export const resize = () => {
 
 	renderer.setSize(Ctx.x, Ctx.y);
 };
+
+export const setCameraPos = (x: number, y: number) => {
+	camera.position.x = x;
+	camera.position.y = y;
+};
+
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
@@ -295,7 +318,7 @@ const initObjects = () => {
 };
 
 export const addSceneObject = (object: SandObject) => {
-	let newObj = new OBJ(object.X, object.Y, object.UUID);
+	let newObj = new OBJ(object.X, object.Y, object.UUID, object.visible);
 	window.threeScene.add(newObj);
 };
 

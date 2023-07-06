@@ -67,7 +67,7 @@ export default function Objects() {
     setIsScrollBottom(wrapperElem.current.scrollTop >= wrapperElem.current.scrollHeight - wrapperElem.current.clientHeight);
 
     let name = 'object' + (Object.keys(objectDatas).length - 1)
-    let newObject = new SandObject(name, OBJECT_TYPE.Object, false, selectedObjectUUID);
+    let newObject = new SandObject(name, OBJECT_TYPE.Object, selectedObjectUUID);
     let selectedTreeNode = searchNode(selectedTree);
 
     selectedTreeNode.children.push({ uuid: newObject.UUID, children: [] });
@@ -94,14 +94,10 @@ export default function Objects() {
     const isLeafNode = children.length == 0;
     const isSelected = selectedObjectUUID == uuid;
     const objectData = objectDatas[uuid];
-    const name = objectData.name;
     let IconSVG;
 
     const setFold = () => {
       setIsOpened({ ...isOpened, [uuid]: !isOpened![uuid] });
-    }
-
-    const setSee = () => {
     }
 
     const treeSelect = () => {
@@ -136,7 +132,7 @@ export default function Objects() {
               : ''}
           </div>
           <div className={style.object_icon}><IconSVG /></div>
-          <span className={style.object_name}>{name}</span>
+          <span className={style.object_name}>{objectData.name}</span>
         </div>
         {(isOpened![uuid]) ? <ObjectTree treeData={children} currentTree={currentTree} /> : null}
       </div >

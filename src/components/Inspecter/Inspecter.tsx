@@ -9,16 +9,20 @@ import { ReactComponent as CameraIconSVG } from '@assets/image/icon/object/camer
 
 import { ReactComponent as DeleteSVG } from '@assets/image/icon/inspecter/delete.svg';
 import { ReactComponent as TargetSVG } from '@assets/image/icon/inspecter/target.svg';
-import { ReactComponent as SeeSVG } from '@assets/image/icon/inspecter/see.svg';
+import { ReactComponent as VisibleOnSVG } from '@assets/image/icon/inspecter/visible_on.svg';
+import { ReactComponent as VisibleOffSVG } from '@assets/image/icon/inspecter/visible_off.svg';
+import { ReactComponent as LockOnSVG } from '@assets/image/icon/inspecter/lock_on.svg';
+import { ReactComponent as LockOffSVG } from '@assets/image/icon/inspecter/lock_off.svg';
 import { ReactComponent as ArrowDownSVG } from '@assets/image/icon/object/arrow_down.svg';
 import { ReactComponent as ControllerSVG } from '@assets/image/icon/inspecter/controller.svg';
 import { useEffect, useState } from 'react';
 import { SandObjectBase } from '@/classes';
+import { setCameraPos } from '@/system/threejs';
 
 export default function Folder() {
   const { objectDatas, setObjectDatas, selectedObjectUUID, codeFiles } = useBoundStore();
   const [currentOBJ, setCurrentOBJ] = useState<SandObjectBase>();
-  const ignorePropsName = ['type', 'parentUUID', 'UUID', 'name', 'controller'];
+  const ignorePropsName = ['type', 'parentUUID', 'UUID', 'name', 'controller', 'visible'];
 
   useEffect(() => {
     if (!selectedObjectUUID) return;
@@ -31,6 +35,23 @@ export default function Folder() {
     let tmp = { ...currentOBJ };
     tmp[key as keyof Object] = value;
     setObjectDatas({ ...objectDatas, [selectedObjectUUID]: tmp });
+  }
+
+  const setVisible = () => {
+    if (selectedObjectUUID == null || currentOBJ == null) return;
+
+    let tmp = { ...currentOBJ };
+    tmp.visible = !tmp.visible;
+    setObjectDatas({ ...objectDatas, [selectedObjectUUID]: tmp });
+  }
+
+  const gotoObject = () => {
+    if (currentOBJ == null) return;
+    setCameraPos(currentOBJ.X, currentOBJ.Y);
+  }
+
+  const LockObject = () => {
+
   }
 
   const deleteObject = () => {
@@ -88,9 +109,16 @@ export default function Folder() {
               </div>
               {currentOBJ.type == OBJECT_TYPE.Object ?
                 <div className={style.objectInfo_line}>
-                  <button className={style.btn_see}><SeeSVG /></button>
-                  <button className={style.btn_goto}><TargetSVG /></button>
-                  <button className={style.btn_delete} onClick={deleteObject}><DeleteSVG /></button>
+                  <button className={style.btn_goto} title='해당 위치로 이동하기' onClick={gotoObject}><TargetSVG /></button>
+                  <button className={style.btn_see} title={currentOBJ.visible ? '숨기기' : '보이기'} onClick={setVisible}>
+                    {currentOBJ.visible ?
+                      <VisibleOnSVG />
+                      :
+                      <VisibleOffSVG />
+                    }
+                  </button>
+                  <button className={style.btn_lock} title='잠그기' onClick={LockObject}><LockOffSVG /></button>
+                  <button className={style.btn_delete} title=' 오브젝트 삭제하기' onClick={deleteObject}><DeleteSVG /></button>
                 </div>
                 : ''}
             </div>
