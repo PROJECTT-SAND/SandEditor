@@ -45,6 +45,8 @@ const uiScene = new THREE.Scene();
 uiScene.background = new THREE.Color(0x111111);
 const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 2000);
 camera.position.z = 1000;
+let SceneObjectUUID: string;
+let CameraObjectUUID: string;
 
 let controls: DragControls;
 const raycaster = new THREE.Raycaster();
@@ -121,13 +123,33 @@ useBoundStore.subscribe((state) => {
 
 	for (const uuid in state.objectDatas) {
 		let objData = state.objectDatas[uuid];
-		if (objData.type !== OBJECT_TYPE.Object) continue;
-		let obj = getObjectByUUID(uuid);
-		if (obj == undefined) continue;
 
-		obj.position.x = objData.X;
-		obj.position.y = objData.Y;
-		obj.visible = objData.visible;
+		camera.zoom = state.zoom;
+		// store.setObjectDatas({
+		// 	...store.objectDatas,
+		// 	[CameraObjectUUID]: {
+		// 		...store.objectDatas[CameraObjectUUID],
+		// 		zoom: state.zoom,
+		// 	},
+		// });
+
+		if (objData.type == OBJECT_TYPE.Object) {
+			let obj = getObjectByUUID(uuid);
+			if (obj == undefined) continue;
+
+			obj.position.x = objData.X;
+			obj.position.y = objData.Y;
+			obj.visible = objData.visible;
+		} else if (objData.type == OBJECT_TYPE.Camera) {
+			camera.position.x = objData.X;
+			camera.position.y = objData.Y;
+			camera.zoom = objData.zoom;
+			camera.fov = objData.fov;
+			camera.near = objData.near;
+			camera.far = objData.far;
+		} else if (objData.type == OBJECT_TYPE.Scene) {
+			// window.threeScene.background = objData.background;
+		}
 	}
 
 	if (controls)
@@ -136,7 +158,7 @@ useBoundStore.subscribe((state) => {
 			state.currentLifeCycle === LIFECYCLE.IDLE;
 
 	gridHelper.visible = state.optionState.showGrid;
-	camera.zoom = state.zoom;
+
 	camera.updateProjectionMatrix();
 });
 
@@ -204,6 +226,15 @@ const mousemoveEvent = (e: MouseEvent) => {
 
 		camera.position.x = posOffset.x;
 		camera.position.y = posOffset.y;
+
+		store.setObjectDatas({
+			...store.objectDatas,
+			[CameraObjectUUID]: {
+				...store.objectDatas[CameraObjectUUID],
+				X: posOffset.x,
+				Y: posOffset.y,
+			},
+		});
 	}
 };
 
@@ -310,16 +341,21 @@ const initObjects = () => {
 	const objectDatas = store.objectDatas;
 
 	for (const uuid in objectDatas) {
-		if (objectDatas[uuid].type !== OBJECT_TYPE.Object) return;
-		if (objectDatas[uuid] instanceof SandObject) return;
-
 		addSceneObject(objectDatas[uuid]);
+
+		// if (objectDatas[uuid] instanceof SandObject) return;
 	}
 };
 
-export const addSceneObject = (object: SandObject) => {
-	let newObj = new OBJ(object.X, object.Y, object.UUID, object.visible);
-	window.threeScene.add(newObj);
+export const addSceneObject = (object: SandObjectBase) => {
+	if (object.type == OBJECT_TYPE.Object) {
+		let newObj = new OBJ(object.X, object.Y, object.UUID, object.visible);
+		window.threeScene.add(newObj);
+	} else if (object.type == OBJECT_TYPE.Scene) {
+		SceneObjectUUID = object.UUID;
+	} else if (object.type == OBJECT_TYPE.Camera) {
+		CameraObjectUUID = object.UUID;
+	}
 };
 
 const render = () => {

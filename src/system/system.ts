@@ -247,7 +247,7 @@ export const system = {
 
 							for (let key in objectDatas) {
 								let objectData = objectDatas[key];
-								codeFiles[objectData.controller[0]].contents;
+								// codeFiles[objectData.controller[0]].contents;
 							}
 
 							const context = {
@@ -262,7 +262,9 @@ export const system = {
 							const codeContext = `const{${Object.keys(
 								context
 							).toString()}}=this;`;
-							const code = `'use strict';${codeContext + codeFiles.test.contents}`;
+							const code = `'use strict';${
+								codeContext + codeFiles.test.contents
+							}`;
 							const codeFunc = new Function(code).bind(context);
 
 							try {

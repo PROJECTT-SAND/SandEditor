@@ -50,8 +50,13 @@ export default function Folder() {
     setCameraPos(currentOBJ.X, currentOBJ.Y);
   }
 
-  const LockObject = () => {
+  const lockObject = () => {
 
+  }
+
+  const enterProperty = (e) => {
+    if (e.key === 'Enter' && e.currentTarget.value !== '') {
+    }
   }
 
   const deleteObject = () => {
@@ -117,7 +122,7 @@ export default function Folder() {
                       <VisibleOffSVG />
                     }
                   </button>
-                  <button className={style.btn_lock} title='잠그기' onClick={LockObject}><LockOffSVG /></button>
+                  <button className={style.btn_lock} title='잠그기' onClick={lockObject}><LockOffSVG /></button>
                   <button className={style.btn_delete} title=' 오브젝트 삭제하기' onClick={deleteObject}><DeleteSVG /></button>
                 </div>
                 : ''}
@@ -131,11 +136,11 @@ export default function Folder() {
                     <div className={style.property_label}>{key}</div>
                     <div className={style.property_input_wrap}>
                       {typeof value == "number" ?
-                        <input type="number" value={value} onInput={(e) => { setObjectParam(key, Number(e.currentTarget.value)) }}></input>
+                        <input type="number" value={value} onKeyDown={enterProperty} onInput={(e) => { setObjectParam(key, Number(e.currentTarget.value)) }}></input>
                         : typeof value == "boolean" ?
                           <input type="checkbox" checked={value} className={style.property_input_checkbox} onChange={(e) => { setObjectParam(key, e.currentTarget.checked) }}></input>
                           : typeof value == "string" ?
-                            <input type="text" value={value} onInput={(e) => { setObjectParam(key, e.currentTarget.value) }}></input>
+                            <input type="text" value={value} onKeyDown={enterProperty} onInput={(e) => { setObjectParam(key, e.currentTarget.value) }}></input>
                             : ''}
                     </div>
                   </div>
@@ -161,7 +166,7 @@ export default function Folder() {
             }
           </div>
           :
-          <span className={style.select_none}>오브젝트를 선택해주세요.</span>
+          <span className={style.select_none}>오브젝트를 선택해주세요</span>
         }
       </div>
     </Window>

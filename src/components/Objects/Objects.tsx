@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import style from './Objects.module.scss';
 import Window from '@/components/Wrapper/Wrapper';
 import { OBJECT_TYPE } from '@/constants'
-import { SandObjectBase, SandObject } from '@/classes'
+import { SandObjectBase, SandObject, SandScene, SandCamera } from '@/classes'
 import { objectTreeNode, TreePos } from '@/types'
 import { useBoundStore } from "@/store";
 import { addSceneObject } from '@/system/threejs';
@@ -27,8 +27,8 @@ export default function Objects() {
   const wrapperElem = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const Scene = new SandObjectBase('Scene', OBJECT_TYPE.Scene, null);
-    const Camera = new SandObjectBase('Camera', OBJECT_TYPE.Camera, Scene.UUID);
+    const Scene = new SandScene('Scene');
+    const Camera = new SandCamera('Camera', Scene.UUID, 1, 50, 0.1, 2000);
 
     setObjectDatas({ [Scene.UUID]: Scene, [Camera.UUID]: Camera })
     setObjectTree(
@@ -71,8 +71,6 @@ export default function Objects() {
     let selectedTreeNode = searchNode(selectedTree);
 
     selectedTreeNode.children.push({ uuid: newObject.UUID, children: [] });
-    setObjectDatas({ ...objectDatas, [newObject.UUID]: newObject });
-    addSceneObject(newObject);
     setIsOpened({ ...isOpened, [selectedObjectUUID]: true });
   }
 
