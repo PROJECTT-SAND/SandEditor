@@ -75,9 +75,31 @@ export default function WorkSpace() {
   const editorOnChange = (code: string | undefined) => {
     if (!code || selectedWorkMenu == null) return;
 
+    let params = {};
+    let tokens = code.split(' ');
+    let propTokenIndex = tokens.indexOf("_properties")
+    let endBucketIndex = tokens.indexOf("}");
+    let aaaa;
+    let json;
+
+    if (tokens[propTokenIndex + 1] == "=" && tokens[propTokenIndex + 2] == "{") {
+       aaaa = tokens.slice(propTokenIndex + 2, endBucketIndex).join(" ");
+       aaaa.split(',');
+       aaaa.replace(asdd, a);
+    }
+
+    json = JSON.pharse(aaaa);
+
+    for(let key in json) {
+      
+    }
+
+    if (idx == -1) return;
+    // Error 컴포넌트에 에러발생?
+
     setCodeFiles(workMenu[selectedWorkMenu].fileName, {
       contents: code,
-      params: {}
+      params
     });
   }
 

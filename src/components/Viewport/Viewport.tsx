@@ -1,7 +1,7 @@
 import style from './Viewport.module.scss';
 import { useRef, useEffect } from 'react';
 import { useBoundStore } from '@/store'
-import { createScene, resize } from '@/system/threejs';
+import { createScene } from '@/system/threejs';
 
 export default function Viewer() {
   const { mouseIsEnterViewer, setMouseIsEnterViewer, zoom, setZoom, cameraPos, optionState, setOptionState } = useBoundStore();
@@ -9,15 +9,13 @@ export default function Viewer() {
   const wrapperElem = useRef<HTMLDivElement>(null);
   const bgElem = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    resize();
-  }, [optionState.fullScreen])
-
+  // Create scene
   useEffect(() => {
     if (canvasElem.current == null || wrapperElem.current == null) return;
     createScene(canvasElem.current, wrapperElem.current);
   }, [])
 
+  // Click outside => Exit fullscreen
   useEffect(() => {
     if (!bgElem.current) return;
 
@@ -31,10 +29,6 @@ export default function Viewer() {
     }, {})
   }, [])
 
-  const onWheel = (e: React.WheelEvent) => {
-    setZoom(Math.round(zoom * (1 + ((e.deltaY / Math.abs(e.deltaY)) / 6) * -1) * 100) / 100);
-  }
-
   return (
     <div
       className={`${style.viewer_wrap} ${optionState.fullScreen ? style.viewer_wrap_fullscreen : ''}`}
@@ -45,12 +39,11 @@ export default function Viewer() {
         ref={wrapperElem}
         onMouseEnter={() => setMouseIsEnterViewer(true)}
         onMouseLeave={() => setMouseIsEnterViewer(false)}
-        onWheel={onWheel}
       >
         {mouseIsEnterViewer ?
           <div className={style.cameraPos}>
-            <div className={style.prop}><div className={style.propName}>Camera X :</div>{Math.round(cameraPos.x * 100) / 100} px</div>
-            <div className={style.prop}><div className={style.propName}>Camera Y :</div>{Math.round(cameraPos.y * 100) / 100} px</div>
+            <div className={style.prop}><div className={style.propName}>Camera X :</div>{Math.round(cameraPos.x * 100) / 100}</div>
+            <div className={style.prop}><div className={style.propName}>Camera Y :</div>{Math.round(cameraPos.y * 100) / 100}</div>
             <div className={style.prop}><div className={style.propName}>Zoom :</div>{zoom} x</div>
           </div>
           : ''

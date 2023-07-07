@@ -103,9 +103,16 @@ gridHelper.visible = false;
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
+// selector
+useBoundStore.subscribe((state) => {
+	// Option fullScreen
+	resize();
+}, A);
+
 useBoundStore.subscribe((state) => {
 	store = state;
 
+	// Set wireframe
 	if (
 		state.currentLifeCycle == LIFECYCLE.RUNNING ||
 		!state.selectedObjectUUID
@@ -121,6 +128,7 @@ useBoundStore.subscribe((state) => {
 		}
 	}
 
+	// Apply objectDatas to scene object
 	for (const uuid in state.objectDatas) {
 		let objData = state.objectDatas[uuid];
 
@@ -152,13 +160,14 @@ useBoundStore.subscribe((state) => {
 		}
 	}
 
+	// Tool move controll
 	if (controls)
 		controls.enabled =
 			state.toolState === TOOL.Move &&
 			state.currentLifeCycle === LIFECYCLE.IDLE;
 
+	// ShowGrid
 	gridHelper.visible = state.optionState.showGrid;
-
 	camera.updateProjectionMatrix();
 });
 
@@ -236,6 +245,8 @@ const mousemoveEvent = (e: MouseEvent) => {
 			},
 		});
 	}
+
+	store.setMousePos({ x, y });
 };
 
 const mousedownEvent = (e: MouseEvent) => {
@@ -248,6 +259,15 @@ const mousedownEvent = (e: MouseEvent) => {
 
 const mouseupEvent = (e: MouseEvent) => {
 	if (isMove) isMove = false;
+};
+
+const wheelEvent = (e: WheelEvent) => {
+	store.setZoom(
+		Math.round(
+			store.zoom * (1 + (e.deltaY / Math.abs(e.deltaY) / 6) * -1) * 100
+		) / 100
+	);
+	// camera.zoom;
 };
 
 const dragstartEvent = (e: THREE.Event) => {
@@ -289,7 +309,7 @@ const dragendEvent = (e: THREE.Event) => {
 	});
 };
 
-export const resize = () => {
+const resize = () => {
 	if (!wrapperElem || !renderer) return;
 	Ctx.set(wrapperElem.clientWidth, wrapperElem.clientHeight);
 
@@ -327,6 +347,7 @@ export const createScene = (el: HTMLCanvasElement, wrap: HTMLDivElement) => {
 	canvasElem.addEventListener('mousemove', mousemoveEvent);
 	canvasElem.addEventListener('mousedown', mousedownEvent);
 	canvasElem.addEventListener('mouseup', mouseupEvent);
+	canvasElem.addEventListener('wheel', wheelEvent);
 	window.addEventListener('resize', resize);
 	controls.addEventListener('dragstart', dragstartEvent);
 	controls.addEventListener('dragend', dragendEvent);
