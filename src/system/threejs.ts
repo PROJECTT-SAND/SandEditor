@@ -101,9 +101,16 @@ gridHelper.visible = false;
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
+// selector
+useBoundStore.subscribe((state)  => {
+	// Option fullScreen
+	resize();
+}, A)
+
 useBoundStore.subscribe((state) => {
 	store = state;
 
+	// Set wireframe
 	if (
 		state.currentLifeCycle == LIFECYCLE.RUNNING ||
 		!state.selectedObjectUUID
@@ -119,6 +126,7 @@ useBoundStore.subscribe((state) => {
 		}
 	}
 
+	// Apply objectDatas to scene object
 	for (const uuid in state.objectDatas) {
 		let objData = state.objectDatas[uuid];
 		if (objData.type !== OBJECT_TYPE.Object) continue;
@@ -130,14 +138,18 @@ useBoundStore.subscribe((state) => {
 		obj.visible = objData.visible;
 	}
 
+	// Tool move controll
 	if (controls)
 		controls.enabled =
 			state.toolState === TOOL.Move &&
 			state.currentLifeCycle === LIFECYCLE.IDLE;
-
+    
+    // ShowGrid
 	gridHelper.visible = state.optionState.showGrid;
-	camera.zoom = state.zoom;
-	camera.updateProjectionMatrix();
+
+	// Camera zoom
+	// camera.zoom = state.zoom;
+	// camera.updateProjectionMatrix();
 });
 
 const getObjectByUUID = (uuid: string) => {
@@ -205,6 +217,8 @@ const mousemoveEvent = (e: MouseEvent) => {
 		camera.position.x = posOffset.x;
 		camera.position.y = posOffset.y;
 	}
+
+	store.setMousePos({ x, y })
 };
 
 const mousedownEvent = (e: MouseEvent) => {
@@ -218,6 +232,10 @@ const mousedownEvent = (e: MouseEvent) => {
 const mouseupEvent = (e: MouseEvent) => {
 	if (isMove) isMove = false;
 };
+
+const wheelEvent = (e: WheelEvent) => {
+	store.setZoom(Math.round(store.zoom * (1 + (e.deltaY / Math.abs(e.deltaY) / 6) * -1) *100) / 100)
+}
 
 const dragstartEvent = (e: THREE.Event) => {
 	let uuid = e.object.uuid;
@@ -258,7 +276,7 @@ const dragendEvent = (e: THREE.Event) => {
 	});
 };
 
-export const resize = () => {
+const resize = () => {
 	if (!wrapperElem || !renderer) return;
 	Ctx.set(wrapperElem.clientWidth, wrapperElem.clientHeight);
 
@@ -296,6 +314,7 @@ export const createScene = (el: HTMLCanvasElement, wrap: HTMLDivElement) => {
 	canvasElem.addEventListener('mousemove', mousemoveEvent);
 	canvasElem.addEventListener('mousedown', mousedownEvent);
 	canvasElem.addEventListener('mouseup', mouseupEvent);
+	canvasElem.addEventListener('wheel', wheelEvent)
 	window.addEventListener('resize', resize);
 	controls.addEventListener('dragstart', dragstartEvent);
 	controls.addEventListener('dragend', dragendEvent);
