@@ -144,6 +144,7 @@ export default function Folder() {
             }
 
             {/* Controller */
+            // 반복문 써서 다 꺼내기
               currentOBJ.type == OBJECT_TYPE.Object ?
                 <div className={style.controller}>
                   <span className={style.button_arrow}><ArrowDownSVG /></span>

@@ -64,7 +64,7 @@ const createCodes: StateCreator<codes> = (set) => ({
 	codeFiles: {
 		test: {
 			contents: '',
-			params: {},
+			// params: {},
 		},
 	},
 	setCodeFiles: (filename, data) => {

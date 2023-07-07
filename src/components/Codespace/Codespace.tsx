@@ -75,9 +75,16 @@ export default function WorkSpace() {
   const editorOnChange = (code: string | undefined) => {
     if (!code || selectedWorkMenu == null) return;
 
+    let params = {};
+    let tokens = code.split(' ');
+    let propTokenIndex = tokens.indexOf("_properties")
+
+    if (idx == -1) return;
+    // Error 컴포넌트에 에러발생?
+
     setCodeFiles(workMenu[selectedWorkMenu].fileName, {
       contents: code,
-      params: {}
+      params
     });
   }
 
