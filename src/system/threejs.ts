@@ -1,4 +1,4 @@
-import { SandObject, SandObjectBase } from '@/classes';
+import { SandCamera, SandObject, SandObjectBase, SandScene } from '@/classes';
 import { LIFECYCLE, OBJECT_TYPE, TOOL } from '@/constants';
 import { useBoundStore } from '@/store';
 import * as THREE from 'three';
@@ -36,6 +36,7 @@ class OBJ extends THREE.Mesh {
 }
 
 let store = useBoundStore.getState();
+
 let canvasElem: HTMLCanvasElement;
 let wrapperElem: HTMLDivElement;
 let renderer: THREE.WebGLRenderer;
@@ -103,73 +104,109 @@ gridHelper.visible = false;
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
-// selector
-useBoundStore.subscribe((state) => {
-	// Option fullScreen
-	resize();
-}, A);
-
 useBoundStore.subscribe((state) => {
 	store = state;
-
-	// Set wireframe
-	if (
-		state.currentLifeCycle == LIFECYCLE.RUNNING ||
-		!state.selectedObjectUUID
-	) {
-		setWireframe(0, 0, 0, 0);
-	} else {
-		let obj = getObjectByUUID(state.selectedObjectUUID);
-
-		if (obj) {
-			setWireframe(obj.position.x, obj.position.x, 30, 30);
-		} else {
-			setWireframe(0, 0, 0, 0);
-		}
-	}
-
-	// Apply objectDatas to scene object
-	for (const uuid in state.objectDatas) {
-		let objData = state.objectDatas[uuid];
-
-		camera.zoom = state.zoom;
-		// store.setObjectDatas({
-		// 	...store.objectDatas,
-		// 	[CameraObjectUUID]: {
-		// 		...store.objectDatas[CameraObjectUUID],
-		// 		zoom: state.zoom,
-		// 	},
-		// });
-
-		if (objData.type == OBJECT_TYPE.Object) {
-			let obj = getObjectByUUID(uuid);
-			if (obj == undefined) continue;
-
-			obj.position.x = objData.X;
-			obj.position.y = objData.Y;
-			obj.visible = objData.visible;
-		} else if (objData.type == OBJECT_TYPE.Camera) {
-			camera.position.x = objData.X;
-			camera.position.y = objData.Y;
-			camera.zoom = objData.zoom;
-			camera.fov = objData.fov;
-			camera.near = objData.near;
-			camera.far = objData.far;
-		} else if (objData.type == OBJECT_TYPE.Scene) {
-			// window.threeScene.background = objData.background;
-		}
-	}
-
-	// Tool move controll
-	if (controls)
-		controls.enabled =
-			state.toolState === TOOL.Move &&
-			state.currentLifeCycle === LIFECYCLE.IDLE;
-
-	// ShowGrid
-	gridHelper.visible = state.optionState.showGrid;
-	camera.updateProjectionMatrix();
 });
+
+// Window resize
+useBoundStore.subscribe(
+	(state) => state.optionState.fullScreen,
+	() => {
+		setTimeout(() => {
+			resize();
+		}, 10);
+	}
+);
+
+// ShowGrid
+useBoundStore.subscribe(
+	(state) => state.optionState.showGrid,
+	(showGrid) => {
+		gridHelper.visible = showGrid;
+		camera.updateProjectionMatrix();
+	}
+);
+
+// Tool move controll
+useBoundStore.subscribe(
+	(state) => {
+		return {
+			toolState: state.toolState,
+			currentLifeCycle: state.currentLifeCycle,
+		};
+	},
+	(state) => {
+		if (controls)
+			controls.enabled =
+				state.toolState === TOOL.Move &&
+				state.currentLifeCycle === LIFECYCLE.IDLE;
+	}
+);
+
+// Set wireframe
+useBoundStore.subscribe(
+	(state) => {
+		return {
+			selectedObjectUUID: state.selectedObjectUUID,
+			currentLifeCycle: state.currentLifeCycle,
+		};
+	},
+	(state) => {
+		if (
+			state.currentLifeCycle == LIFECYCLE.RUNNING ||
+			!state.selectedObjectUUID
+		) {
+			setWireframe(0, 0, 0, 0);
+		} else {
+			let obj = getObjectByUUID(state.selectedObjectUUID);
+
+			if (obj) {
+				setWireframe(obj.position.x, obj.position.x, 30, 30);
+			} else {
+				setWireframe(0, 0, 0, 0);
+			}
+		}
+	}
+);
+
+// Apply objectDatas to scene object
+useBoundStore.subscribe(
+	(state) => {
+		return {
+			selectedObjectUUID: state.selectedObjectUUID,
+			objectDatas: state.objectDatas,
+		};
+	},
+	(state) => {
+		for (const uuid in state.objectDatas) {
+			let objData = state.objectDatas[uuid];
+
+			if (objData.type == OBJECT_TYPE.Object) {
+				if (!(objData instanceof SandObject)) return;
+
+				let obj = getObjectByUUID(uuid);
+				if (obj === undefined) continue;
+
+				obj.position.x = objData.X;
+				obj.position.y = objData.Y;
+				obj.visible = objData.visible;
+			} else if (objData.type == OBJECT_TYPE.Camera) {
+				if (!(objData instanceof SandCamera)) return;
+
+				camera.position.x = objData.X;
+				camera.position.y = objData.Y;
+				camera.zoom = objData.zoom;
+				camera.fov = objData.fov;
+				camera.near = objData.near;
+				camera.far = objData.far;
+			} else if (objData.type == OBJECT_TYPE.Scene) {
+				if (!(objData instanceof SandScene)) return;
+
+				// window.threeScene.background = objData.background;
+			}
+		}
+	}
+);
 
 const getObjectByUUID = (uuid: string) => {
 	return window.threeScene.getObjectByProperty('uuid', uuid);
@@ -228,7 +265,7 @@ const mousemoveEvent = (e: MouseEvent) => {
 		posOffset
 			.divide(Ctx)
 			.multiply(cameraFov)
-			.divideScalar(store.zoom)
+			.divideScalar(camera.zoom)
 			.add(prevCameraPos);
 
 		store.setCameraPos({ x: posOffset.x, y: posOffset.y });
@@ -246,7 +283,10 @@ const mousemoveEvent = (e: MouseEvent) => {
 		});
 	}
 
-	store.setMousePos({ x, y });
+	store.setMousePos({
+		x: posOffset.x + ((e.offsetX - Ctx.x / 2) / Ctx.x) * cameraFov.x,
+		y: posOffset.y + (-(e.offsetY - Ctx.y / 2) / Ctx.y) * cameraFov.y,
+	});
 };
 
 const mousedownEvent = (e: MouseEvent) => {
@@ -262,12 +302,23 @@ const mouseupEvent = (e: MouseEvent) => {
 };
 
 const wheelEvent = (e: WheelEvent) => {
-	store.setZoom(
+	if (!CameraObjectUUID) return;
+
+	camera.zoom =
 		Math.round(
-			store.zoom * (1 + (e.deltaY / Math.abs(e.deltaY) / 6) * -1) * 100
-		) / 100
-	);
-	// camera.zoom;
+			camera.zoom * (1 + (e.deltaY / Math.abs(e.deltaY) / 6) * -1) * 100
+		) / 100;
+	camera.updateProjectionMatrix();
+
+	store.setObjectDatas({
+		...store.objectDatas,
+		[CameraObjectUUID]: {
+			...store.objectDatas[CameraObjectUUID],
+			zoom: camera.zoom,
+		},
+	});
+
+	store.setZoom(camera.zoom);
 };
 
 const dragstartEvent = (e: THREE.Event) => {
@@ -275,7 +326,7 @@ const dragstartEvent = (e: THREE.Event) => {
 	let obj = getObjectByUUID(uuid);
 	let objData = store.objectDatas[uuid];
 
-	if (!obj) return;
+	if (!obj || !(objData instanceof SandObject)) return;
 
 	e.object.onDragStart();
 	store.setSelectedObjectUUID(uuid);
@@ -368,14 +419,24 @@ const initObjects = () => {
 	}
 };
 
-export const addSceneObject = (object: SandObjectBase) => {
+export const addSceneObject = (object: SandScene | SandCamera | SandObject) => {
+	if (object.type == OBJECT_TYPE.Scene) {
+		if (!(object instanceof SandScene)) return;
+
+		SceneObjectUUID = object.UUID;
+		return;
+	}
+	if (object.type == OBJECT_TYPE.Camera) {
+		if (!(object instanceof SandCamera)) return;
+
+		CameraObjectUUID = object.UUID;
+		return;
+	}
 	if (object.type == OBJECT_TYPE.Object) {
+		if (!(object instanceof SandObject)) return;
+
 		let newObj = new OBJ(object.X, object.Y, object.UUID, object.visible);
 		window.threeScene.add(newObj);
-	} else if (object.type == OBJECT_TYPE.Scene) {
-		SceneObjectUUID = object.UUID;
-	} else if (object.type == OBJECT_TYPE.Camera) {
-		CameraObjectUUID = object.UUID;
 	}
 };
 
