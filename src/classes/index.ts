@@ -56,7 +56,7 @@ export class SandScene extends SandObjectBase {
 export class SandObject extends SandObjectBase {
 	X: number;
 	Y: number;
-	visible?: boolean;
+	visible: boolean = true;
 	controller: string[];
 
 	constructor(
@@ -74,8 +74,6 @@ export class SandObject extends SandObjectBase {
 
 		if (visible) {
 			this.visible = visible;
-		} else {
-			this.visible = true;
 		}
 
 		addSceneObject(this);
