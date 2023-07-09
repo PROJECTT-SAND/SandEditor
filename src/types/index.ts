@@ -1,4 +1,4 @@
-import { SandObject, SandObjectBase } from '@/classes';
+import { SandCamera, SandObject, SandObjectBase, SandScene } from '@/classes';
 import { LOG_KIND } from '@/constants';
 
 export interface viewerController {
@@ -10,10 +10,14 @@ export interface viewerController {
 		showGrid: boolean;
 		fullScreen: boolean;
 	};
-	zoom: number;
 	cameraPos: { x: number; y: number };
-	setZoom: (zoom: number) => void;
+	mousePos: { x: number; y: number };
+	zoom: number;
+	selectedObjectUUID: string | null;
+	setSelectedObjectUUID: (value: string | null) => void;
 	setCameraPos: (value: { x: number; y: number }) => void;
+	setMousePos: (value: { x: number; y: number }) => void;
+	setZoom: (value: number) => void;
 	setMouseIsEnterViewer: (value: boolean) => void;
 	setCurrentLifeCycle: (value: number) => void;
 	setToolState: (value: number) => void;
@@ -21,7 +25,7 @@ export interface viewerController {
 }
 
 export interface objects {
-	objectDatas: { [uuid: string]: SandObjectBase | SandObject };
+	objectDatas: { [uuid: string]: SandObject | SandCamera | SandScene };
 	objectTree: objectTreeNode[];
 	setObjectDatas: (data: { [uuid: string]: SandObjectBase }) => void;
 	setObjectTree: (treeData: objectTreeNode[]) => void;
@@ -68,11 +72,6 @@ export interface codes {
 export interface UI {
 	isSettingsOpen: boolean;
 	setIsSettingsOpen: (value: boolean) => void;
-}
-
-export interface selectedObject {
-	selectedObjectUUID: string | null;
-	setSelectedObjectUUID: (value: string | null) => void;
 }
 
 export interface objectTreeNode {

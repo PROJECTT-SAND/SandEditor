@@ -4,7 +4,7 @@ import { useBoundStore } from '@/store'
 import { createScene } from '@/system/threejs';
 
 export default function Viewer() {
-  const { mouseIsEnterViewer, setMouseIsEnterViewer, zoom, setZoom, cameraPos, optionState, setOptionState } = useBoundStore();
+  const { mouseIsEnterViewer, setMouseIsEnterViewer, zoom, setZoom, cameraPos, mousePos, optionState, setOptionState } = useBoundStore();
   const canvasElem = useRef<HTMLCanvasElement>(null);
   const wrapperElem = useRef<HTMLDivElement>(null);
   const bgElem = useRef<HTMLDivElement>(null);
@@ -44,6 +44,8 @@ export default function Viewer() {
           <div className={style.cameraPos}>
             <div className={style.prop}><div className={style.propName}>Camera X :</div>{Math.round(cameraPos.x * 100) / 100}</div>
             <div className={style.prop}><div className={style.propName}>Camera Y :</div>{Math.round(cameraPos.y * 100) / 100}</div>
+            <div className={style.prop}><div className={style.propName}>Mouse X :</div>{Math.round(mousePos.x * 100) / 100}</div>
+            <div className={style.prop}><div className={style.propName}>Mouse Y :</div>{Math.round(mousePos.y * 100) / 100}</div>
             <div className={style.prop}><div className={style.propName}>Zoom :</div>{zoom} x</div>
           </div>
           : ''
