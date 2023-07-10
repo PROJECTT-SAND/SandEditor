@@ -75,12 +75,13 @@ export default function WorkSpace() {
   const editorOnChange = (code: string | undefined) => {
     if (!code || selectedWorkMenu == null) return;
 
-    let params = {};
+    let args = {};
     let tokens = code.split(' ');
     let propTokenIndex = tokens.indexOf("_properties")
     let endBucketIndex = tokens.indexOf("}");
     let aaaa;
     let json;
+    let newJson;
 
     if (tokens[propTokenIndex + 1] == "=" && tokens[propTokenIndex + 2] == "{") {
        aaaa = tokens.slice(propTokenIndex + 2, endBucketIndex).join(" ");
@@ -91,7 +92,17 @@ export default function WorkSpace() {
     json = JSON.pharse(aaaa);
 
     for(let key in json) {
-      
+      let value = json[key];
+      let func = value.match(/()()()/g)[0];
+      let funcArgs = value.match(/(()())/g)[0].split(',');
+
+      switch (func) {
+        case 'newSliderProp':
+          if(props.length < 2) return;
+
+          args[key] = new sliderArg(...funcArgs);
+          break;
+      }
     }
 
     if (idx == -1) return;

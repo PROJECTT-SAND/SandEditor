@@ -143,6 +143,8 @@ useBoundStore.subscribe(
 	}
 );
 
+// 테스트해봐야됨
+
 // Set wireframe
 useBoundStore.subscribe(
 	(state) => {
@@ -181,8 +183,8 @@ useBoundStore.subscribe(
 		for (const uuid in state.objectDatas) {
 			let objData = state.objectDatas[uuid];
 
-			if (objData.type == OBJECT_TYPE.Object) {
-				if (!(objData instanceof SandObject)) return;
+			//if (objData.type == OBJECT_TYPE.Object) {
+				if ((objData instanceof SandObject)) {
 
 				let obj = getObjectByUUID(uuid);
 				if (obj === undefined) continue;
@@ -190,8 +192,8 @@ useBoundStore.subscribe(
 				obj.position.x = objData.X;
 				obj.position.y = objData.Y;
 				obj.visible = objData.visible;
-			} else if (objData.type == OBJECT_TYPE.Camera) {
-				if (!(objData instanceof SandCamera)) return;
+			//} else if (objData.type == OBJECT_TYPE.Camera) {
+				} else if ((objData instanceof SandCamera)) {
 
 				camera.position.x = objData.X;
 				camera.position.y = objData.Y;
@@ -199,8 +201,8 @@ useBoundStore.subscribe(
 				camera.fov = objData.fov;
 				camera.near = objData.near;
 				camera.far = objData.far;
-			} else if (objData.type == OBJECT_TYPE.Scene) {
-				if (!(objData instanceof SandScene)) return;
+			//} else if (objData.type == OBJECT_TYPE.Scene) {
+				} else if ((objData instanceof SandScene)) {
 
 				// window.threeScene.background = objData.background;
 			}
@@ -310,12 +312,15 @@ const wheelEvent = (e: WheelEvent) => {
 		) / 100;
 	camera.updateProjectionMatrix();
 
+	let tmp = store.objectDatas[CameraObjectUUID];
+	if(!(tmp instants SandCamera)) return;
+ 
+	tmp.zoom = camera.zoom;
+
+	// 타입 에러, 이게 SandCamera인지 어케알음ㅋ
 	store.setObjectDatas({
 		...store.objectDatas,
-		[CameraObjectUUID]: {
-			...store.objectDatas[CameraObjectUUID],
-			zoom: camera.zoom,
-		},
+		[CameraObjectUUID]: tmp,
 	});
 
 	store.setZoom(camera.zoom);
@@ -419,21 +424,21 @@ const initObjects = () => {
 	}
 };
 
-export const addSceneObject = (object: SandScene | SandCamera | SandObject) => {
-	if (object.type == OBJECT_TYPE.Scene) {
-		if (!(object instanceof SandScene)) return;
-
+// Switch 문
+export const addSceSandObject: {object: T} <T extends  SandObjectTypes > = (object) => {
+	// if (object.type == OBJECT_TYPE.Scene) {
+		if ((T is SandScene)) {
 		SceneObjectUUID = object.UUID;
 		return;
 	}
-	if (object.type == OBJECT_TYPE.Camera) {
-		if (!(object instanceof SandCamera)) return;
+	// if (object.type == OBJECT_TYPE.Camera) {
+		if ((T is SandCamera)) {
 
 		CameraObjectUUID = object.UUID;
 		return;
 	}
-	if (object.type == OBJECT_TYPE.Object) {
-		if (!(object instanceof SandObject)) return;
+	// if (object.type == OBJECT_TYPE.Object) {
+		if ((T is SandObject)) {
 
 		let newObj = new OBJ(object.X, object.Y, object.UUID, object.visible);
 		window.threeScene.add(newObj);
