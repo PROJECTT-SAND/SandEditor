@@ -4,6 +4,7 @@ import { addSceneObject } from '@/system/threejs';
 import { v4 as uuidv4 } from 'uuid';
 
 // 클래스 타입 보고 처리하면 되니까 type는 그냥 집어 치자
+// https://stackoverflow.com/questions/69831102/multiple-type-predicates-in-typescript
 export class SandObjectBase {
 	name: string;
 	// type: OBJECT_TYPE;

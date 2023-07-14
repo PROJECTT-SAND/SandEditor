@@ -72,10 +72,20 @@ export default function WorkSpace() {
   const monaco = useMonaco();
   const language = "typescript";
 
+  class sliderArg {
+    let start: number;
+    let end: number;
+
+    constructor(start: number, end: number) {
+      this.start = start;
+      this.end = end;
+    }
+  }
+
   const editorOnChange = (code: string | undefined) => {
     if (!code || selectedWorkMenu == null) return;
 
-    let args = {};
+    let params = {};
     let tokens = code.split(' ');
     let propTokenIndex = tokens.indexOf("_properties")
     let endBucketIndex = tokens.indexOf("}");
@@ -84,29 +94,23 @@ export default function WorkSpace() {
     let newJson;
 
     if (tokens[propTokenIndex + 1] == "=" && tokens[propTokenIndex + 2] == "{") {
-       aaaa = tokens.slice(propTokenIndex + 2, endBucketIndex).join(" ");
+       aaaa = tokens.slice(propTokenIndex + 3, endBucketIndex).join(" ");
        aaaa.split(',');
-       aaaa.replace(asdd, a);
     }
 
-    json = JSON.pharse(aaaa);
-
-    for(let key in json) {
-      let value = json[key];
-      let func = value.match(/()()()/g)[0];
-      let funcArgs = value.match(/(()())/g)[0].split(',');
+    for(let item of aaaa) {
+      let label = item.match(/\w+(?=:\s)/g)[0];
+      let func = item.match(/(?<=:)[^(]+/g)[0];
+      let funcArgs = item.match(/(?<=\()[^)]+/g)[0].split(',');
 
       switch (func) {
         case 'newSliderProp':
           if(props.length < 2) return;
 
-          args[key] = new sliderArg(...funcArgs);
+          params[label] = new sliderArg(...funcArgs);
           break;
       }
     }
-
-    if (idx == -1) return;
-    // Error 컴포넌트에 에러발생?
 
     setCodeFiles(workMenu[selectedWorkMenu].fileName, {
       contents: code,
