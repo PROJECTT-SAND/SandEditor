@@ -22,6 +22,7 @@ import { setCameraPos } from '@/system/threejs';
 export default function Folder() {
   const { objectDatas, setObjectDatas, selectedObjectUUID, codeFiles } = useBoundStore();
   const [currentOBJ, setCurrentOBJ] = useState<SandObject | SandCamera | SandScene>();
+  const [isObject, setIsObject] = useState<boolean>();
   const [addDropdownVisible, setAddDropdownVisible] = useState(false);
   const [controllerList, setControllerList] = useState<string[]>([]);
   const ignorePropsName = ['type', 'parentUUID', 'UUID', 'name', 'controller', 'visible'];
@@ -30,6 +31,7 @@ export default function Folder() {
     if (!selectedObjectUUID) return;
 
     setCurrentOBJ(objectDatas[selectedObjectUUID]);
+    setIsObject(objectDatas[selectedObjectUUID].type instanceof SandObject);
   }, [selectedObjectUUID, objectDatas]);
 
   const onAddControllerClick = () => {
@@ -142,7 +144,7 @@ export default function Folder() {
                   onInput={(e) => { setObjectParam("name", e.currentTarget.value) }}
                 ></input>
               </div>
-              {currentOBJ.type == OBJECT_TYPE.Object ?
+              {isObject ?
                 <div className={style.objectInfo_line}>
                   <button className={style.btn_goto} title='해당 위치로 이동하기' onClick={gotoObject}><TargetSVG /></button>
                   <button className={style.btn_see} title={currentOBJ.visible ? '숨기기' : '보이기'} onClick={setVisible}>
@@ -179,17 +181,35 @@ export default function Folder() {
             }
 
             {/* Controller */
-              // 반복문 써서 다 꺼내기
-              currentOBJ.type == OBJECT_TYPE.Object ?
-                currentOBJ.controller.map((controller, index) => {
+              isObject ?
+                currentOBJ.controller.map((controllerName, index1) => {
+                  let params = codeFiles[controllerName].params;
+
                   return (
-                    <div className={style.controller} key={index}>
+                    <div className={style.controller} key={index1}>
                       <span className={style.button_arrow}><ArrowDownSVG /></span>
                       <input className={style.controller_check} type="checkbox"></input>
                       <span className={style.controller_icon}><ControllerSVG /></span>
-                      <div className={style.controller_label}>{controller}</div>
+                      <div className={style.controller_label}>{controllerName}</div>
                     </div>
                   )
+
+                  Object.entries(params).map((param, index2) => {
+                    return (
+                      <div className={style.property} key={index1 + '-' + index2}>
+                        <div className={style.property_label}>{param.label}</div>
+                        <div className={style.property_input_wrap}>
+                          {param.type == ARG_TYPE.Number ?
+                            <input type="number" value={param.value} onKeyDown={enterProperty} onInput={(e) => { setObjectParam(param.label, Number(e.currentTarget.value)) }}></input>
+                            : param.type == ARG_TYPE.Boolean ?
+                              <input type="checkbox" checked={param.value} className={style.property_input_checkbox} onChange={(e) => { setObjectParam(param.label, e.currentTarget.checked) }}></input>
+                              : param.type == ARG_TYPE.String ?
+                                <input type="text" value={param.value} onKeyDown={enterProperty} onInput={(e) => { setObjectParam(param.label, e.currentTarget.value) }}></input>
+                                : ''}
+                        </div>
+                      </div>
+                    )
+                  })
                 })
                 : ''
             }

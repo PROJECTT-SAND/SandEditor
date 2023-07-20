@@ -135,8 +135,85 @@ export default function WorkSpace() {
 
   function EditorWrap() {
     const { selectedWorkMenu } = useBoundStore();
+    const monaco = useMonaco();
+    const language = "typescript";
 
-    return (
+    class sliderArg {
+    let start: number;
+    let end: number;
+
+    constructor(start: number, end: number) {
+      this.start = start;
+      this.end = end;
+    }
+  }
+
+  const editorOnChange = (code: string | undefined) => {
+    if (!code || selectedWorkMenu == null) return;
+
+    let params = {};
+    let tokens = code.split(' ');
+    let propTokenIndex = tokens.indexOf("_properties")
+    let endBucketIndex = tokens.indexOf("}");
+    let aaaa;
+    let json;
+    let newJson;
+
+    if (tokens[propTokenIndex + 1] == "=" && tokens[propTokenIndex + 2] == "{") {
+      aaaa = tokens.slice(propTokenIndex + 3, endBucketIndex).join(" ");
+      aaaa.split(',');
+    }
+
+    for (let item of aaaa) {
+      let label = item.match(/\w+(?=:\s)/g)[0];
+      let func = item.match(/(?<=:)[^(]+/g)[0];
+      let funcArgs = item.match(/(?<=\()[^)]+/g)[0].split(',');
+
+      switch (func) {
+        case 'newSliderProp':
+          if (props.length < 2) return;
+
+          params[label] = new sliderArg(...funcArgs);
+          break;
+      }
+    }
+
+    setCodeFiles(workMenu[selectedWorkMenu].fileName, {
+      contents: code,
+      params
+    });
+  }
+
+  useEffect(() => {
+    if (!monaco) return;
+
+    monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
+      target: monaco.languages.typescript.ScriptTarget.Latest,
+      allowNonTsExtensions: true,
+      moduleResolution: monaco.languages.typescript.ModuleResolutionKind.NodeJs,
+      module: monaco.languages.typescript.ModuleKind.CommonJS,
+      noEmit: true,
+      typeRoots: ["node_modules/@types"]
+    })
+
+    monaco.languages.typescript.typescriptDefaults.setExtraLibs([
+      // { content: Declaration_process, filePath: 'file:///node_modules/@types/process/index.d.ts' },
+      { content: Declaration_types },
+    ])
+    monaco.editor.defineTheme('sandEditor', {
+      base: 'vs-dark',
+      inherit: true,
+      rules: [],
+      colors: {
+        "editor.background": scssVariblesJson.codespace_color,
+      }
+    })
+  }, [monaco])
+
+  return (
+    <div className={style.workSpace}>
+      <WorkMenu />
+
       <div className={style.editor_wrap}>
         {(selectedWorkMenu !== -1) ?
           <Editor
@@ -157,13 +234,13 @@ export default function WorkSpace() {
           </div>
         }
       </div>
-    )
+      )
   }
 
-  return (
-    <div className={style.workSpace}>
-      <WorkMenu />
-      <EditorWrap />
-    </div>
-  );
+      return (
+      <div className={style.workSpace}>
+        <WorkMenu />
+        <EditorWrap />
+      </div>
+      );
 }

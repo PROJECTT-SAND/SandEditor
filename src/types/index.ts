@@ -1,6 +1,9 @@
 import { SandCamera, SandObject, SandObjectBase, SandScene } from '@/classes';
 import { LOG_KIND } from '@/constants';
 
+export type sandObjectTypes = (SandObject | SandScene | SandCamera)
+
+// 이걸 꼭 이렇게 타입을 개별 파일로 빼야하나?
 export interface viewerController {
 	mouseIsEnterViewer: boolean;
 	isGrid: boolean;
@@ -56,7 +59,7 @@ export interface codespace {
 
 export interface codeFile {
 	contents: string;
-	params: { [key: string]: { type: number; value: any } };
+	params: { type: number; label: string; value: any }[];
 }
 
 export interface codes {
