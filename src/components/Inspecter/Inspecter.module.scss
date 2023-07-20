@@ -204,15 +204,39 @@
       margin: 0px 12px 0px 20px;
     }
 
-    .btnAdd {
-      margin: 15px 30px;
-      padding: 5px 0px;
-      border-radius: 5px;
+    .addController_wrap {
+      margin: 15px 20px;
 
-      background: $base3_color;
-      border: 1px solid $topbar_border_color;
-      color: #fff;
-      cursor: pointer;
+      .btnAdd {
+        width: 100%;
+        padding: 5px 0px;
+        border-radius: 5px;
+
+        background: $base3_color;
+        border: 1px solid $topbar_border_color;
+        color: #fff;
+        cursor: pointer;
+      }
+
+      .addController_dropdown {
+        border-radius: 5px;
+        display: flex;
+        flex-direction: column;
+        font-size: 13px;
+        max-height: 300px;
+        overflow-y: auto;
+
+        background: $base3_color;
+        border: 1px solid $topbar_border_color;
+
+        .addController_dropdown_item {
+          padding: 4px 25px;
+
+          &:hover {
+            background-color: #0002;
+          }
+        }
+      }
     }
   }
 }

@@ -16,37 +16,57 @@ import { ReactComponent as LockOffSVG } from '@assets/image/icon/inspecter/lock_
 import { ReactComponent as ArrowDownSVG } from '@assets/image/icon/object/arrow_down.svg';
 import { ReactComponent as ControllerSVG } from '@assets/image/icon/inspecter/controller.svg';
 import { useEffect, useState } from 'react';
-import { SandObjectBase } from '@/classes';
+import { SandCamera, SandObject, SandObjectBase, SandScene } from '@/classes';
 import { setCameraPos } from '@/system/threejs';
 
 export default function Folder() {
   const { objectDatas, setObjectDatas, selectedObjectUUID, codeFiles } = useBoundStore();
-  const [currentOBJ, setCurrentOBJ] = useState<SandObjectBase>();
+  const [currentOBJ, setCurrentOBJ] = useState<SandObject | SandCamera | SandScene>();
+  const [addDropdownVisible, setAddDropdownVisible] = useState(false);
+  const [controllerList, setControllerList] = useState<string[]>([]);
   const ignorePropsName = ['type', 'parentUUID', 'UUID', 'name', 'controller', 'visible'];
 
   useEffect(() => {
     if (!selectedObjectUUID) return;
+
     setCurrentOBJ(objectDatas[selectedObjectUUID]);
   }, [selectedObjectUUID, objectDatas]);
+
+  const onAddControllerClick = () => {
+    setAddDropdownVisible(!addDropdownVisible);
+
+    if (!addDropdownVisible === false) return;
+    if (currentOBJ == null) return;
+    if (!(currentOBJ instanceof SandObject)) return;
+
+    let controllerName = Object.keys(codeFiles);
+    let result = controllerName.filter(x => { return !(currentOBJ.controller.includes(x)) })
+
+    setControllerList(result);
+  }
 
   const setObjectParam = (key: string, value: any) => {
     if (selectedObjectUUID == null || currentOBJ == null) return;
 
-    let tmp = { ...currentOBJ };
+    let tmp = currentOBJ;
     tmp[key as keyof Object] = value;
+
     setObjectDatas({ ...objectDatas, [selectedObjectUUID]: tmp });
   }
 
   const setVisible = () => {
     if (selectedObjectUUID == null || currentOBJ == null) return;
+    if (!(currentOBJ instanceof SandObject)) return;
 
-    let tmp = { ...currentOBJ };
+    let tmp = currentOBJ;
     tmp.visible = !tmp.visible;
     setObjectDatas({ ...objectDatas, [selectedObjectUUID]: tmp });
   }
 
   const gotoObject = () => {
     if (currentOBJ == null) return;
+    if (!(currentOBJ instanceof SandObject)) return;
+
     setCameraPos(currentOBJ.X, currentOBJ.Y);
   }
 
@@ -54,7 +74,7 @@ export default function Folder() {
 
   }
 
-  const enterProperty = (e) => {
+  const enterProperty = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && e.currentTarget.value !== '') {
     }
   }
@@ -66,6 +86,16 @@ export default function Folder() {
     // let tmp = { ...objectDatas };
     // delete tmp.selectedObjectUUID;
     // setObjectDatas(tmp);
+  }
+
+  const addController = (name: string) => {
+    if (!selectedObjectUUID) return;
+    if (!(currentOBJ instanceof SandObject)) return;
+
+    let tmp = currentOBJ;
+    tmp.controller.push(name);
+    setObjectDatas({ ...objectDatas, [selectedObjectUUID]: tmp });
+    setAddDropdownVisible(false);
   }
 
   const ObjectIcon = () => {
@@ -149,20 +179,39 @@ export default function Folder() {
             }
 
             {/* Controller */
-            // 반복문 써서 다 꺼내기
+              // 반복문 써서 다 꺼내기
               currentOBJ.type == OBJECT_TYPE.Object ?
-                <div className={style.controller}>
-                  <span className={style.button_arrow}><ArrowDownSVG /></span>
-                  <input className={style.controller_check} type="checkbox"></input>
-                  <span className={style.controller_icon}><ControllerSVG /></span>
-                  <div className={style.controller_label}>asdf.sand</div>
-                </div>
+                currentOBJ.controller.map((controller, index) => {
+                  return (
+                    <div className={style.controller} key={index}>
+                      <span className={style.button_arrow}><ArrowDownSVG /></span>
+                      <input className={style.controller_check} type="checkbox"></input>
+                      <span className={style.controller_icon}><ControllerSVG /></span>
+                      <div className={style.controller_label}>{controller}</div>
+                    </div>
+                  )
+                })
                 : ''
             }
 
             {/* Add Controller */
               currentOBJ.type == OBJECT_TYPE.Object ?
-                <button className={style.btnAdd}>Add Controller</button>
+                <div className={style.addController_wrap}>
+                  <button className={style.btnAdd} onClick={onAddControllerClick}>Add Controller</button>
+                  {
+                    addDropdownVisible ?
+                      <div className={style.addController_dropdown}>
+                        {
+                          controllerList.map((controller, index) => {
+                            return (
+                              <div className={style.addController_dropdown_item} key={index} onClick={() => { addController(controller); }}>{controller}</div>
+                            )
+                          })
+                        }
+                      </div>
+                      : ''
+                  }
+                </div>
                 : ''
             }
           </div>

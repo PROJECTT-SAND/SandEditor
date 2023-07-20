@@ -1,28 +1,91 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Editor, { OnChange, useMonaco } from "@monaco-editor/react";
 import style from "./Codespace.module.scss";
 import { useBoundStore } from "@/store";
-import { file } from '@/types'
 import Declaration_types from '@/types/sandeditor/types.d.ts?raw';
+import scssVaribles from '@assets/scss/_variables.scss'
 
 import { ReactComponent as CloseSVG } from '@assets/image/icon/codespace/close.svg';
 import { ReactComponent as IconSVG } from '@assets/image/icon_full.svg';
 
-import scssVaribles from '@assets/scss/_variables.scss'
-
 export default function WorkSpace() {
-  const { codeFiles, setCodeFiles, workMenu, setWorkMenu, selectedWorkMenu, setSelectedWorkMenu } = useBoundStore();
+  let [scssVariblesJson, setScssVariblesJson] = useState<{ [key: string]: string }>();
 
-  let tmp = scssVaribles.replace(':export ', '');
-  let scssLabel = tmp.match(/\w+(?=:\s)/g);
-  let scssValue = tmp.match(/(?<=: )[^;]+(?=;)/g);
-  let scssVariblesJson: { [key: string]: string } = {};
+  const monaco = useMonaco();
+  const language = "typescript";
 
-  scssLabel?.forEach((label, index) => {
-    scssVariblesJson[label] = scssValue![index];
-  })
+  const editorOnChange = (code: string | undefined) => {
+    const { setCodeFiles, workMenu, selectedWorkMenu } = useBoundStore();
+
+    if (!code || selectedWorkMenu == null) return;
+
+    setCodeFiles(workMenu[selectedWorkMenu].fileName, {
+      contents: code,
+      params: {}
+    });
+
+    let tokens = code.replaceAll('\n', ' ').replaceAll('\r', '').split(' ').filter((value) => value !== '');
+    let propTokenIndex = tokens.indexOf("_properties")
+    let endBucketIndex = tokens.indexOf("}");
+    let aaaa;
+    let json: any = {};
+
+    if (propTokenIndex === -1 || endBucketIndex === -1 || tokens[propTokenIndex + 1] !== "=" || tokens[propTokenIndex + 2] !== "{") return;
+
+    aaaa = tokens.slice(propTokenIndex + 3, endBucketIndex).join(" ").split(',');
+    aaaa.forEach((textLine) => {
+      let text = textLine.trim();
+      let key = text.match(/(?<=^)(.*?)(?=:)/g);
+      let value = text.match(/(?<=:)(.*?)(?=$)/g);
+
+      if (!key || !value) return;
+
+      json[key[0].trim()] = value[0].trim();
+    })
+  }
+
+  useEffect(() => {
+    let tmp = scssVaribles.replace(':export ', '');
+    let value: any = {};
+    let scssLabel = tmp.match(/\w+(?=:\s)/g);
+    let scssValue = tmp.match(/(?<=: )[^;]+(?=;)/g);
+
+    scssLabel?.forEach((label, index) => {
+      value[label] = scssValue![index];
+    })
+
+    setScssVariblesJson(value);
+  }, []);
+
+  useEffect(() => {
+    if (!monaco || !scssVariblesJson) return;
+
+    monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
+      target: monaco.languages.typescript.ScriptTarget.Latest,
+      allowNonTsExtensions: true,
+      moduleResolution: monaco.languages.typescript.ModuleResolutionKind.NodeJs,
+      module: monaco.languages.typescript.ModuleKind.CommonJS,
+      noEmit: true,
+      typeRoots: ["node_modules/@types"]
+    })
+
+    monaco.languages.typescript.typescriptDefaults.setExtraLibs([
+      // { content: Declaration_process, filePath: 'file:///node_modules/@types/process/index.d.ts' },
+      { content: Declaration_types },
+    ])
+    monaco.editor.defineTheme('sandEditor', {
+      base: 'vs-dark',
+      inherit: true,
+      rules: [],
+      colors: {
+        "editor.background": scssVariblesJson.codespace_color,
+      }
+    })
+  }, [monaco, scssVariblesJson])
 
   function WorkMenu() {
+    const { workMenu, setWorkMenu, selectedWorkMenu, setSelectedWorkMenu } = useBoundStore();
+
     const closeWorkMenu = (index: number) => {
       if (selectedWorkMenu === -1) return;
 
@@ -56,83 +119,24 @@ export default function WorkSpace() {
             key={i}
             onClick={(e) => { selectWorkMenu(e, i) }}
           >
-            <span>
+            <span className={style.menuItem_name}>
               <span className={style.menuItemContent}>{fileName}</span>
               .
               {extension}
             </span>
 
             <div className={style.close} onClick={() => { closeWorkMenu(i) }}><CloseSVG /></div>
+            {/* <div className={style.menuItem_border}></div> */}
           </div>
         ))}
       </div>
     );
   }
 
-  const monaco = useMonaco();
-  const language = "typescript";
+  function EditorWrap() {
+    const { selectedWorkMenu } = useBoundStore();
 
-  const editorOnChange = (code: string | undefined) => {
-    if (!code || selectedWorkMenu == null) return;
-
-    let params = {};
-    let tokens = code.split(' ');
-    let propTokenIndex = tokens.indexOf("_properties")
-    let endBucketIndex = tokens.indexOf("}");
-    let aaaa;
-    let json;
-
-    if (tokens[propTokenIndex + 1] == "=" && tokens[propTokenIndex + 2] == "{") {
-       aaaa = tokens.slice(propTokenIndex + 2, endBucketIndex).join(" ");
-       aaaa.split(',');
-       aaaa.replace(asdd, a);
-    }
-
-    json = JSON.pharse(aaaa);
-
-    for(let key in json) {
-      
-    }
-
-    if (idx == -1) return;
-    // Error 컴포넌트에 에러발생?
-
-    setCodeFiles(workMenu[selectedWorkMenu].fileName, {
-      contents: code,
-      params
-    });
-  }
-
-  useEffect(() => {
-    if (!monaco) return;
-
-    monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
-      target: monaco.languages.typescript.ScriptTarget.Latest,
-      allowNonTsExtensions: true,
-      moduleResolution: monaco.languages.typescript.ModuleResolutionKind.NodeJs,
-      module: monaco.languages.typescript.ModuleKind.CommonJS,
-      noEmit: true,
-      typeRoots: ["node_modules/@types"]
-    })
-
-    monaco.languages.typescript.typescriptDefaults.setExtraLibs([
-      // { content: Declaration_process, filePath: 'file:///node_modules/@types/process/index.d.ts' },
-      { content: Declaration_types },
-    ])
-    monaco.editor.defineTheme('sandEditor', {
-      base: 'vs-dark',
-      inherit: true,
-      rules: [],
-      colors: {
-        "editor.background": scssVariblesJson.codespace_color,
-      }
-    })
-  }, [monaco])
-
-  return (
-    <div className={style.workSpace}>
-      <WorkMenu />
-
+    return (
       <div className={style.editor_wrap}>
         {(selectedWorkMenu !== -1) ?
           <Editor
@@ -153,6 +157,13 @@ export default function WorkSpace() {
           </div>
         }
       </div>
+    )
+  }
+
+  return (
+    <div className={style.workSpace}>
+      <WorkMenu />
+      <EditorWrap />
     </div>
   );
 }

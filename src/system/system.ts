@@ -1,6 +1,7 @@
 import { EventEmitter } from '@/classes';
 import { ProcessEvent, KeyboardEvent, KeyType } from '@/constants';
 import { useBoundStore } from '@/store';
+import ErrorStackParser from 'error-stack-parser';
 import log from './log';
 
 const { setCurrentLifeCycle } = useBoundStore.getState();
@@ -259,18 +260,34 @@ export const system = {
 								KeyType,
 								getObject,
 							};
-							const codeContext = `const{${Object.keys(
-								context
-							).toString()}}=this;`;
-							const code = `'use strict';${
-								codeContext + codeFiles.test.contents
-							}`;
-							const codeFunc = new Function(code).bind(context);
+							const code = `'use strict';
+              const {${Object.keys(context).toString()}} = this;
+              let window = undefined, document = undefined, location = undefined, URL = undefined, history = undefined, alert = undefined, prompt = undefined, confirm = undefined;
+              ${codeFiles.test.contents}`;
+
+							const codeFunc: Function = new Function(code).bind(context);
+
+							const sandCodeExecute = () => {
+								codeFunc();
+							};
 
 							try {
-								codeFunc();
+								sandCodeExecute();
 								playSystem();
 							} catch (err) {
+								if (err instanceof Error) {
+									let stack = ErrorStackParser.parse(err);
+									let callIndex = stack.findIndex(
+										(stack) => stack.functionName === 'sandCodeExecute'
+									);
+
+									stack = stack.slice(0, callIndex);
+
+									log.error(`[test.sand] ${err.name}: ${err.message}`);
+									stack.forEach((stack) => {
+										log.error(`at ${stack.functionName}()`);
+									});
+								}
 								console.error(err);
 							}
 

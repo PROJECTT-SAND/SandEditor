@@ -161,7 +161,7 @@ useBoundStore.subscribe(
 			let obj = getObjectByUUID(state.selectedObjectUUID);
 
 			if (obj) {
-				setWireframe(obj.position.x, obj.position.x, 30, 30);
+				setWireframe(obj.position.x, obj.position.y, 30, 30);
 			} else {
 				setWireframe(0, 0, 0, 0);
 			}
@@ -223,11 +223,6 @@ const clickEvent = (e: MouseEvent) => {
 	intersects.forEach((hit) => {
 		if (hit.object.onClick) hit.object.onClick(e);
 	});
-
-	if (intersects.length == 0) {
-		setWireframe(0, 0, 0, 0);
-		store.setSelectedObjectUUID(null);
-	}
 };
 
 const mousemoveEvent = (e: MouseEvent) => {
@@ -414,8 +409,6 @@ const initObjects = () => {
 
 	for (const uuid in objectDatas) {
 		addSceneObject(objectDatas[uuid]);
-
-		// if (objectDatas[uuid] instanceof SandObject) return;
 	}
 };
 
@@ -424,15 +417,11 @@ export const addSceneObject = (object: SandScene | SandCamera | SandObject) => {
 		if (!(object instanceof SandScene)) return;
 
 		SceneObjectUUID = object.UUID;
-		return;
-	}
-	if (object.type == OBJECT_TYPE.Camera) {
+	} else if (object.type == OBJECT_TYPE.Camera) {
 		if (!(object instanceof SandCamera)) return;
 
 		CameraObjectUUID = object.UUID;
-		return;
-	}
-	if (object.type == OBJECT_TYPE.Object) {
+	} else if (object.type == OBJECT_TYPE.Object) {
 		if (!(object instanceof SandObject)) return;
 
 		let newObj = new OBJ(object.X, object.Y, object.UUID, object.visible);

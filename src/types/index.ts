@@ -27,7 +27,9 @@ export interface viewerController {
 export interface objects {
 	objectDatas: { [uuid: string]: SandObject | SandCamera | SandScene };
 	objectTree: objectTreeNode[];
-	setObjectDatas: (data: { [uuid: string]: SandObjectBase }) => void;
+	setObjectDatas: (data: {
+		[uuid: string]: SandObject | SandCamera | SandScene;
+	}) => void;
 	setObjectTree: (treeData: objectTreeNode[]) => void;
 }
 
