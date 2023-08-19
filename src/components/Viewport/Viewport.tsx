@@ -1,7 +1,7 @@
 import style from './Viewport.module.scss';
 import { useRef, useEffect } from 'react';
 import { useBoundStore } from '@/store'
-import { createScene } from '@/system/threejs';
+import { createScene } from '@/system/renderer';
 
 export default function Viewer() {
   const { mouseIsEnterViewer, setMouseIsEnterViewer, zoom, setZoom, cameraPos, mousePos, optionState, setOptionState } = useBoundStore();
@@ -14,6 +14,21 @@ export default function Viewer() {
     if (canvasElem.current == null || wrapperElem.current == null) return;
     createScene(canvasElem.current, wrapperElem.current);
   }, [])
+
+  // Fullscreen
+  useEffect(() => {
+    let elem = document.getElementById("root");
+
+    if (!wrapperElem.current || !elem) return;
+
+    if (optionState.fullScreen) {
+      if (document.fullscreenElement) return;
+      elem.requestFullscreen();
+    } else {
+      if (!document.fullscreenElement) return;
+      document.exitFullscreen();
+    }
+  }, [optionState.fullScreen])
 
   // Click outside => Exit fullscreen
   useEffect(() => {

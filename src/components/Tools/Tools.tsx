@@ -2,11 +2,9 @@ import style from './Tools.module.scss';
 import { useBoundStore } from '@/store'
 import { system } from '@/system/system';
 import { useEffect, useRef, useState } from 'react';
-
 import Option from './Option';
 import PlayerButton from './PlayerButton';
 import Tool from './Tool';
-
 import { TOOL, OPTION, LIFECYCLE, PLAYER, ButtonState, ButtonLifeCycle } from '@/constants';
 
 import { ReactComponent as PlaySVG } from '@assets/image/icon/toolbar/player/play.svg';
@@ -23,7 +21,7 @@ export default function ViewerController() {
   const wrapperElem = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (optionState.fullScreen) {
+    if (optionState.FullScreen) {
       setHideTools(false);
 
       setTimeout(() => {
@@ -32,7 +30,7 @@ export default function ViewerController() {
     } else {
       setHideTools(false);
     }
-  }, [optionState.fullScreen])
+  }, [optionState.ShowGrid])
 
   useEffect(() => {
     if (!wrapperElem.current) return;
@@ -48,7 +46,7 @@ export default function ViewerController() {
     return (
       <>
         <PlayerButton PlayerButtonEnum={PLAYER.Play} style_={style.play} func={() => {
-          if (ButtonLifeCycle[currentLifeCycle].play === ButtonState.DEFAULT) {
+          if (ButtonLifeCycle[currentLifeCycle].Play === ButtonState.DEFAULT) {
             if (currentLifeCycle === LIFECYCLE.IDLE) {
               (async () => await system.run("sys start"))();
             } else if (currentLifeCycle === LIFECYCLE.PAUSE) {
@@ -60,7 +58,7 @@ export default function ViewerController() {
         </PlayerButton>
 
         <PlayerButton PlayerButtonEnum={PLAYER.Pause} style_={style.pause} func={() => {
-          if (ButtonLifeCycle[currentLifeCycle].pause === ButtonState.DEFAULT) {
+          if (ButtonLifeCycle[currentLifeCycle].Pause === ButtonState.DEFAULT) {
             (async () => await system.run("sys pause"))();
           }
         }}>
@@ -68,7 +66,7 @@ export default function ViewerController() {
         </PlayerButton>
 
         <PlayerButton PlayerButtonEnum={PLAYER.Stop} style_={style.stop} func={() => {
-          if (ButtonLifeCycle[currentLifeCycle].stop === ButtonState.DEFAULT) {
+          if (ButtonLifeCycle[currentLifeCycle].Stop === ButtonState.DEFAULT) {
             if (currentLifeCycle === LIFECYCLE.RUNNING || currentLifeCycle === LIFECYCLE.PAUSE) {
               (async () => await system.run("sys stop"))();
             }
@@ -81,14 +79,14 @@ export default function ViewerController() {
   }
 
   return (
-    <div className={`${style.tools_wrap} ${optionState.fullScreen ? style.tools_fullscreen : ''}`} ref={wrapperElem}>
+    <div className={`${style.tools_wrap} ${optionState.FullScreen ? style.tools_fullscreen : ''}`} ref={wrapperElem}>
       <div className={`${style.tools} ${hideTools ? style.tools_hide : ''}`}>
         <div className={style.options}>
-          <Option style_={style.showGrid} optionEnum={OPTION.FullScreen}>
+          <Option style_={style.showGrid} optionEnum={OPTION.ShowGrid}>
             <GullscreenSVG />
           </Option>
 
-          <Option style_={style.fullScreen} optionEnum={OPTION.ShowGrid}>
+          <Option style_={style.fullScreen} optionEnum={OPTION.FullScreen}>
             <ShowgridSVG />
           </Option>
         </div>

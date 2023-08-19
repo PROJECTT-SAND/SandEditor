@@ -1,12 +1,14 @@
 import style from './Inspecter.module.scss';
 import Window from '@/components/Wrapper/Wrapper';
 import { useBoundStore } from "@/store";
-import { OBJECT_TYPE } from '@/constants';
+import { useEffect, useState } from 'react';
+import { SandCamera, SandObject, SandScene } from '@/classes';
+import { setCameraPos } from '@/system/renderer';
+import { SandObjectTypes } from '@/types'
 
 import { ReactComponent as FolderIconSVG } from '@assets/image/icon/object/folder.svg';
 import { ReactComponent as SceneIconSVG } from '@assets/image/icon/object/scene.svg';
 import { ReactComponent as CameraIconSVG } from '@assets/image/icon/object/camera.svg';
-
 import { ReactComponent as DeleteSVG } from '@assets/image/icon/inspecter/delete.svg';
 import { ReactComponent as TargetSVG } from '@assets/image/icon/inspecter/target.svg';
 import { ReactComponent as VisibleOnSVG } from '@assets/image/icon/inspecter/visible_on.svg';
@@ -15,24 +17,32 @@ import { ReactComponent as LockOnSVG } from '@assets/image/icon/inspecter/lock_o
 import { ReactComponent as LockOffSVG } from '@assets/image/icon/inspecter/lock_off.svg';
 import { ReactComponent as ArrowDownSVG } from '@assets/image/icon/object/arrow_down.svg';
 import { ReactComponent as ControllerSVG } from '@assets/image/icon/inspecter/controller.svg';
-import { useEffect, useState } from 'react';
-import { SandCamera, SandObject, SandObjectBase, SandScene } from '@/classes';
-import { setCameraPos } from '@/system/threejs';
+
 
 export default function Folder() {
+  /* ------------------------------------------------------------------------- */
+  // ANCHOR constants
+  /* ------------------------------------------------------------------------- */
+
   const { objectDatas, setObjectDatas, selectedObjectUUID, codeFiles } = useBoundStore();
-  const [currentOBJ, setCurrentOBJ] = useState<SandObject | SandCamera | SandScene>();
-  const [isObject, setIsObject] = useState<boolean>();
+  const [currentOBJ, setCurrentOBJ] = useState<SandObjectTypes>();
   const [addDropdownVisible, setAddDropdownVisible] = useState(false);
   const [controllerList, setControllerList] = useState<string[]>([]);
   const ignorePropsName = ['type', 'parentUUID', 'UUID', 'name', 'controller', 'visible'];
+
+  /* ------------------------------------------------------------------------- */
+  // ANCHOR reack hooks
+  /* ------------------------------------------------------------------------- */
 
   useEffect(() => {
     if (!selectedObjectUUID) return;
 
     setCurrentOBJ(objectDatas[selectedObjectUUID]);
-    setIsObject(objectDatas[selectedObjectUUID].type instanceof SandObject);
   }, [selectedObjectUUID, objectDatas]);
+
+  /* ------------------------------------------------------------------------- */
+  // ANCHOR functions
+  /* ------------------------------------------------------------------------- */
 
   const onAddControllerClick = () => {
     setAddDropdownVisible(!addDropdownVisible);
@@ -100,24 +110,39 @@ export default function Folder() {
     setAddDropdownVisible(false);
   }
 
+  /* ------------------------------------------------------------------------- */
+  // ANCHOR components
+  /* ------------------------------------------------------------------------- */
+
   const ObjectIcon = () => {
     if (!currentOBJ) return (<></>);
 
     let IconSVG;
-    switch (currentOBJ.type) {
-      case OBJECT_TYPE.Camera:
-        IconSVG = CameraIconSVG;
-        break;
-      case OBJECT_TYPE.Scene:
-        IconSVG = SceneIconSVG;
-        break;
-      case OBJECT_TYPE.Object:
-        IconSVG = FolderIconSVG;
-        break;
-      default:
-        IconSVG = FolderIconSVG;
-        break;
+
+    if (currentOBJ instanceof SandScene) {
+      IconSVG = SceneIconSVG;
+    } else if (currentOBJ instanceof SandCamera) {
+      IconSVG = CameraIconSVG;
+    } else if (currentOBJ instanceof SandObject) {
+      IconSVG = FolderIconSVG;
+    } else {
+      IconSVG = FolderIconSVG;
     }
+
+    // switch (currentOBJ.type) {
+    //   case OBJECT_TYPE.Camera:
+    //     IconSVG = CameraIconSVG;
+    //     break;
+    //   case OBJECT_TYPE.Scene:
+    //     IconSVG = SceneIconSVG;
+    //     break;
+    //   case OBJECT_TYPE.Object:
+    //     IconSVG = FolderIconSVG;
+    //     break;
+    //   default:
+    //     IconSVG = FolderIconSVG;
+    //     break;
+    // }
 
     return (
       <IconSVG />
@@ -140,11 +165,11 @@ export default function Folder() {
                   type="text"
                   value={currentOBJ.name ?? ''}
                   className={style.objectInfo_name}
-                  readOnly={currentOBJ.type != OBJECT_TYPE.Object}
+                  readOnly={!(currentOBJ instanceof SandObject)}
                   onInput={(e) => { setObjectParam("name", e.currentTarget.value) }}
                 ></input>
               </div>
-              {isObject ?
+              {currentOBJ instanceof SandObject ?
                 <div className={style.objectInfo_line}>
                   <button className={style.btn_goto} title='해당 위치로 이동하기' onClick={gotoObject}><TargetSVG /></button>
                   <button className={style.btn_see} title={currentOBJ.visible ? '숨기기' : '보이기'} onClick={setVisible}>
@@ -181,7 +206,7 @@ export default function Folder() {
             }
 
             {/* Controller */
-              isObject ?
+              currentOBJ instanceof SandObject ?
                 currentOBJ.controller.map((controllerName, index1) => {
                   let params = codeFiles[controllerName].params;
 
@@ -194,28 +219,28 @@ export default function Folder() {
                     </div>
                   )
 
-                  Object.entries(params).map((param, index2) => {
-                    return (
-                      <div className={style.property} key={index1 + '-' + index2}>
-                        <div className={style.property_label}>{param.label}</div>
-                        <div className={style.property_input_wrap}>
-                          {param.type == ARG_TYPE.Number ?
-                            <input type="number" value={param.value} onKeyDown={enterProperty} onInput={(e) => { setObjectParam(param.label, Number(e.currentTarget.value)) }}></input>
-                            : param.type == ARG_TYPE.Boolean ?
-                              <input type="checkbox" checked={param.value} className={style.property_input_checkbox} onChange={(e) => { setObjectParam(param.label, e.currentTarget.checked) }}></input>
-                              : param.type == ARG_TYPE.String ?
-                                <input type="text" value={param.value} onKeyDown={enterProperty} onInput={(e) => { setObjectParam(param.label, e.currentTarget.value) }}></input>
-                                : ''}
-                        </div>
-                      </div>
-                    )
-                  })
+                  // Object.entries(params).map((param, index2) => {
+                  //   return (
+                  //     <div className={style.property} key={index1 + '-' + index2}>
+                  //       <div className={style.property_label}>{param.label}</div>
+                  //       <div className={style.property_input_wrap}>
+                  //         {param.type == ARG_TYPE.Number ?
+                  //           <input type="number" value={param.value} onKeyDown={enterProperty} onInput={(e) => { setObjectParam(param.label, Number(e.currentTarget.value)) }}></input>
+                  //           : param.type == ARG_TYPE.Boolean ?
+                  //             <input type="checkbox" checked={param.value} className={style.property_input_checkbox} onChange={(e) => { setObjectParam(param.label, e.currentTarget.checked) }}></input>
+                  //             : param.type == ARG_TYPE.String ?
+                  //               <input type="text" value={param.value} onKeyDown={enterProperty} onInput={(e) => { setObjectParam(param.label, e.currentTarget.value) }}></input>
+                  //               : ''}
+                  //       </div>
+                  //     </div>
+                  //   )
+                  // })
                 })
                 : ''
             }
 
             {/* Add Controller */
-              currentOBJ.type == OBJECT_TYPE.Object ?
+              currentOBJ instanceof SandObject ?
                 <div className={style.addController_wrap}>
                   <button className={style.btnAdd} onClick={onAddControllerClick}>Add Controller</button>
                   {

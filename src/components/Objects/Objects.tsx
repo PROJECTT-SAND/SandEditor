@@ -1,17 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import style from './Objects.module.scss';
 import Window from '@/components/Wrapper/Wrapper';
-import { OBJECT_TYPE } from '@/constants'
-import { SandObjectBase, SandObject, SandScene, SandCamera } from '@/classes'
+import { SandObject, SandScene, SandCamera } from '@/classes'
 import { objectTreeNode, TreePos } from '@/types'
 import { useBoundStore } from "@/store";
-import { addSceneObject } from '@/system/threejs';
 
-import folderIcon from '@assets/image/icon/object/folder.svg';
 import { ReactComponent as FolderIconSVG } from '@assets/image/icon/object/folder.svg';
 import { ReactComponent as SceneIconSVG } from '@assets/image/icon/object/scene.svg';
 import { ReactComponent as CameraIconSVG } from '@assets/image/icon/object/camera.svg';
-
 import { ReactComponent as ArrowDownSVG } from '@assets/image/icon/object/arrow_down.svg';
 import { ReactComponent as ArrowUpSVG } from '@assets/image/icon/object/arrow_up.svg';
 import { ReactComponent as AddSVG } from '@assets/image/icon/add.svg';
@@ -67,7 +63,7 @@ export default function Objects() {
     setIsScrollBottom(wrapperElem.current.scrollTop >= wrapperElem.current.scrollHeight - wrapperElem.current.clientHeight);
 
     let name = 'object' + (Object.keys(objectDatas).length - 1)
-    let newObject = new SandObject(name, OBJECT_TYPE.Object, selectedObjectUUID);
+    let newObject = new SandObject(name, selectedObjectUUID);
     let selectedTreeNode = searchNode(selectedTree);
 
     selectedTreeNode.children.push({ uuid: newObject.UUID, children: [] });
@@ -99,25 +95,36 @@ export default function Objects() {
     }
 
     const treeSelect = () => {
-      setIsCanAdd(objectData.type != OBJECT_TYPE.Camera);
+      // setIsCanAdd(objectData.type != OBJECT_TYPE.Camera);
+      setIsCanAdd(!(objectData instanceof SandCamera));
       setSelectedTree(currentTree);
       setSelectedObjectUUID(uuid);
     }
 
-    switch (objectData.type) {
-      case OBJECT_TYPE.Camera:
-        IconSVG = CameraIconSVG;
-        break;
-      case OBJECT_TYPE.Scene:
-        IconSVG = SceneIconSVG;
-        break;
-      case OBJECT_TYPE.Object:
-        IconSVG = FolderIconSVG;
-        break;
-      default:
-        IconSVG = FolderIconSVG;
-        break;
+    if (objectData instanceof SandScene) {
+      IconSVG = SceneIconSVG;
+    } else if (objectData instanceof SandCamera) {
+      IconSVG = CameraIconSVG;
+    } else if (objectData instanceof SandObject) {
+      IconSVG = FolderIconSVG;
+    } else {
+      IconSVG = FolderIconSVG;
     }
+
+    // switch (objectData.type) {
+    //   case OBJECT_TYPE.Camera:
+    //     IconSVG = CameraIconSVG;
+    //     break;
+    //   case OBJECT_TYPE.Scene:
+    //     IconSVG = SceneIconSVG;
+    //     break;
+    //   case OBJECT_TYPE.Object:
+    //     IconSVG = FolderIconSVG;
+    //     break;
+    //   default:
+    //     IconSVG = FolderIconSVG;
+    //     break;
+    // }
 
     return (
       <div className={style.object_folder}>

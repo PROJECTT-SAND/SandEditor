@@ -1,10 +1,10 @@
 import style from './Tools.module.scss';
 import React from 'react';
 import { useBoundStore } from '@/store'
-import { ButtonLifeCycleState } from '@/constants'
+import { ButtonLifeCycle, PLAYER } from '@/constants'
 
 const PlayerButton: React.FC<{
-  PlayerButtonEnum: any;
+  PlayerButtonEnum: PLAYER;
   style_: string;
   func: any;
   children: React.ReactNode;
@@ -13,7 +13,7 @@ const PlayerButton: React.FC<{
 
   return (
     <button
-      data-state={ButtonLifeCycleState[store.currentLifeCycle][PlayerButtonEnum]}
+      data-state={ButtonLifeCycle[store.currentLifeCycle][PlayerButtonEnum]}
       className={style_}
       onClick={func}>
 

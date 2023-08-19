@@ -1,7 +1,9 @@
 import { SandCamera, SandObject, SandObjectBase, SandScene } from '@/classes';
-import { LOG_KIND } from '@/constants';
+import { LOG_KIND, OPTION } from '@/constants';
 
-export type sandObjectTypes = (SandObject | SandScene | SandCamera)
+export type SandObjectTypes = SandObject | SandScene | SandCamera;
+
+export type sandCommand = { func: Function; args: []; label: string };
 
 // 이걸 꼭 이렇게 타입을 개별 파일로 빼야하나?
 export interface viewerController {
@@ -10,8 +12,8 @@ export interface viewerController {
 	currentLifeCycle: number;
 	toolState: number;
 	optionState: {
-		showGrid: boolean;
-		fullScreen: boolean;
+		[OPTION.FullScreen]: boolean;
+		[OPTION.ShowGrid]: boolean;
 	};
 	cameraPos: { x: number; y: number };
 	mousePos: { x: number; y: number };
@@ -24,15 +26,16 @@ export interface viewerController {
 	setMouseIsEnterViewer: (value: boolean) => void;
 	setCurrentLifeCycle: (value: number) => void;
 	setToolState: (value: number) => void;
-	setOptionState: (value: { showGrid: boolean; fullScreen: boolean }) => void;
+	setOptionState: (value: {
+		[OPTION.ShowGrid]: boolean;
+		[OPTION.FullScreen]: boolean;
+	}) => void;
 }
 
 export interface objects {
-	objectDatas: { [uuid: string]: SandObject | SandCamera | SandScene };
+	objectDatas: { [uuid: string]: SandObjectTypes };
 	objectTree: objectTreeNode[];
-	setObjectDatas: (data: {
-		[uuid: string]: SandObject | SandCamera | SandScene;
-	}) => void;
+	setObjectDatas: (data: { [uuid: string]: SandObjectTypes }) => void;
 	setObjectTree: (treeData: objectTreeNode[]) => void;
 }
 

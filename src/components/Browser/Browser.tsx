@@ -1,11 +1,11 @@
+import { useState } from 'react';
 import style from './Browser.module.scss';
 import Window from '@/components/Wrapper/Wrapper';
-import example from '@assets/example1.png';
 import { useBoundStore } from "@/store";
 
+import example from '@assets/example1.png';
 import { ReactComponent as AddSVG } from '@assets/image/icon/add.svg';
 import { ReactComponent as ControllerSVG } from '@assets/image/icon/browser/controller.svg';
-import { useState } from 'react';
 
 export default function Folder() {
   const { codeFiles, setCodeFiles, workMenu, setWorkMenu, selectedWorkMenu, setSelectedWorkMenu } = useBoundStore();
@@ -24,7 +24,7 @@ export default function Folder() {
 
   const addObject = () => {
     let filename = Math.random().toString();
-    setCodeFiles(filename, { contents: '', params: {} });
+    setCodeFiles(filename, { contents: '', params: [] });
     setWorkMenu([...workMenu, { fullName: filename, fileName: filename, extension: "" }]);
   }
 

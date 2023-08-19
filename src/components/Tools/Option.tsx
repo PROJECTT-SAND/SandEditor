@@ -1,19 +1,18 @@
 import style from './Tools.module.scss';
 import React, { useState } from 'react';
 import { useBoundStore } from '@/store'
+import { OPTION } from '@/constants';
 
 const Option: React.FC<{
   style_: string;
-  optionEnum: number;
+  optionEnum: OPTION;
   children: React.ReactNode;
 }> = ({ style_, optionEnum, children }) => {
   const { optionState, setOptionState } = useBoundStore();
-  let aaaa = ['showGrid', 'fullScreen'];
-  // tlqkf 인덱싱해야됨 ㅅㅄㅄㅄㅄㅄㅂ
-  const currentState = optionState[aaaa[optionEnum]];
+  const currentState = optionState[optionEnum];
 
   const setOption = () => {
-    setOptionState({ ...optionState, [aaaa[optionEnum]]: !currentState });
+    setOptionState({ ...optionState, [optionEnum]: !currentState });
   }
 
   return (

@@ -1,6 +1,5 @@
-import { OBJECT_TYPE, ProcessEvent } from '@/constants';
 import { useBoundStore } from '@/store';
-import { addSceneObject } from '@/system/threejs';
+import { addSceneObject } from '@/system/renderer';
 import { v4 as uuidv4 } from 'uuid';
 
 // 클래스 타입 보고 처리하면 되니까 type는 그냥 집어 치자
@@ -35,7 +34,7 @@ export class SandCamera extends SandObjectBase {
 		near: number,
 		far: number
 	) {
-		super(name, OBJECT_TYPE.Camera, sceneUUID);
+		super(name, sceneUUID);
 		this.X = 0;
 		this.Y = 0;
 		this.zoom = zoom;
@@ -50,7 +49,7 @@ export class SandScene extends SandObjectBase {
 	background: string = '111111';
 
 	constructor(name: string) {
-		super(name, OBJECT_TYPE.Scene, null);
+		super(name, null);
 		addSceneObject(this);
 	}
 }
@@ -61,15 +60,10 @@ export class SandObject extends SandObjectBase {
 	visible: boolean = true;
 	controller: string[];
 
-	constructor(
-		name: string,
-		type: OBJECT_TYPE,
-		parentUUID: string | null,
-		visible?: boolean
-	) {
+	constructor(name: string, parentUUID: string | null, visible?: boolean) {
 		const { objectDatas, setObjectDatas } = useBoundStore.getState();
 
-		super(name, type, parentUUID);
+		super(name, parentUUID);
 		this.X = 0;
 		this.Y = 0;
 		this.controller = [];
@@ -87,6 +81,10 @@ export class EventEmitter<T extends number> {
 	target: EventTarget;
 
 	constructor() {
+		this.target = new EventTarget();
+	}
+
+	resetEventListener() {
 		this.target = new EventTarget();
 	}
 

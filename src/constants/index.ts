@@ -5,8 +5,8 @@ export const TOOL = {
 export type TOOL = (typeof TOOL)[keyof typeof TOOL];
 
 export const OPTION = {
-	FullScreen: 0,
-	ShowGrid: 1,
+	FullScreen: 'FullScreen',
+	ShowGrid: 'ShowGrid',
 } as const;
 export type OPTION = (typeof OPTION)[keyof typeof OPTION];
 
@@ -21,9 +21,9 @@ export const LIFECYCLE = {
 export type LIFECYCLE = (typeof LIFECYCLE)[keyof typeof LIFECYCLE];
 
 export const PLAYER = {
-	Play: 0,
-	Pause: 1,
-	Stop: 2,
+	Play: 'Play',
+	Pause: 'Pause',
+	Stop: 'Stop',
 } as const;
 export type PLAYER = (typeof PLAYER)[keyof typeof PLAYER];
 
@@ -49,21 +49,12 @@ export const ButtonState = {
 } as const;
 
 export const ButtonLifeCycle = [
-	{ play: 0, pause: 0, stop: 0 },
-	{ play: 1, pause: 0, stop: 0 },
-	{ play: 2, pause: 0, stop: 0 },
-	{ play: 2, pause: 1, stop: 1 },
-	{ play: 1, pause: 2, stop: 1 },
-	{ play: 0, pause: 0, stop: 2 },
-] as const;
-
-export const ButtonLifeCycleState = [
-	[0, 0, 0],
-	[1, 0, 0],
-	[2, 0, 0],
-	[2, 1, 1],
-	[1, 2, 1],
-	[0, 0, 2],
+	{ [PLAYER.Play]: 0, [PLAYER.Pause]: 0, [PLAYER.Stop]: 0 },
+	{ [PLAYER.Play]: 1, [PLAYER.Pause]: 0, [PLAYER.Stop]: 0 },
+	{ [PLAYER.Play]: 2, [PLAYER.Pause]: 0, [PLAYER.Stop]: 0 },
+	{ [PLAYER.Play]: 2, [PLAYER.Pause]: 1, [PLAYER.Stop]: 1 },
+	{ [PLAYER.Play]: 1, [PLAYER.Pause]: 2, [PLAYER.Stop]: 1 },
+	{ [PLAYER.Play]: 0, [PLAYER.Pause]: 0, [PLAYER.Stop]: 2 },
 ] as const;
 
 export const ProcessEvent = {
@@ -72,12 +63,12 @@ export const ProcessEvent = {
 } as const;
 export type ProcessEvent = (typeof ProcessEvent)[keyof typeof ProcessEvent];
 
-export const KeyboardEvent = {
-	Press: 0,
+export const InputEvent = {
+	Hold: 0,
 	Down: 1,
 	Up: 2,
 } as const;
-export type KeyboardEvent = (typeof KeyboardEvent)[keyof typeof KeyboardEvent];
+export type InputEvent = (typeof InputEvent)[keyof typeof InputEvent];
 
 export const KeyType = {
 	Enter: 13,

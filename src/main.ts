@@ -1,58 +1,60 @@
-const { app, BrowserWindow, Menu } = require('electron');
-const log = require('electron-log');
-const isDev = require('electron-is-dev');
+export {};
 
-function createWindow() {
-    const win = new BrowserWindow({ 
-        width: 800, 
-        height: 600, 
-        webPreferences: { 
-            nodeIntegration: true,
-            contextIsolation : false
-        }
-    });
+// const { app, BrowserWindow, Menu } = require('electron');
+// const log = require('electron-log');
+// const isDev = require('electron-is-dev');
 
-    if(isDev) {
-        win.loadURL("http://localhost:3000/");
-        win.webContents.openDevTools();
-    } else {
-        win.loadURL(`file://${__dirname}/../build/index.html`);
-    }
+// function createWindow() {
+//     const win = new BrowserWindow({
+//         width: 800,
+//         height: 600,
+//         webPreferences: {
+//             nodeIntegration: true,
+//             contextIsolation : false
+//         }
+//     });
 
-    const template = [
-        {
-            label: "SAND-editer",
-            submenu: [],
-        },
-        {
-            label: "파일",
-            submenu: [
-                {
-                    label: "파일 만들기",
-                    click: () => {
-                        window.webContents.excuteJavaScript(`
-                            getBackground();
-                        `);
-                    }
-                },
-                {
-                    label: "파일 저장",
-                },
-                {
-                    label: "파일 열기",
-                },
-            ],
-        }
-    ];
+//     if(isDev) {
+//         win.loadURL("http://localhost:3000/");
+//         win.webContents.openDevTools();
+//     } else {
+//         win.loadURL(`file://${__dirname}/../build/index.html`);
+//     }
 
-    const customMenu = Menu.buildFromTemplate(template);
-    Menu.setApplicationMenu(customMenu);
-}
+//     const template = [
+//         {
+//             label: "SAND-editer",
+//             submenu: [],
+//         },
+//         {
+//             label: "파일",
+//             submenu: [
+//                 {
+//                     label: "파일 만들기",
+//                     click: () => {
+//                         window.webContents.excuteJavaScript(`
+//                             getBackground();
+//                         `);
+//                     }
+//                 },
+//                 {
+//                     label: "파일 저장",
+//                 },
+//                 {
+//                     label: "파일 열기",
+//                 },
+//             ],
+//         }
+//     ];
 
-app.whenReady().then(() => { 
-    createWindow() 
-})
+//     const customMenu = Menu.buildFromTemplate(template);
+//     Menu.setApplicationMenu(customMenu);
+// }
 
-app.on('window-all-closed', () => { 
-    if (process.platform !== 'darwin') app.quit() 
-})
+// app.whenReady().then(() => {
+//     createWindow()
+// })
+
+// app.on('window-all-closed', () => {
+//     if (process.platform !== 'darwin') app.quit()
+// })

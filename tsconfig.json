@@ -15,7 +15,7 @@
 		"isolatedModules": true,
 		"noEmit": true,
 		"jsx": "react-jsx",
-		"typeRoots": ["./types/declare", "./types/global"],
+		// "typeRoots": ["./types/declare", "./types/global"],
 		"baseUrl": ".",
 		"paths": {
 			"@/*": ["./src/*"],
