@@ -8,6 +8,8 @@ import { removeEvents, setEvents } from '@/system/eventManager';
 import { startPhysics, stopPhysics } from '@/system/physics';
 import { resetObjPos } from '@/system/renderer';
 
+const worker = new Worker(new URL('./renderer.worker.ts', import.meta.url));
+
 export default () => {
 	const { setCurrentLifeCycle, codeFiles, objectDatas } =
 		useBoundStore.getState();
@@ -36,7 +38,7 @@ export default () => {
 			};
 
 			const newNumberArg = (name: string, min: number, max: number) => {
-				return file.params.find((param) => param.label == name);
+				return file.args.find((arg) => arg.label == name);
 			};
 
 			const context = {
@@ -69,6 +71,8 @@ export default () => {
 				func();
 			}
 		};
+
+		worker.postMessage({});
 
 		setEvents();
 		executeSandCode();

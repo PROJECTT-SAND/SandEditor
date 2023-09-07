@@ -27,20 +27,27 @@ export const PLAYER = {
 } as const;
 export type PLAYER = (typeof PLAYER)[keyof typeof PLAYER];
 
-export const OBJECT_TYPE = {
+export const OBJECT = {
 	Scene: 1,
 	Camera: 2,
 	Object: 3,
 } as const;
-export type OBJECT_TYPE = (typeof OBJECT_TYPE)[keyof typeof OBJECT_TYPE];
+export type OBJECT = (typeof OBJECT)[keyof typeof OBJECT];
 
-export const LOG_KIND = {
+export const LOG = {
 	Command: 0,
 	Text: 1,
 	Warning: 2,
 	Error: 3,
-};
-export type LOG_KIND = (typeof LOG_KIND)[keyof typeof LOG_KIND];
+} as const;
+export type LOG = (typeof LOG)[keyof typeof LOG];
+
+export const ARG = {
+	Number: 0,
+	String: 1,
+	Boolean: 2,
+} as const;
+export type ARG = (typeof ARG)[keyof typeof ARG];
 
 export const ButtonState = {
 	DISABLED: 0,

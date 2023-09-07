@@ -1,15 +1,9 @@
 import { SandCamera, SandObject, SandScene } from '@/classes';
-import { LIFECYCLE, TOOL } from '@/constants';
-import { useBoundStore } from '@/store';
+import { TOOL } from '@/constants';
 import * as THREE from 'three';
 import { DragControls } from 'three/examples/jsm/controls/DragControls.js';
 import Stats from 'stats.js';
 import { SandObjectTypes } from '@/types';
-import { objectDataManager } from './objectDataManager';
-
-/* ------------------------------------------------------------------------- */
-// ANCHOR Classes
-/* ------------------------------------------------------------------------- */
 
 class OBJ extends THREE.Mesh {
 	material: THREE.MeshBasicMaterial;
@@ -41,26 +35,75 @@ class OBJ extends THREE.Mesh {
 	}
 }
 
+self.onmessage = (e) => {
+	const { type, data } = e.data;
+
+	switch (type) {
+		case 'setObjectData':
+			objectDatas[data.uuid] = data.objectData;
+			break;
+
+		case 'addObject': {
+			const { objectData } = data;
+
+			if (Array.isArray(objectData)) {
+				objectData.forEach((data) => {
+					addSceneObject(data);
+				});
+			} else {
+				addSceneObject(objectData);
+			}
+			break;
+		}
+		case 'createScene':
+			createScene(data.canvas, data.wrap);
+			break;
+
+		case 'setToolState':
+			toolState = data.toolState;
+			break;
+
+		case 'setIsMouseEnter':
+			isMouseEnter = data.isMouseEnter;
+
+		case 'resetObjPos':
+			Object.keys(objectDatas).forEach((uuid) => {
+				let sceneObj = getObjectByUUID(uuid);
+				let objData = objectDatas[uuid];
+
+				if (!sceneObj || !(objData instanceof SandObject)) return;
+
+				sceneObj.position.x = objData.X;
+				sceneObj.position.y = objData.Y;
+			});
+		default:
+			break;
+	}
+};
+
 /* ------------------------------------------------------------------------- */
 // ANCHOR Constants
 /* ------------------------------------------------------------------------- */
 
-let store = useBoundStore.getState();
+let objectDatas: Record<string, SandObjectTypes> = {};
 let isHandDragging = false;
+let toolState = 0;
+let isMouseEnter = false;
+// FIXME - 핵심요소의 uuid를 각각 그냥 변수에 담는건 너무 주먹구구식?
+let SceneObjectUUID: string;
+let CameraObjectUUID: string;
 
 // NOTE - Threejs
-let canvasElem: HTMLCanvasElement;
+let canvasElem: OffscreenCanvas;
 let wrapperElem: HTMLDivElement;
 let renderer: THREE.WebGLRenderer;
-// const textureLoader = new THREE.TextureLoader();
-window.threeScene = new THREE.Scene();
+const textureLoader = new THREE.TextureLoader();
+
+const mainScene = new THREE.Scene();
 const uiScene = new THREE.Scene();
 uiScene.background = new THREE.Color(0x111111);
 const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 2000);
 camera.position.z = 1000;
-// FIXME - 핵심요소의 uuid를 각각 그냥 변수에 담는건 너무 주먹구구식?
-let SceneObjectUUID: string;
-let CameraObjectUUID: string;
 
 // NOTE - Camera, Ctx
 const vFOV = THREE.MathUtils.degToRad(camera.fov);
@@ -87,7 +130,7 @@ const wireframe = new THREE.LineSegments(
 	new THREE.EdgesGeometry(new THREE.BoxGeometry(1, 1)),
 	new THREE.LineBasicMaterial({ color: 0xaaaaaa })
 );
-window.threeScene.add(wireframe);
+mainScene.add(wireframe);
 
 const gridHelper = new THREE.GridHelper(10000, 10000 / 100, 0x555555, 0x333333);
 gridHelper.rotation.x = Math.PI / 2;
@@ -123,6 +166,7 @@ gridHelper.visible = false;
 /* ------------------------------------------------------------------------- */
 // FIXME - subscribewithselector 이용하여도 원하는 방식의 선택 방식이 아님
 // FIXME - 전역 store에 다 때려박으니 복잡해짐, 따로 class를 만들어서 각 기능을 모아두고 그걸 import 할 필요 있음
+
 /*
 useBoundStore.subscribe((state) => {
 	store = state;
@@ -252,6 +296,7 @@ useBoundStore.subscribe(
 	}
 );
 */
+
 /* ------------------------------------------------------------------------- */
 // ANCHOR Event functions
 /* ------------------------------------------------------------------------- */
@@ -269,14 +314,17 @@ const mousemoveEvent = (e: MouseEvent) => {
 		applyHandDraggingtoCamera(e.offsetX, e.offsetY);
 	}
 
-	store.setMousePos({
-		x: cameraPos.x + ((e.offsetX - Ctx.x / 2) / Ctx.x) * cameraFov.x,
-		y: cameraPos.y + (-(e.offsetY - Ctx.y / 2) / Ctx.y) * cameraFov.y,
+	self.postMessage({
+		type: 'setMousePos',
+		data: {
+			x: cameraPos.x + ((e.offsetX - Ctx.x / 2) / Ctx.x) * cameraFov.x,
+			y: cameraPos.y + (-(e.offsetY - Ctx.y / 2) / Ctx.y) * cameraFov.y,
+		},
 	});
 };
 
 const mousedownEvent = (e: MouseEvent) => {
-	if (store.mouseIsEnterViewer && store.toolState === TOOL.Hand) {
+	if (isMouseEnter && toolState === TOOL.Hand) {
 		isHandDragging = true;
 		prevCameraPos.set(camera.position.x, camera.position.y);
 		mouseDragStartPos.set(e.offsetX, e.offsetY);
@@ -296,17 +344,17 @@ const wheelEvent = (e: WheelEvent) => {
 		) / 100;
 	camera.updateProjectionMatrix();
 
-	let tmp = store.objectDatas[CameraObjectUUID];
+	let tmp = getObjectData(CameraObjectUUID);
 	if (!(tmp instanceof SandCamera)) return;
-
 	tmp.zoom = camera.zoom;
+	setObjectData(CameraObjectUUID, tmp);
 
-	store.setObjectDatas({
-		...store.objectDatas,
-		[CameraObjectUUID]: tmp,
+	self.postMessage({
+		type: 'setZoom',
+		data: {
+			zoom: camera.zoom,
+		},
 	});
-
-	store.setZoom(camera.zoom);
 };
 
 const resizeEvent = () => {
@@ -324,12 +372,18 @@ const resizeEvent = () => {
 const dragstartEvent = (e: THREE.Event) => {
 	let uuid = e.object.uuid;
 	let obj = getObjectByUUID(uuid);
-	let objData = store.objectDatas[uuid];
+	let objData = getObjectData(uuid);
 
 	if (!obj || !(objData instanceof SandObject)) return;
 
 	e.object.onDragStart();
-	store.setSelectedObjectUUID(uuid);
+
+	self.postMessage({
+		type: 'setSelectedObjectUUID',
+		data: {
+			uuid,
+		},
+	});
 
 	obj.position.x = objData.X;
 	obj.position.y = objData.Y;
@@ -338,7 +392,7 @@ const dragstartEvent = (e: THREE.Event) => {
 
 const dragendEvent = (e: THREE.Event) => {
 	let obj = e.object;
-	let objData = store.objectDatas[e.object.uuid];
+	let objData = getObjectData(e.object.uuid);
 	let posX = Math.round(obj.position.x * 10) / 10;
 	let posY = Math.round(obj.position.y * 10) / 10;
 
@@ -349,24 +403,30 @@ const dragendEvent = (e: THREE.Event) => {
 	obj.position.y = posY;
 	objData.X = posX;
 	objData.Y = posY;
-	setWireframe(posX, posY, 30, 30);
+	setObjectData(obj.uuid, objData);
 
-	store.setObjectDatas({
-		...store.objectDatas,
-		[obj.uuid]: objData,
-	});
+	setWireframe(posX, posY, 30, 30);
 };
 
 /* ------------------------------------------------------------------------- */
 // ANCHOR Functions
 /* ------------------------------------------------------------------------- */
 
+const getObjectData = (uuid: string) => {
+	return objectDatas[uuid];
+};
+
+const setObjectData = (uuid: string, data: SandObjectTypes) => {
+	objectDatas[uuid] = data;
+	self.postMessage({ type: 'setObjectData', data: { objectData: data, uuid } });
+};
+
 const searchHoveredObjects = (e: MouseEvent) => {
 	mouseVector.set(e.offsetX, -e.offsetY);
 	mouseVector.divide(Ctx).multiplyScalar(2);
 	mouseVector.set(mouseVector.x - 1, mouseVector.y + 1);
 	raycaster.setFromCamera(mouseVector, camera);
-	hoveredObjects = raycaster.intersectObjects(window.threeScene.children, true);
+	hoveredObjects = raycaster.intersectObjects(mainScene.children, true);
 
 	// NOTE - add
 	for (let i = 0; i < hoveredObjects.length; i++) {
@@ -402,23 +462,23 @@ const applyHandDraggingtoCamera = (offsetX: number, offsetY: number) => {
 		.divideScalar(camera.zoom)
 		.add(prevCameraPos);
 
-	store.setCameraPos({ x: cameraPos.x, y: cameraPos.y });
+	self.postMessage({
+		type: 'setCameraPos',
+		data: { x: cameraPos.x, y: cameraPos.y },
+	});
 
 	camera.position.x = cameraPos.x;
 	camera.position.y = cameraPos.y;
 
-	store.setObjectDatas({
-		...store.objectDatas,
-		[CameraObjectUUID]: {
-			...store.objectDatas[CameraObjectUUID],
-			X: cameraPos.x,
-			Y: cameraPos.y,
-		},
-	});
+	let tmp = getObjectData(CameraObjectUUID);
+	if (!(tmp instanceof SandCamera)) return;
+	tmp.X = cameraPos.x;
+	tmp.Y = cameraPos.y;
+	setObjectData(CameraObjectUUID, tmp);
 };
 
 const getObjectByUUID = (uuid: string) => {
-	return window.threeScene.getObjectByProperty('uuid', uuid);
+	return mainScene.getObjectByProperty('uuid', uuid);
 };
 
 const setWireframe = (x: number, y: number, sizeX: number, sizeY: number) => {
@@ -428,133 +488,14 @@ const setWireframe = (x: number, y: number, sizeX: number, sizeY: number) => {
 	wireframe.scale.y = sizeY;
 };
 
-//TODO - store랑 export 함수랑 기능이 겹치는 상황, renderer wrap 클래스를 새로 만들기, 다른 코드 참조
-export const setCameraPos = (x: number, y: number) => {
-	camera.position.x = x;
-	camera.position.y = y;
-};
-
-export const resetObjPos = () => {
-	postMsg('resetObjPos');
-	return;
-
-	const { objectDatas } = useBoundStore.getState();
-
-	Object.keys(objectDatas).forEach((uuid) => {
-		let sceneObj = window.threeScene.getObjectByProperty('uuid', uuid);
-		let objData = objectDatas[uuid];
-
-		if (!sceneObj || !(objData instanceof SandObject)) return;
-
-		sceneObj.position.x = objData.X;
-		sceneObj.position.y = objData.Y;
-	});
-};
-
-const worker = new Worker(
-	new URL('./workers/renderer.worker.ts', import.meta.url)
-);
-
-const postMsg = (
-	type: string,
-	data?: any,
-	option?: StructuredSerializeOptions
-) => {
-	worker.postMessage(
-		{
-			type,
-			data,
-		},
-		option
-	);
-};
-
-export const setObjectDatas = (data: SandObjectTypes, uuid: string) => {
-	postMsg('setObjectData', { objectData: data, uuid });
-};
-
-worker.onmessage = (e) => {
-	const { type, data } = e.data;
-
-	switch (type) {
-		case 'setObjectData':
-			const { objectData, uuid } = data;
-			objectDataManager.objectData[uuid] = objectData;
-			break;
-
-		default:
-			break;
-	}
-};
-
-export const createScene = (el: HTMLCanvasElement, wrap: HTMLDivElement) => {
-	const offscreen = el.transferControlToOffscreen();
-
-	postMsg('createScene', { canvas: offscreen, wrap }, [offscreen, wrap]);
-	return;
-	canvasElem = el;
-	wrapperElem = wrap;
-
-	worker.postMessage({ canvas: offscreen }, [offscreen]);
-
-	renderer = new THREE.WebGLRenderer({
-		antialias: true,
-		canvas: canvasElem,
-	});
-	renderer.autoClear = false;
-	renderer.shadowMap.enabled = true;
-	renderer.shadowMap.type = THREE.VSMShadowMap;
-
-	controls = new DragControls(window.threeScene.children, camera, canvasElem);
-
-	canvasElem.addEventListener('click', clickEvent);
-	canvasElem.addEventListener('mousemove', mousemoveEvent);
-	canvasElem.addEventListener('mousedown', mousedownEvent);
-	canvasElem.addEventListener('mouseup', mouseupEvent);
-	canvasElem.addEventListener('wheel', wheelEvent);
-	window.addEventListener('resize', resizeEvent);
-	controls.addEventListener('dragstart', dragstartEvent);
-	controls.addEventListener('dragend', dragendEvent);
-
-	setWireframe(0, 0, 0, 0);
-	initObjects();
-	resizeEvent();
-	render();
-};
-
-const initObjects = () => {
-	const objectDatas = store.objectDatas;
-	let objectData: SandObjectTypes[] = [];
-
-	Object.keys(objectDatas).forEach((uuid) => {
-		objectData.push(objectDatas[uuid]);
-		// addSceneObject(objectDatas[uuid]);
-	});
-
-	postMsg('addObject', { objectData });
-};
-
-//FIXME - instanceof 기준 판단은 구린 면이 있음, switch문 사용 가능 필요, 매번 타입체킹을 해도 구리고, 다른 코드들 참고해야될듯
-// const objectTypeChecker = (object: SandObjectTypes) => {
-// 	if (object instanceof SandScene) {
-// 		return object as SandScene;
-// 	} else if (object instanceof SandCamera) {
-// 		return object as SandCamera;
-// 	} else if (object instanceof SandObject) {
-// 		return object as SandObject;
-// 	}
-// };
-
 export const addSceneObject = (object: SandObjectTypes) => {
-	worker.postMessage({ type: 'addObject', data: { objectData: object } });
-	return;
 	if (object instanceof SandScene) {
 		SceneObjectUUID = object.UUID;
 	} else if (object instanceof SandCamera) {
 		CameraObjectUUID = object.UUID;
 	} else if (object instanceof SandObject) {
 		let newObj = new OBJ(object.X, object.Y, object.UUID, object.visible);
-		window.threeScene.add(newObj);
+		mainScene.add(newObj);
 	}
 };
 
@@ -581,6 +522,34 @@ const render = () => {
 	renderer.clear();
 	renderer.render(uiScene, camera);
 	renderer.clearDepth();
-	renderer.render(window.threeScene, camera);
+	renderer.render(mainScene, camera);
 	// stats.end();
+};
+
+const createScene = (canvas: OffscreenCanvas, wrap: HTMLDivElement) => {
+	canvasElem = canvas;
+	wrapperElem = wrap;
+
+	renderer = new THREE.WebGLRenderer({
+		antialias: true,
+		canvas: canvasElem,
+	});
+	renderer.autoClear = false;
+	renderer.shadowMap.enabled = true;
+	renderer.shadowMap.type = THREE.VSMShadowMap;
+
+	// controls = new DragControls(window.threeScene.children, camera, canvasElem);
+
+	// canvasElem.addEventListener('click', clickEvent);
+	// canvasElem.addEventListener('mousemove', mousemoveEvent);
+	// canvasElem.addEventListener('mousedown', mousedownEvent);
+	// canvasElem.addEventListener('mouseup', mouseupEvent);
+	// canvasElem.addEventListener('wheel', wheelEvent);
+	// window.addEventListener('resize', resizeEvent);
+	// controls.addEventListener('dragstart', dragstartEvent);
+	// controls.addEventListener('dragend', dragendEvent);
+
+	setWireframe(0, 0, 0, 0);
+	resizeEvent();
+	render();
 };

@@ -17,22 +17,15 @@ import { ReactComponent as LockOnSVG } from '@assets/image/icon/inspecter/lock_o
 import { ReactComponent as LockOffSVG } from '@assets/image/icon/inspecter/lock_off.svg';
 import { ReactComponent as ArrowDownSVG } from '@assets/image/icon/object/arrow_down.svg';
 import { ReactComponent as ControllerSVG } from '@assets/image/icon/inspecter/controller.svg';
+import { ARG } from '@/constants';
 
 
 export default function Folder() {
-  /* ------------------------------------------------------------------------- */
-  // ANCHOR constants
-  /* ------------------------------------------------------------------------- */
-
   const { objectDatas, setObjectDatas, selectedObjectUUID, codeFiles } = useBoundStore();
   const [currentOBJ, setCurrentOBJ] = useState<SandObjectTypes>();
   const [addDropdownVisible, setAddDropdownVisible] = useState(false);
   const [controllerList, setControllerList] = useState<string[]>([]);
   const ignorePropsName = ['type', 'parentUUID', 'UUID', 'name', 'controller', 'visible'];
-
-  /* ------------------------------------------------------------------------- */
-  // ANCHOR reack hooks
-  /* ------------------------------------------------------------------------- */
 
   useEffect(() => {
     if (!selectedObjectUUID) return;
@@ -47,20 +40,18 @@ export default function Folder() {
   const onAddControllerClick = () => {
     setAddDropdownVisible(!addDropdownVisible);
 
-    if (!addDropdownVisible === false) return;
+    if (addDropdownVisible === true) return;
     if (currentOBJ == null) return;
     if (!(currentOBJ instanceof SandObject)) return;
 
-    let controllerName = Object.keys(codeFiles);
-    let result = controllerName.filter(x => { return !(currentOBJ.controller.includes(x)) })
-
+    const result = Object.keys(codeFiles).filter(x => { return !(currentOBJ.controller.includes(x)) })
     setControllerList(result);
   }
 
   const setObjectParam = (key: string, value: any) => {
     if (selectedObjectUUID == null || currentOBJ == null) return;
 
-    let tmp = currentOBJ;
+    const tmp = currentOBJ;
     tmp[key as keyof Object] = value;
 
     setObjectDatas({ ...objectDatas, [selectedObjectUUID]: tmp });
@@ -70,7 +61,7 @@ export default function Folder() {
     if (selectedObjectUUID == null || currentOBJ == null) return;
     if (!(currentOBJ instanceof SandObject)) return;
 
-    let tmp = currentOBJ;
+    const tmp = currentOBJ;
     tmp.visible = !tmp.visible;
     setObjectDatas({ ...objectDatas, [selectedObjectUUID]: tmp });
   }
@@ -104,7 +95,7 @@ export default function Folder() {
     if (!selectedObjectUUID) return;
     if (!(currentOBJ instanceof SandObject)) return;
 
-    let tmp = currentOBJ;
+    const tmp = currentOBJ;
     tmp.controller.push(name);
     setObjectDatas({ ...objectDatas, [selectedObjectUUID]: tmp });
     setAddDropdownVisible(false);
@@ -129,21 +120,6 @@ export default function Folder() {
       IconSVG = FolderIconSVG;
     }
 
-    // switch (currentOBJ.type) {
-    //   case OBJECT_TYPE.Camera:
-    //     IconSVG = CameraIconSVG;
-    //     break;
-    //   case OBJECT_TYPE.Scene:
-    //     IconSVG = SceneIconSVG;
-    //     break;
-    //   case OBJECT_TYPE.Object:
-    //     IconSVG = FolderIconSVG;
-    //     break;
-    //   default:
-    //     IconSVG = FolderIconSVG;
-    //     break;
-    // }
-
     return (
       <IconSVG />
     )
@@ -156,8 +132,8 @@ export default function Folder() {
       </div>
       <div className={style.Inspecter}>
         {(selectedObjectUUID != null && currentOBJ != null) ?
-          <div className={style.property_wrap}>
-            {/* Object Info */}
+          <div className={style.inspecter_wrap}>
+            {/* NOTE Object Info */}
             <div className={style.objectInfo}>
               <div className={style.objectInfo_line}>
                 <div className={style.objectInfo_icon}><ObjectIcon /></div>
@@ -184,81 +160,91 @@ export default function Folder() {
                 </div>
                 : ''}
             </div>
+
             <hr />
-            {/* Object Property */
-              Object.entries(currentOBJ).map(([key, value], index) => {
-                if (ignorePropsName.includes(key)) return;
-                return (
-                  <div className={style.property} key={index}>
-                    <div className={style.property_label}>{key}</div>
-                    <div className={style.property_input_wrap}>
-                      {typeof value == "number" ?
-                        <input type="number" value={value} onKeyDown={enterProperty} onInput={(e) => { setObjectParam(key, Number(e.currentTarget.value)) }}></input>
-                        : typeof value == "boolean" ?
-                          <input type="checkbox" checked={value} className={style.property_input_checkbox} onChange={(e) => { setObjectParam(key, e.currentTarget.checked) }}></input>
-                          : typeof value == "string" ?
-                            <input type="text" value={value} onKeyDown={enterProperty} onInput={(e) => { setObjectParam(key, e.currentTarget.value) }}></input>
-                            : ''}
-                    </div>
-                  </div>
-                )
-              })
-            }
 
-            {/* Controller */
-              currentOBJ instanceof SandObject ?
-                currentOBJ.controller.map((controllerName, index1) => {
-                  let params = codeFiles[controllerName].params;
-
-                  return (
-                    <div className={style.controller} key={index1}>
-                      <span className={style.button_arrow}><ArrowDownSVG /></span>
-                      <input className={style.controller_check} type="checkbox"></input>
-                      <span className={style.controller_icon}><ControllerSVG /></span>
-                      <div className={style.controller_label}>{controllerName}</div>
-                    </div>
-                  )
-
-                  // Object.entries(params).map((param, index2) => {
-                  //   return (
-                  //     <div className={style.property} key={index1 + '-' + index2}>
-                  //       <div className={style.property_label}>{param.label}</div>
-                  //       <div className={style.property_input_wrap}>
-                  //         {param.type == ARG_TYPE.Number ?
-                  //           <input type="number" value={param.value} onKeyDown={enterProperty} onInput={(e) => { setObjectParam(param.label, Number(e.currentTarget.value)) }}></input>
-                  //           : param.type == ARG_TYPE.Boolean ?
-                  //             <input type="checkbox" checked={param.value} className={style.property_input_checkbox} onChange={(e) => { setObjectParam(param.label, e.currentTarget.checked) }}></input>
-                  //             : param.type == ARG_TYPE.String ?
-                  //               <input type="text" value={param.value} onKeyDown={enterProperty} onInput={(e) => { setObjectParam(param.label, e.currentTarget.value) }}></input>
-                  //               : ''}
-                  //       </div>
-                  //     </div>
-                  //   )
-                  // })
-                })
-                : ''
-            }
-
-            {/* Add Controller */
-              currentOBJ instanceof SandObject ?
-                <div className={style.addController_wrap}>
-                  <button className={style.btnAdd} onClick={onAddControllerClick}>Add Controller</button>
-                  {
-                    addDropdownVisible ?
-                      <div className={style.addController_dropdown}>
-                        {
-                          controllerList.map((controller, index) => {
-                            return (
-                              <div className={style.addController_dropdown_item} key={index} onClick={() => { addController(controller); }}>{controller}</div>
-                            )
-                          })
-                        }
+            <div className={style.property_container}>
+              <div className={style.property_wrap}>
+                {// NOTE Object Property
+                  Object.entries(currentOBJ).map(([key, value], index) => {
+                    if (ignorePropsName.includes(key)) return;
+                    return (
+                      <div className={style.property} key={index}>
+                        <div className={style.property_label}>{key}</div>
+                        <div className={style.property_input_wrap}>
+                          {typeof value == "number" ?
+                            <input type="number" value={value} onKeyDown={enterProperty} onInput={(e) => { setObjectParam(key, Number(e.currentTarget.value)) }}></input>
+                            : typeof value == "boolean" ?
+                              <input type="checkbox" checked={value} className={style.property_input_checkbox} onChange={(e) => { setObjectParam(key, e.currentTarget.checked) }}></input>
+                              : typeof value == "string" ?
+                                <input type="text" value={value} onKeyDown={enterProperty} onInput={(e) => { setObjectParam(key, e.currentTarget.value) }}></input>
+                                : ''}
+                        </div>
                       </div>
-                      : ''
-                  }
-                </div>
-                : ''
-            }
+                    )
+                  })
+                }
+
+                {// NOTE Controller
+                  currentOBJ instanceof SandObject ?
+                    currentOBJ.controller.map((controllerName, index1) => {
+                      let params = codeFiles[controllerName].args;
+
+                      return (
+                        <>
+                          <div className={style.controller} key={index1}>
+                            <span className={style.button_arrow}><ArrowDownSVG /></span>
+                            <input className={style.controller_check} type="checkbox"></input>
+                            <span className={style.controller_icon}><ControllerSVG /></span>
+                            <div className={style.controller_label}>{controllerName}</div>
+                          </div>
+
+                          {
+                            Object.entries(params).map(([key, param], index2) => {
+                              return (
+                                <div className={style.property} key={index1 + '-' + index2}>
+                                  <div className={style.property_label}>{param.label}</div>
+                                  <div className={style.property_input_wrap}>
+                                    {param.type == ARG.Number ?
+                                      <input type="number" value={param.value} onKeyDown={enterProperty} onInput={(e) => { setObjectParam(param.label, Number(e.currentTarget.value)) }}></input>
+                                      : param.type == ARG.Boolean ?
+                                        <input type="checkbox" checked={param.value} className={style.property_input_checkbox} onChange={(e) => { setObjectParam(param.label, e.currentTarget.checked) }}></input>
+                                        : param.type == ARG.String ?
+                                          <input type="text" value={param.value} onKeyDown={enterProperty} onInput={(e) => { setObjectParam(param.label, e.currentTarget.value) }}></input>
+                                          : ''}
+                                  </div>
+                                </div>
+                              )
+                            })
+                          }
+                        </>
+                      )
+                    })
+                    : ''
+                }
+
+                {// NOTE Add Controller 
+                  currentOBJ instanceof SandObject ?
+                    <div className={style.addController_wrap}>
+                      <button className={style.btnAdd} onClick={onAddControllerClick}>Add Controller</button>
+                      {
+                        addDropdownVisible ?
+                          <div className={style.addController_dropdown}>
+                            {
+                              controllerList.map((controller, index) => {
+                                return (
+                                  <div className={style.addController_dropdown_item} key={index} onClick={() => { addController(controller); }}>{controller}</div>
+                                )
+                              })
+                            }
+                          </div>
+                          : ''
+                      }
+                    </div>
+                    : ''
+                }
+              </div>
+            </div>
           </div>
           :
           <span className={style.select_none}>오브젝트를 선택해주세요</span>

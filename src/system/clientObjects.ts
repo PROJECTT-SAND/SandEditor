@@ -6,10 +6,7 @@ import {
 } from './eventManager';
 
 export const Process = {
-	on: (
-		type: ProcessEvent,
-		callback: EventListenerOrEventListenerObject | null
-	) => {
+	on: (type: ProcessEvent, callback: () => any) => {
 		if (!processEventTarget)
 			throw new Error('Process.on(): processEventTarget이 없음');
 
@@ -17,58 +14,58 @@ export const Process = {
 	},
 };
 
-//TODO - capture나 passive는 dom이 아니라 필요없을듯
 interface InputEventOptions {
 	keyType?: KeyType[] | KeyType;
 	shift?: boolean;
 	alt?: boolean;
 	ctrl?: boolean;
 	once?: boolean;
-	capture?: boolean;
-	passive?: boolean;
 }
 
-//TODO - 솔직히 이따구로 keyStates 객체를 직접 참조하는거 개구림
 export const Input = {
 	getKeyHold: (keyType: KeyType) => {
-		return keyStates.keyHold[keyType];
+		return keyStates.hold.has(keyType);
 	},
 	getKeyUp: (keyType: KeyType) => {
-		return keyStates.keyUp[keyType];
+		return keyStates.up.has(keyType);
 	},
 	getKeyDown: (keyType: KeyType) => {
-		return keyStates.keyDown[keyType];
+		return keyStates.down.has(keyType);
 	},
-	on: (type: InputEvent, callback: Function, options?: InputEventOptions) => {
+	on: (
+		type: InputEvent,
+		callback: (e: globalThis.KeyboardEvent) => any,
+		options?: InputEventOptions
+	) => {
 		if (!inputEventTarget)
 			throw new Error('Input.on(): inputEventTarget이 없음');
 
-		const isOptionMeets = (e: any) => {
+		const isOptionMeets = (e: KeyboardEvent) => {
 			let res = true;
 
 			if (options?.keyType !== undefined) {
 				if (typeof options?.keyType === 'object') {
-					if (options.keyType.every((key) => key !== e.detail.keyCode)) {
+					if (options.keyType.every((key) => key !== e.keyCode)) {
 						res = false;
 					}
 				} else {
-					if (options.keyType !== e.detail.keyCode) {
+					if (options.keyType !== e.keyCode) {
 						res = false;
 					}
 				}
 			}
 			if (options?.alt !== undefined) {
-				if (options?.alt !== e.detail.altKey) {
+				if (options?.alt !== e.altKey) {
 					res = false;
 				}
 			}
 			if (options?.ctrl !== undefined) {
-				if (options?.ctrl !== e.detail.ctrlKey) {
+				if (options?.ctrl !== e.ctrlKey) {
 					res = false;
 				}
 			}
 			if (options?.shift !== undefined) {
-				if (options?.shift !== e.detail.shiftKey) {
+				if (options?.shift !== e.shiftKey) {
 					res = false;
 				}
 			}
@@ -78,17 +75,14 @@ export const Input = {
 
 		inputEventTarget.addEventListener(
 			type,
-			(e: any) => {
-				//TODO - callback의 e값을 any가 아닌 정확한 타입으로 변경
+			(e) => {
 				if (isOptionMeets(e) === false) {
 					return;
 				}
-				callback(e.detail);
+				callback(e);
 			},
 			{
 				once: options?.once,
-				capture: options?.capture,
-				passive: options?.passive,
 			}
 		);
 	},

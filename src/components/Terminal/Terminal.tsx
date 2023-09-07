@@ -5,7 +5,7 @@ import Window from '@/components/Wrapper/Wrapper';
 import { system } from '@/system/system';
 import { useBoundStore } from '@/store';
 import { commands } from '@/system/system';
-import { LOG_KIND } from '@/constants';
+import { LOG } from '@/constants';
 
 import { ReactComponent as ErrorSVG } from '@assets/image/icon/terminal/error.svg';
 import { ReactComponent as TimeSVG } from '@assets/image/icon/terminal/time.svg';
@@ -27,7 +27,8 @@ export default function Console() {
       let value = e.currentTarget.value.split(' ')
       let command = value[value.length - 1];
       let suggestion = [];
-      let search = commands;
+      let search: any = commands;
+
       for (const data of value) {
         if (search[data] === undefined) {
           break;
@@ -82,7 +83,7 @@ export default function Console() {
 
     logs.map((item, key) => {
       switch (item.kind) {
-        case LOG_KIND.Command:
+        case LOG.Command:
           result.push(
             <div key={key} className={`${style.logLine} ${style.command}`}>
               <div className={style.contents}>
@@ -93,7 +94,7 @@ export default function Console() {
             </div>
           );
           break;
-        case LOG_KIND.Error:
+        case LOG.Error:
           result.push(
             <div key={key} className={`${style.logLine} ${style.errer}`}>
               <div className={style.contents}>
@@ -104,7 +105,7 @@ export default function Console() {
             </div>
           );
           break;
-        case LOG_KIND.Warning:
+        case LOG.Warning:
           result.push(
             <div key={key} className={`${style.logLine} ${style.warning}`}>
               <div className={style.contents}>{item.content}</div>
@@ -112,7 +113,7 @@ export default function Console() {
             </div>
           );
           break;
-        case LOG_KIND.Text:
+        case LOG.Text:
           result.push(
             <div key={key} className={`${style.logLine} ${style.text}`}>
               <div className={style.contents}>{item.content}</div>

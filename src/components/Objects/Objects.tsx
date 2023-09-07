@@ -4,6 +4,7 @@ import Window from '@/components/Wrapper/Wrapper';
 import { SandObject, SandScene, SandCamera } from '@/classes'
 import { objectTreeNode, TreePos } from '@/types'
 import { useBoundStore } from "@/store";
+import { objectDataManager } from '@/system/objectDataManager';
 
 import { ReactComponent as FolderIconSVG } from '@assets/image/icon/object/folder.svg';
 import { ReactComponent as SceneIconSVG } from '@assets/image/icon/object/scene.svg';

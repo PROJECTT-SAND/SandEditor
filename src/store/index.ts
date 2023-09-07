@@ -1,6 +1,7 @@
 import create, { StateCreator } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import { codes, logs, objects, viewerController, UI, codespace } from '@/types';
+import { ARG } from '@/constants';
 
 type mystate = viewerController & objects & logs & codespace & codes & UI;
 
@@ -24,8 +25,8 @@ const createViewerController: StateCreator<
 	},
 	zoom: 1,
 	optionState: {
-		showGrid: false,
-		fullScreen: false,
+		ShowGrid: false,
+		FullScreen: false,
 	},
 	selectedObjectUUID: null,
 	setSelectedObjectUUID: (value) => set(() => ({ selectedObjectUUID: value })),
@@ -88,8 +89,31 @@ const createCodes: StateCreator<
 	codeFiles: {
 		test: {
 			contents: '',
-			params: [],
+			args: [],
 		},
+		'Rectangle Body': {
+			contents: '',
+			args: [
+				{ label: 'Related_X', type: ARG.Number, value: 0 },
+				{ label: 'Related_Y', type: ARG.Number, value: 0 },
+				{ label: 'Width', type: ARG.Number, value: 100 },
+				{ label: 'Height', type: ARG.Number, value: 100 },
+				{ label: 'Angle', type: ARG.Number, value: 0, optional: true },
+				{ label: 'Force_X', type: ARG.Number, value: 0, optional: true },
+				{ label: 'Force_Y', type: ARG.Number, value: 0, optional: true },
+			],
+		},
+		'Circle Body': {
+			contents: '',
+			args: [
+				{ label: 'Related_X', type: ARG.Number, value: 0 },
+				{ label: 'Related_Y', type: ARG.Number, value: 0 },
+				{ label: 'Radius', type: ARG.Number, value: 100 },
+				{ label: 'Force_X', type: ARG.Number, value: 0, optional: true },
+				{ label: 'Force_Y', type: ARG.Number, value: 0, optional: true },
+			],
+		},
+		// 'Polygon Body': { contents: '', args: [] },
 	},
 	setCodeFiles: (filename, data) => {
 		set((values) => ({

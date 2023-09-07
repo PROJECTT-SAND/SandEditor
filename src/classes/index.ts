@@ -77,7 +77,7 @@ export class SandObject extends SandObjectBase {
 	}
 }
 
-export class EventEmitter<T extends number> {
+export class EventEmitter<T extends number, E = undefined> {
 	target: EventTarget;
 
 	constructor() {
@@ -90,10 +90,17 @@ export class EventEmitter<T extends number> {
 
 	addEventListener(
 		type: T,
-		callback: EventListenerOrEventListenerObject | null,
+		callback: (e: E) => any,
 		options?: boolean | AddEventListenerOptions | undefined
 	) {
-		return this.target.addEventListener(type.toString(), callback, options);
+		return this.target.addEventListener(
+			type.toString(),
+			//@ts-ignore
+			(e: Event & { detail: E }) => {
+				callback(e.detail);
+			},
+			options
+		);
 	}
 
 	removeEventListener(
@@ -104,7 +111,7 @@ export class EventEmitter<T extends number> {
 		return this.target.removeEventListener(type.toString(), callback, options);
 	}
 
-	dispatchEvent(type: T, detail?: any) {
+	dispatchEvent(type: T, detail?: E) {
 		return this.target.dispatchEvent(
 			new CustomEvent(type.toString(), { detail, cancelable: true })
 		);

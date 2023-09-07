@@ -6,6 +6,8 @@ export const commands: Record<string, Record<string, sandCommand>> = {
 	sys,
 };
 
+new Worker('a');
+
 //TODO - 과연 promise를 쓸 필요가 있을까
 export const system = {
 	run: (Props: string) => {

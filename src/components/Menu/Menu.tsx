@@ -10,7 +10,7 @@ export default function Menu() {
   const wrapperElem = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (optionState.fullScreen) {
+    if (optionState.FullScreen) {
       setHideMenu(false);
 
       setTimeout(() => {
@@ -19,7 +19,7 @@ export default function Menu() {
     } else {
       setHideMenu(false);
     }
-  }, [optionState.fullScreen])
+  }, [optionState.FullScreen])
 
 
   useEffect(() => {
@@ -41,7 +41,7 @@ export default function Menu() {
   }
 
   return (
-    <div className={`${style.menu_wrap} ${optionState.fullScreen ? style.menu_fullscreen : ''}`} ref={wrapperElem}>
+    <div className={`${style.menu_wrap} ${optionState.FullScreen ? style.menu_fullscreen : ''}`} ref={wrapperElem}>
       <div className={`${style.menu} ${hideMenu ? style.menu_hide : ''}`}>
         <div className={style.menu_container_left}>
           <IconSVG />

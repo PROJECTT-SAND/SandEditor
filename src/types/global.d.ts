@@ -2,6 +2,7 @@ export {};
 
 declare global {
 	interface Window {
-		threeScene: THREE.Scene;
+		// threeScene: THREE.Scene;
+		physicsWorld: Matter.World;
 	}
 }

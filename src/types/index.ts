@@ -62,7 +62,7 @@ export interface codespace {
 
 export interface codeFile {
 	contents: string;
-	params: { type: number; label: string; value: any }[];
+	args: { label: string; type: number; value: any; optional?: boolean }[];
 }
 
 export interface codes {

@@ -21,14 +21,14 @@ export default function Viewer() {
 
     if (!wrapperElem.current || !elem) return;
 
-    if (optionState.fullScreen) {
+    if (optionState.FullScreen) {
       if (document.fullscreenElement) return;
       elem.requestFullscreen();
     } else {
       if (!document.fullscreenElement) return;
       document.exitFullscreen();
     }
-  }, [optionState.fullScreen])
+  }, [optionState.FullScreen])
 
   // Click outside => Exit fullscreen
   useEffect(() => {
@@ -39,18 +39,18 @@ export default function Viewer() {
       if (e.target.id != "bgElem") return;
 
       const { optionState, setOptionState } = useBoundStore.getState();
-      if (!optionState.fullScreen) return;
-      setOptionState({ ...optionState, fullScreen: false });
+      if (!optionState.FullScreen) return;
+      setOptionState({ ...optionState, FullScreen: false });
     }, {})
   }, [])
 
   return (
     <div
-      className={`${style.viewer_wrap} ${optionState.fullScreen ? style.viewer_wrap_fullscreen : ''}`}
+      className={`${style.viewer_wrap} ${optionState.FullScreen ? style.viewer_wrap_fullscreen : ''}`}
       id="bgElem"
       ref={bgElem}
     >
-      <div className={`${style.viewer} ${optionState.fullScreen ? style.viewer_fullscreen : ''}`}
+      <div className={`${style.viewer} ${optionState.FullScreen ? style.viewer_fullscreen : ''}`}
         ref={wrapperElem}
         onMouseEnter={() => setMouseIsEnterViewer(true)}
         onMouseLeave={() => setMouseIsEnterViewer(false)}
